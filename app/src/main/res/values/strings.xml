@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ElectricApp</string>
+
+    <!--Pantalla de inicio de sesion (Login)-->
+    <string name="titulo_sesion" > Inicio sesion </string>
+    <string name="campo_correo"> Correo </string>
+    <string name="campo_password"> Contraseña </string>
+    <string name="has_olvidado_password"> ¿haz olvidado tu contraseña? </string>
+    <string name="no_tienes_cuenta"> ¿No tienes cuenta? </string>
+    <string name="btn_registrarse"> Registrese aqui </string>
+    <string name="btn_iniciar_sesion"> Inicie Sesion </string>
+
+
 </resources>
