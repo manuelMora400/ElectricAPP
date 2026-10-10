@@ -14,4 +14,7 @@ object Dimens {
     val bordeBoton = 2.dp
     val radioBoton = 20.dp
     val elevation = 5.dp
+
+    // Iconos
+    val tamanoIcono = 25.dp
 }

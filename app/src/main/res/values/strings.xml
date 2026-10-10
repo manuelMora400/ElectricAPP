@@ -9,6 +9,10 @@
     <string name="no_tienes_cuenta"> ¿No tienes cuenta? </string>
     <string name="btn_registrarse"> Registrese aqui </string>
     <string name="btn_iniciar_sesion"> Inicie Sesion </string>
+    <string name="ocultar_contrasena"> Ocultar su contraseña </string>
+    <string name="mostrar_contrasena"> Mostrar contraseña</string>
+
+    <string name="Error_password"> Contraseña invalida, intente de nuevo</string>
 
 
 </resources>
