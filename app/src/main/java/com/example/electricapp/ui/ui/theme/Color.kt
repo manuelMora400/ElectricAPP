@@ -3,20 +3,22 @@ package com.example.electricapp.ui.ui.theme
 import androidx.compose.ui.graphics.Color
 
 
-// Colores en general
-val colorPrimario = Color(0xFF00E5FF)
-val ColorPrimarioOscuro = Color(0xFF05505D)
+val Primario = Color(0xFF2B46F6)
+val PrimarioOscuro = Color(0xFF2E458C)
+val PrimarioClaro = Color(0xFFFFFFFF)
 
+val Secundario = Color(0xFF44C5C5)
+val Acento = Color(0xFFFF6B4A)
+val AcentoOscuro = Color(0xFFE0482A)
 
-val colorSecundario = Color(0xFFB6AF5A)
-val colorSecundarioOscuro = Color(0xFF2C2A17)
-val FondoClaro = Color(0xFFFFFFFF)
-val FondoOscuro = Color(0xFF2C2C2C)
+val Blanco = Color(0xFFFFFFFF)
+val FondoClaro = Color(0xFF69A0B4)
+val SuperficieClara = Color(0xFFFFFFFF)
+val TextoOscuro = Color(0xFF000000)
+val FondoOscuro = Color(0xFF14131A)
+val SuperficieOscura = Color(0xFF1F1D27)
+val TextoClaro = Color(0xFFECEAF4)
+val GrisDeshabilitado = Color(0xFFBDBAC7)
 
-// Botones
-val textoBotonInicio = Color(0xFFFFFFFF)
-val textoDesabilitado = Color(0xFF939094)
-val BotonNoHabilitado = Color(0xFF6B6A6E)
-
-// Exito
-val Exito = Color(0xFF0AB44F)
+val Exito = Color(0xFF06EC76)
+val ExitoFondo = Color(0xFFE3F5EA)

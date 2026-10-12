@@ -11,33 +11,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = colorSecundario,
-    secondary = colorSecundarioOscuro,
-    background = FondoClaro
+    primary = PrimarioClaro,
+    onPrimary = PrimarioOscuro,
+    primaryContainer = PrimarioOscuro,
+    onPrimaryContainer = PrimarioClaro,
+    secondary = Secundario,
+    onSecondary = Blanco,
+    tertiary = Acento,
+    onTertiary = Blanco,
+    background = FondoOscuro,
+    onBackground = TextoClaro,
+    surface = SuperficieOscura,
+    onSurface = TextoClaro
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = colorPrimario,
-    secondary = colorSecundario,
-    background = FondoClaro
-
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = Primario,
+    onPrimary = Blanco,
+    primaryContainer = PrimarioClaro,
+    onPrimaryContainer = PrimarioOscuro,
+    secondary = Secundario,
+    onSecondary = Blanco,
+    tertiary = Acento,
+    onTertiary = Blanco,
+    background = FondoClaro,
+    onBackground = TextoOscuro,
+    surface = SuperficieClara,
+    onSurface = TextoOscuro
 )
 
 @Composable
 fun ElectricAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
