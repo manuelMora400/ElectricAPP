@@ -13,7 +13,7 @@ object Dimens {
     // Botones
     val alturaBoton = 45.dp
     val bordeBoton = 2.dp
-    val radioBoton = 20.dp
+    val radioBoton = 13.dp
     val elevation = 5.dp
 
     // Iconos
@@ -21,5 +21,5 @@ object Dimens {
 
     // Pantalla
     val espacioPantalla = 20.dp
-    val espacioMed = 17.dp
+    val espacioMed = 10.dp
 }
