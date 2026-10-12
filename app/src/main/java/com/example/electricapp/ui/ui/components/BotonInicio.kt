@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.electricapp.ui.ui.styles.EstilosBotones
 import com.example.electricapp.ui.ui.styles.estiloAltoBoton
+import com.example.electricapp.ui.ui.theme.Blanco
+import com.example.electricapp.ui.ui.theme.TextoOscuro
 
 @Composable
 fun BotonInicio(
@@ -38,7 +41,6 @@ fun BotonInicio(
 
     ){
         if(icono != null){
-
             Icon(
                 painter = painterResource(id = icono),
                 contentDescription = null,
@@ -46,7 +48,7 @@ fun BotonInicio(
             )
             Spacer(modifier.size(ButtonDefaults.IconSpacing))
         }
-        Text(text = texto)
+        Text(text = texto, style = MaterialTheme.typography.titleLarge, color = TextoOscuro)
     }
 }
 

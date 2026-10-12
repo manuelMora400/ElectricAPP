@@ -30,6 +30,7 @@ import com.example.electricapp.ui.ui.components.CampoPassword
 import com.example.electricapp.ui.ui.components.ImagenEncabezadoLogin
 import com.example.electricapp.ui.ui.theme.Dimens
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.electricapp.ui.ui.styles.EstilosBotones
 import com.example.electricapp.ui.ui.theme.Blanco
 import com.example.electricapp.ui.ui.theme.TextoOscuro
 import com.example.electricapp.viewModel.FormularioLoginViewModel
@@ -47,8 +48,6 @@ fun ScreensLogin(
         onVisibilidad = viewModel::onVisibilidad
     )
 }
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreens(
@@ -97,10 +96,9 @@ fun LoginScreens(
                 BotonInicio(
                     texto = stringResource(R.string.btn_iniciar_sesion),
                     onClick = onIniciar,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
-
     }
 }

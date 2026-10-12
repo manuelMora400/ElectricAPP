@@ -42,15 +42,16 @@ class FormularioLoginViewModel : ViewModel(){
                 null
 
         val errorPassword =
-            if (estado.passwordHash.length in 8..14){
-                "Contraseña fuera de rango"
+            if (estado.passwordHash.isBlank()){
+                "La contraseña no puede estar vacia"
             }else if(!estado.passwordHash.any{it.isUpperCase()}){
                 "La contraseña debe contener al menos una letra en mayuscula"
             }else if(!estado.passwordHash.contains(".") || !estado.passwordHash.contains("-")){
                 "La contraseña debe contener al menos un (.) y (-)"
+            }else if (estado.passwordHash.length !in 8..12){
+                "La contraseña debe tener un minimo de 8 y maximo de 12 digitos"
             }else
                 null
-
         val hayErrores = listOf(errorCorreo, errorPassword).any{it != null}
         _uiState.update { it.copy(
             errorCorreo = errorCorreo,
