@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.electricapp.ui.ui.theme.Blanco
+import com.example.electricapp.ui.ui.theme.BotonGestiones
 import com.example.electricapp.ui.ui.theme.Dimens
 import com.example.electricapp.ui.ui.theme.FondoClaro
 import com.example.electricapp.ui.ui.theme.GrisDeshabilitado
@@ -38,6 +39,14 @@ object EstilosBotones{
         disabledContainerColor = TextoOscuro,
         disabledContentColor = FondoClaro
 
+    )
+
+    @Composable
+    fun ColorBotonGestiones() : ButtonColors = buttonColors(
+        containerColor = BotonGestiones,
+        contentColor = TextoOscuro,
+        disabledContentColor = GrisDeshabilitado,
+        disabledContainerColor = FondoClaro
     )
     @Composable
     fun elevacion(): ButtonElevation = ButtonDefaults.buttonElevation(
