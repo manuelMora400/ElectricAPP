@@ -22,4 +22,8 @@ object Dimens {
     // Pantalla
     val espacioPantalla = 20.dp
     val espacioMed = 10.dp
+
+    // tarjetas
+    val radioTarjeta = 10.dp
+    val elevacionTarjeta = 7.dp
 }

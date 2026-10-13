@@ -22,3 +22,6 @@ val GrisDeshabilitado = Color(0xFFBDBAC7)
 
 val Exito = Color(0xFF06EC76)
 val ExitoFondo = Color(0xFFE3F5EA)
+
+val BotonGestiones = Color(0xFF5AF6E5)
+val ColorCard =  Color(0xFF84F3DA)
