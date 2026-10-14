@@ -1,4 +1,4 @@
-package com.example.electricapp.ui.ui.styles
+package com.example.electricapp.ui.styles
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,15 +14,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.electricapp.ui.ui.theme.Blanco
-import com.example.electricapp.ui.ui.theme.BotonGestiones
-import com.example.electricapp.ui.ui.theme.Dimens
-import com.example.electricapp.ui.ui.theme.FondoClaro
-import com.example.electricapp.ui.ui.theme.GrisDeshabilitado
-import com.example.electricapp.ui.ui.theme.PrimarioClaro
-import com.example.electricapp.ui.ui.theme.PrimarioOscuro
-import com.example.electricapp.ui.ui.theme.Secundario
-import com.example.electricapp.ui.ui.theme.TextoOscuro
+import com.example.electricapp.ui.theme.BotonGestiones
+import com.example.electricapp.ui.theme.Dimens
+import com.example.electricapp.ui.theme.FondoClaro
+import com.example.electricapp.ui.theme.GrisDeshabilitado
+import com.example.electricapp.ui.theme.TextoOscuro
 
 
 object EstilosBotones{

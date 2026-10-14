@@ -1,4 +1,4 @@
-package com.example.electricapp.ui.ui.components
+package com.example.electricapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.annotation.DrawableRes
@@ -19,9 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.electricapp.R
-import com.example.electricapp.ui.ui.theme.Blanco
-import com.example.electricapp.ui.ui.theme.Dimens
-import com.example.electricapp.ui.ui.theme.ElectricAppTheme
+import com.example.electricapp.ui.theme.Blanco
+import com.example.electricapp.ui.theme.Dimens
+import com.example.electricapp.ui.theme.ElectricAppTheme
 
 
 @Composable

@@ -1,38 +1,31 @@
-package com.example.electricapp.ui.ui.screens
+package com.example.electricapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.electricapp.R
 import com.example.electricapp.model.FormularioLoginState
-import com.example.electricapp.ui.ui.components.BotonInicio
-import com.example.electricapp.ui.ui.components.CampoCorreo
-import com.example.electricapp.ui.ui.components.CampoPassword
-import com.example.electricapp.ui.ui.components.ImagenEncabezadoLogin
-import com.example.electricapp.ui.ui.theme.Dimens
+import com.example.electricapp.ui.components.BotonInicio
+import com.example.electricapp.ui.components.CampoCorreo
+import com.example.electricapp.ui.components.CampoPassword
+import com.example.electricapp.ui.components.ImagenEncabezadoLogin
+import com.example.electricapp.ui.theme.Dimens
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.electricapp.ui.ui.styles.EstilosBotones
-import com.example.electricapp.ui.ui.theme.Blanco
-import com.example.electricapp.ui.ui.theme.TextoOscuro
+import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -100,5 +93,36 @@ fun LoginScreens(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreensView(){
+
+    ElectricAppTheme(false) {
+        LoginScreens (
+
+            uiState = FormularioLoginState(),
+            onCorreoCambia = {},
+            onPasswordCambia = {},
+            onVisibilidad = {},
+            onIniciar = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreensVie(){
+
+    ElectricAppTheme(true) {
+        LoginScreens (
+            uiState = FormularioLoginState(),
+            onCorreoCambia = {},
+            onPasswordCambia = {},
+            onVisibilidad = {},
+            onIniciar = {}
+        )
     }
 }
