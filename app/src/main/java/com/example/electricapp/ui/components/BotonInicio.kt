@@ -1,4 +1,4 @@
-package com.example.electricapp.ui.ui.components
+package com.example.electricapp.ui.components
 
 import androidx.compose.material3.Button
 import androidx.annotation.DrawableRes
@@ -14,10 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.electricapp.ui.ui.styles.EstilosBotones
-import com.example.electricapp.ui.ui.styles.estiloAltoBoton
-import com.example.electricapp.ui.ui.theme.Blanco
-import com.example.electricapp.ui.ui.theme.TextoOscuro
+import com.example.electricapp.ui.styles.EstilosBotones
+import com.example.electricapp.ui.styles.estiloAltoBoton
 
 @Composable
 fun BotonInicio(

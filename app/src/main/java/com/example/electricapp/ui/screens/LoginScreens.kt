@@ -1,4 +1,4 @@
-package com.example.electricapp.ui.ui.screens
+package com.example.electricapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,13 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.electricapp.R
 import com.example.electricapp.model.FormularioLoginState
-import com.example.electricapp.ui.ui.components.BotonInicio
-import com.example.electricapp.ui.ui.components.CampoCorreo
-import com.example.electricapp.ui.ui.components.CampoPassword
-import com.example.electricapp.ui.ui.components.ImagenEncabezadoLogin
-import com.example.electricapp.ui.ui.theme.Dimens
+import com.example.electricapp.ui.components.BotonInicio
+import com.example.electricapp.ui.components.CampoCorreo
+import com.example.electricapp.ui.components.CampoPassword
+import com.example.electricapp.ui.components.ImagenEncabezadoLogin
+import com.example.electricapp.ui.theme.Dimens
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.electricapp.ui.ui.theme.ElectricAppTheme
+import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
