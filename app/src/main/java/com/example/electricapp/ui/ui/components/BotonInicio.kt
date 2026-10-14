@@ -48,7 +48,7 @@ fun BotonInicio(
             )
             Spacer(modifier.size(ButtonDefaults.IconSpacing))
         }
-        Text(text = texto, style = MaterialTheme.typography.titleLarge, color = TextoOscuro)
+        Text(text = texto, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimary)
     }
 }
 
