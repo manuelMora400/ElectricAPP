@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">ElectricApp</string>
+
+    <!--Pantalla de inicio de sesion (Login)-->
+    <string name="titulo_sesion" > Inicio sesion </string>
+    <string name="campo_correo"> Correo </string>
+    <string name="campo_password"> Contraseña </string>
+    <string name="has_olvidado_password"> ¿haz olvidado tu contraseña? </string>
+    <string name="btn_iniciar_sesion"> Inicie Sesion </string>
+    <string name="ocultar_contrasena"> Ocultar su contraseña </string>
+    <string name="mostrar_contrasena"> Mostrar contraseña</string>
+    <string name="Error_password"> Contraseña invalida, intente de nuevo</string>
+
+    <!-- Pantalla Vista del Jefe Tecnico -->
+    <string name="titulo_bienvenida"> Bienvenido/a, %1$s</string>
+    <string name="titulo_card"> Gestion Tecnico Jefe</string>
+    <string name="titulo_gestionar_users"> Jefe Tecnico </string>
+    <string name="titulo_registrar_instrumentos"> Registrar Instrumentos y calibraciones</string>
+    <string name="consultar_historial_equipo"> Consultar Historial de equipos</string>
+
+    <string name="btn_gestion_usuarios"> Gestionar Cuentas </string>
+    <string name="btn_registrar_instrumentos"> Registrar Instrumentos</string>
+    <string name="btn_historial_equipo"> Consulte Historial de equipos </string>
+    <string name="btn_cerrar_sesion"> Cerrar sesion </string>
 </resources>
