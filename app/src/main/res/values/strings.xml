@@ -12,14 +12,32 @@
     <string name="Error_password"> Contraseña invalida, intente de nuevo</string>
 
     <!-- Pantalla Vista del Jefe Tecnico -->
-    <string name="titulo_bienvenida"> Bienvenido/a, %1$s</string>
-    <string name="titulo_card"> Gestion Tecnico Jefe</string>
-    <string name="titulo_gestionar_users"> Jefe Tecnico </string>
-    <string name="titulo_registrar_instrumentos"> Registrar Instrumentos y calibraciones</string>
-    <string name="consultar_historial_equipo"> Consultar Historial de equipos</string>
 
-    <string name="btn_gestion_usuarios"> Gestionar Cuentas </string>
-    <string name="btn_registrar_instrumentos"> Registrar Instrumentos</string>
-    <string name="btn_historial_equipo"> Consulte Historial de equipos </string>
-    <string name="btn_cerrar_sesion"> Cerrar sesion </string>
+    <string name="titulo_Empresa"> INDUZTEK </string>
+    <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
+    <string name="subtitulo"> Menu principal, Seleccione una opcion: </string>
+
+    <string name="titulo_gestionar_usuarios"> Gestion de usuarios </string>
+    <string name="subtitulo_gestionar_usuarios"> Administrar cuentas y sus accesos </string>
+
+    <string name="titulo_historial_equipos"> Historial de equipos </string>
+    <string name="subtitulo_historial_equipos"> Consultar el historial de equipos </string>
+
+    <string name="titulo_instrumentos_calibracion"> Instrumentos y calibracion </string>
+    <string name="subtitulo_instrumentos_calibracion"> Registrar, actualizar y revisar fechas </string>
+
+    <string name="titulo_revisar_protocolos"> Revisar protocolos </string>
+    <string name="subtitulo_revisar_protocolos"> Formalizacion u observaciones </string>
+
+    <string name="titulo_anular_protocolos"> Anular protocolos </string>
+    <string name="subtitulo_anular_protocolos"> Anular un protocolo existente </string>
+
+    <string name="titulo_registrar_clientes"> Registrar clientes y equipos </string>
+    <string name="subtitulo_registro_cliente"> Clientes, instalaciones y equipos </string>
+
+    <string name="titulo_crear_protocolos"> Crear protocolos </string>
+    <string name="subtitulo_crear_protocolos"> Crear y registrar mediciones </string>
+
+    <string name="titulo_desactivar_personal"> Desactivar personal </string>
+    <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
 </resources>
