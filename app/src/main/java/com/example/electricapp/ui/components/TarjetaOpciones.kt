@@ -1,8 +1,11 @@
 package com.example.electricapp.ui.components
 
 
+import androidx.compose.material3.Icon
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -12,83 +15,110 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.electricapp.R
-import com.example.electricapp.ui.styles.EstilosBotones
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
-import com.example.electricapp.ui.theme.TextoOscuro
+
 
 @Composable
 fun TarjetaOpciones(
-
     titulo : String,
+    subtitulo : String,
+    @DrawableRes icono : Int,
     modifier: Modifier = Modifier,
     onClick : () -> Unit,
 ){
-
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = EstilosTarjetas.forma,
-        colors = EstilosTarjetas.colores(),
-        elevation = EstilosTarjetas.elevacion()
+        onClick = onClick,
+        colors = EstilosTarjetas.colores()
     ) {
-        Column(
-            modifier = Modifier.padding(Dimens.espacioMed),
-            verticalArrangement = Arrangement.spacedBy(Dimens.espacioMed)
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(Dimens.espacioMed),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.espacioLogoJefe),
+            verticalAlignment =  Alignment.CenterVertically,
         ) {
-            Text(
-                text = titulo,
-                style = MaterialTheme.typography.titleLarge,
-                color = TextoOscuro,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+
+            Icon(
+                painter = painterResource(icono),
+                contentDescription = null
             )
-
-            Button(
-                onClick = onClick,
-                modifier = modifier.fillMaxWidth(),
-                shape = EstilosBotones.formaBoton,
-                colors = EstilosBotones.ColorBotonGestiones(),
-                elevation = EstilosBotones.elevacion()
+            Column(
+                modifier = Modifier.padding()
             ) {
-                Text(stringResource(R.string.btn_gestion_usuarios))
+                Text(
+                    text = titulo,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = subtitulo,
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
-        }
-            Button(
-                onClick = onClick,
-                modifier = modifier.fillMaxWidth(),
-                shape = EstilosBotones.formaBoton,
-                colors = EstilosBotones.ColorBotonGestiones(),
-                elevation = EstilosBotones.elevacion()
-            ) {
-                Text(stringResource(R.string.btn_historial_equipo))
-            }
-
-           Button(
-                onClick = onClick,
-                modifier = modifier.fillMaxWidth(),
-                shape = EstilosBotones.formaBoton,
-                colors = EstilosBotones.ColorBotonGestiones(),
-                elevation = EstilosBotones.elevacion()
-        ) {
-            Text(stringResource(R.string.btn_registrar_instrumentos))
-        }
         }
     }
-
-
-
+}
 @Preview(showBackground = true)
 @Composable
-fun viewCardOpciones(){
+fun TarjetaOpcionesView(){
+    ElectricAppTheme(true) {
+    Column(
 
-    ElectricAppTheme {
-        Column {
-            TarjetaOpciones("Gestione con precaucion", Modifier.padding(20.dp), onClick = {})
-        }
+    ) {
+        TarjetaOpciones (
+            "Gestionar usuarios",
+            "Administrar cuentas y accesos",
+            R.drawable.ic_gestion_usuarios,
+            modifier = Modifier.padding(20.dp),
+            onClick = {}
+        )
+        TarjetaOpciones(
+            "Historial de equipos",
+            "Consultar el historial de un equipo",
+            R.drawable.ic_historial_equipo,
+            modifier = Modifier.padding(20.dp),
+            onClick = {}
+        )
+        TarjetaOpciones (
+            "Revisar protocolos",
+            "Revise protocolos",
+            R.drawable.ic_revisar_protocolos,
+            modifier = Modifier.padding(20.dp),
+            onClick = {}
+        )
+        TarjetaOpciones(
+            "Anular protocolos",
+            "Anule protocolos",
+            R.drawable.ic_anular_protocolos,
+            modifier = Modifier.padding(20.dp),
+            onClick = {}
+        )
 
+        TarjetaOpciones(
+            "Registrar clientes",
+            "Clientes, instalaciones y equipo",
+            R.drawable.ic_registrar_client_equipo,
+            modifier = Modifier.padding(20.dp),
+            onClick = {}
+        )
+        TarjetaOpciones (
+            "Crear protocolos ",
+            "Crear y registrar protocolos",
+            R.drawable.ic_crear_protocolos,
+            modifier = Modifier.padding(20.dp),
+            onClick = {}
+        )
+        TarjetaOpciones(
+            "Desactivar personal",
+            "Desactive personal",
+            R.drawable.ic_desactivar_personal,
+            modifier = Modifier.padding(20.dp),
+            onClick = {}
+        )
+    }
     }
 }

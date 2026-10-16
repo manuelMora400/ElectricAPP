@@ -8,6 +8,7 @@ object Dimens {
     val tamanoLogo = 25.dp
     val bordeLogo = 5.dp
     val altoImagen = 200.dp
+    val altoImagenEncabezado = 100.dp
 
 
     // Botones
@@ -26,4 +27,10 @@ object Dimens {
     // tarjetas
     val radioTarjeta = 10.dp
     val elevacionTarjeta = 7.dp
+
+
+    //  vista-jefe
+    val espacioLogoJefe = 20.dp
+    val rowEspacio = 12.dp
+    val espacioTitulo = 12.dp
 }
