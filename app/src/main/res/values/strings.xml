@@ -14,6 +14,7 @@
     <!-- Pantalla Vista del Jefe Tecnico -->
 
     <string name="titulo_Empresa"> INDUZTEK </string>
+    <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
     <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
     <string name="subtitulo"> Menu principal, Seleccione una opcion: </string>
 
@@ -40,4 +41,6 @@
 
     <string name="titulo_desactivar_personal"> Desactivar personal </string>
     <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
+
+    <string name="btn_cerrar_sesion"> Cerrar sesion </string>
 </resources>
