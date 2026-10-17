@@ -1,2 +1,260 @@
 package com.example.electricapp.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.electricapp.R
+import com.example.electricapp.model.FormularioRegistros
+import com.example.electricapp.model.Rol
+import com.example.electricapp.ui.components.Bienvenida
+import com.example.electricapp.ui.components.BotonCerrarSesion
+import com.example.electricapp.ui.components.BotonInicio
+import com.example.electricapp.ui.components.CampoCorreo
+import com.example.electricapp.ui.components.CampoPassword
+import com.example.electricapp.ui.components.CamposFormularios
+import com.example.electricapp.ui.components.EncabezadoVistaJefe
+import com.example.electricapp.ui.components.SeleccionPerfilRegistro
+import com.example.electricapp.ui.styles.EstilosTarjetas
+import com.example.electricapp.ui.theme.Dimens
+import com.example.electricapp.ui.theme.ElectricAppTheme
+import com.example.electricapp.viewModel.FormularioLoginViewModel
+import com.example.electricapp.viewModel.FormularioRegistrosViewModel
+import kotlinx.coroutines.channels.ticker
+
+@Composable
+fun screensRegistro(
+
+     viewModel : FormularioRegistrosViewModel = viewModel()
+){
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    RegistrosScreens (
+        uiState = uiState,
+        onRutCambia = viewModel::onRutCambia,
+        onNombreCambia = viewModel::onNombreCambia,
+        onTelefonoCambia = viewModel::onTelefonoCambia,
+        onCorreoCambia = viewModel::onCorreoCambia,
+        onPasswordCambia = viewModel::onPasswordCambia,
+        onRolCambia = viewModel::onRolCambia,
+        onGiroCambia = viewModel::onGiroCambia,
+        onContactoCambia = viewModel::onContactoCambia,
+        onLimpiar = viewModel::onLimpiar,
+        onRegistrar = viewModel::onRegistrar
+    )
+}
+
+@Composable
+fun RegistrosScreens(
+
+    uiState : FormularioRegistros,
+    onRutCambia : (String) -> Unit,
+    onNombreCambia : (String) -> Unit,
+    onTelefonoCambia : (String) -> Unit,
+    onCorreoCambia : (String) -> Unit,
+    onPasswordCambia : (String) -> Unit,
+    onRolCambia : (Rol) -> Unit,
+    onGiroCambia : (String) -> Unit,
+    onContactoCambia : (String) -> Unit,
+    onLimpiar : () -> Unit,
+    onRegistrar : () -> Unit
+
+){
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background
+    ) { innerPadding ->
+
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+        ) {
+
+            EncabezadoVistaJefe(
+                titulo = stringResource(R.string.titulo_Empresa),
+                subTitulo = stringResource(R.string.subtitulo_empresa),
+                icono = R.drawable.logo_inicio_sesion
+            )
+            Bienvenida(
+                texto = stringResource(R.string.titulo_gestionar_cuenta),
+                descripcion = stringResource(R.string.subtitulo_gestionar_cuenta)
+            )
+
+            Card(
+
+                modifier = Modifier.fillMaxWidth().padding(Dimens.espacioPantalla),
+                colors = EstilosTarjetas.coloresSecundario(),
+                border = EstilosTarjetas.bordeado(),
+                elevation = EstilosTarjetas.elevacion()
+
+            ) {
+                Bienvenida(
+                    texto = stringResource(R.string.titulo_formulario_registro),
+                    descripcion = stringResource(R.string.ayuda_formulario_registro)
+                )
+                    CamposFormularios(
+                        valor = uiState.rut,
+                        onValorCambia = onRutCambia,
+                        etiquetaCampo = stringResource(R.string.campo_rut_registro),
+                        icono = R.drawable.ic_rut,
+                        modifier = Modifier.padding(Dimens.espacioMed),
+                        error = uiState.errorRut,
+                        tipoTeclado = KeyboardType.Text
+                    )
+
+                    CamposFormularios(
+                        valor = uiState.nombre,
+                        onValorCambia = onNombreCambia,
+                        etiquetaCampo = stringResource(R.string.campo_nombre_completo_registro),
+                        icono = R.drawable.ic_nombre_formulario,
+                        modifier = Modifier.padding(Dimens.espacioMed),
+                        error = uiState.errorNombre,
+                        tipoTeclado = KeyboardType.Text
+                    )
+
+                    CamposFormularios(
+                        valor = uiState.telefono,
+                        onValorCambia = onTelefonoCambia,
+                        etiquetaCampo = stringResource(R.string.campo_telefono_registro),
+                        icono = R.drawable.ic_telefono,
+                        modifier = Modifier.padding(Dimens.espacioMed),
+                        error = uiState.errorTelefono,
+                        tipoTeclado = KeyboardType.Text
+                    )
+
+                    CampoCorreo(
+                        valor = uiState.correo,
+                        onValorCambia = onCorreoCambia,
+                        etiquetaCorreo = stringResource(R.string.campo_correo),
+                        iconoCorreo = R.drawable.ic_correo,
+                        modifier = Modifier.padding(Dimens.espacioMed),
+                        error = uiState.errorPassword,
+                        tecladoTipo = KeyboardType.Email
+                    )
+
+                    CamposFormularios(
+                        valor = uiState.password,
+                        onValorCambia = onPasswordCambia,
+                        etiquetaCampo = stringResource(R.string.campo_password),
+                        icono = R.drawable.ic_candado,
+                        modifier = Modifier.padding(Dimens.espacioMed),
+                        error = uiState.errorPassword,
+                        tipoTeclado = KeyboardType.Password
+                    )
+
+                    SeleccionPerfilRegistro(
+                        rol = uiState.rol,
+                        texto = R.string.campo_perfil_registro,
+                        onRolSeleccionado = onRolCambia,
+                        modifier = Modifier.padding(Dimens.espacioMed)
+                    )
+
+                if(uiState.Cliente){
+
+                    CamposFormularios(
+                        valor = uiState.giro,
+                        onValorCambia = onGiroCambia,
+                        etiquetaCampo = stringResource(R.string.campo_giro_registro),
+                        icono = R.drawable.ic_cargo,
+                        modifier = Modifier.padding(Dimens.espacioMed),
+                        error = uiState.errorGiro,
+                        tipoTeclado = KeyboardType.Text
+                    )
+
+                    CamposFormularios(
+                        valor = uiState.contactoCargo,
+                        onValorCambia = onContactoCambia,
+                        etiquetaCampo = stringResource(R.string.campo_contacto_cargo),
+                        icono = R.drawable.ic_contacto_cargo,
+                        modifier = Modifier.padding(Dimens.espacioMed),
+                        error = uiState.errorCotacto,
+                        tipoTeclado = KeyboardType.Text
+                    )
+                }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed),
+                modifier = Modifier.padding(Dimens.espacioMed)
+            ) {
+                BotonInicio(
+                    texto = stringResource(R.string.btn_registre_r),
+                    onClick = onRegistrar,
+                    modifier = Modifier.fillMaxWidth(1f)
+                )
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed),
+                modifier = Modifier.padding(Dimens.espacioMed)
+            ) {
+                BotonCerrarSesion(
+                    texto = stringResource(R.string.btn_limpiar),
+                    onClick = onLimpiar,
+                    icono = null
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegistrosScreensView(){
+
+    ElectricAppTheme(false) {
+        RegistrosScreens (
+            uiState = FormularioRegistros(),
+            onRutCambia = {},
+            onNombreCambia = {},
+            onTelefonoCambia = {},
+            onCorreoCambia = {},
+            onPasswordCambia = {},
+            onRolCambia = {},
+            onGiroCambia = {},
+            onContactoCambia = {},
+            onLimpiar = {},
+            onRegistrar = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegistrosScreensView2(){
+
+    ElectricAppTheme(true) {
+        RegistrosScreens (
+            uiState = FormularioRegistros(),
+            onRutCambia = {},
+            onNombreCambia = {},
+            onTelefonoCambia = {},
+            onCorreoCambia = {},
+            onPasswordCambia = {},
+            onRolCambia = {},
+            onGiroCambia = {},
+            onContactoCambia = {},
+            onLimpiar = {},
+            onRegistrar = {}
+        )
+    }
+}
