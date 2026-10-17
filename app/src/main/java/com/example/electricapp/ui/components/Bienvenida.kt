@@ -15,10 +15,10 @@ import com.example.electricapp.ui.theme.ElectricAppTheme
 @Composable
 fun Bienvenida(
     texto : String,
-    descripcion : String
+    descripcion : String,
 ){
     Column(
-        modifier = Modifier.fillMaxWidth().padding(Dimens.espacioChico)
+        modifier = Modifier.fillMaxWidth().padding(Dimens.espacioMed)
     ) {
         Text(
             text = texto,
