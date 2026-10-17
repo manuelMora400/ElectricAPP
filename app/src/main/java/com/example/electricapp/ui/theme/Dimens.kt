@@ -33,6 +33,8 @@ object Dimens {
     val espacioLogoJefe = 20.dp
     val rowEspacio = 12.dp
     val espacioTitulo = 12.dp
-
     val espacioChico = 2.dp
+
+    //formularios
+    val formaCampo = 6.dp
 }
