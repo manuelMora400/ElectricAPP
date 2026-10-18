@@ -72,6 +72,12 @@
     <string name="btn_registre_r"> Registrar </string>
     <string name="btn_limpiar"> Limpiar </string>
 
+    <!-- Pantalla activar/desactivar cuentas-->
+    <string name="activar_cuenta"> Activada </string>
+    <string name="desactivar_cuenta"> Desactivada </string>
+    
+    <string name="titulo_administrar_cuentas"> Activar/Desactivar cuentas</string>
+    <string name="subtitulo_administrar_cuentas"> No puede eliminar las cuenta, solo desactivar</string>
 
 
 </resources>

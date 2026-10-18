@@ -11,10 +11,24 @@ import kotlinx.coroutines.flow.update
 
 class FormularioRegistrosViewModel : ViewModel(){
 
-    val cuentasSimulado : List<UsuarioEjemplo> = listOf(
-        UsuarioEjemplo(1,"Manuel Mora", Rol.CLIENTE,"manuel@gmail.com"),
-        UsuarioEjemplo(2,"Martina Jimenez", Rol.INGENIERO, "Marti@gmail.com")
-    )
+    // Datos para probar (cuenta activada / desactivada)
+    private val _cuentasSimulado = MutableStateFlow(listOf<UsuarioEjemplo>(
+        UsuarioEjemplo(1,"Manuel Mora Acuña", Rol.CLIENTE, "Manuel@gmail.com"),
+        UsuarioEjemplo(2, "Edelaine yenerie miranda", Rol.INGENIERO, "Edesita@gmail.com")
+    ))
+
+    val cuentasSimuladas : StateFlow<List<UsuarioEjemplo>> = _cuentasSimulado.asStateFlow()
+
+    fun onEstadoCambia(id : Long, estadoNuevo : Boolean){
+
+        _cuentasSimulado.update {it.map { nuevo ->
+                if(nuevo.id == id){
+                    nuevo.copy(activo = estadoNuevo)
+                }else
+                    nuevo
+        }}
+    }
+    //------------------------------------------------------------------------------------------//
     private val _uiState = MutableStateFlow(FormularioRegistros())
     val uiState : StateFlow<FormularioRegistros> = _uiState.asStateFlow()
 
