@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -18,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
+import com.example.electricapp.model.UsuarioEjemplo
 import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.BotonCerrarSesion
 import com.example.electricapp.ui.components.BotonInicio
@@ -38,6 +39,7 @@ import com.example.electricapp.ui.components.CampoPassword
 import com.example.electricapp.ui.components.CamposFormularios
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.components.SeleccionPerfilRegistro
+import com.example.electricapp.ui.components.UsuariosCards
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
@@ -54,9 +56,12 @@ fun screensRegistro(
 ){
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val cuentas by viewModel.cuentasSimuladas.collectAsStateWithLifecycle()
 
     RegistrosScreens (
         uiState = uiState,
+        cuentas = cuentas,
+        onEstadoCambia = viewModel::onEstadoCambia,
         onRutCambia = viewModel::onRutCambia,
         onNombreCambia = viewModel::onNombreCambia,
         onTelefonoCambia = viewModel::onTelefonoCambia,
@@ -74,6 +79,7 @@ fun screensRegistro(
 fun RegistrosScreens(
 
     uiState : FormularioRegistros,
+    cuentas : List<UsuarioEjemplo>,
     onRutCambia : (String) -> Unit,
     onNombreCambia : (String) -> Unit,
     onTelefonoCambia : (String) -> Unit,
@@ -83,29 +89,32 @@ fun RegistrosScreens(
     onGiroCambia : (String) -> Unit,
     onContactoCambia : (String) -> Unit,
     onLimpiar : () -> Unit,
-    onRegistrar : () -> Unit
+    onRegistrar : () -> Unit,
+    onEstadoCambia :(Long, Boolean) -> Unit
 
 ){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
 
-        Column(
+        LazyColumn(
             modifier = Modifier.fillMaxWidth().padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+
         ) {
 
-            EncabezadoVistaJefe(
+            item {EncabezadoVistaJefe(
                 titulo = stringResource(R.string.titulo_Empresa),
                 subTitulo = stringResource(R.string.subtitulo_empresa),
                 icono = R.drawable.logo_inicio_sesion
-            )
-            Bienvenida(
+             )
+            }
+
+            item {  Bienvenida(
                 texto = stringResource(R.string.titulo_gestionar_cuenta),
                 descripcion = stringResource(R.string.subtitulo_gestionar_cuenta)
-            )
-
-            Card(
+                )
+            }
+            item {  Card(
 
                 modifier = Modifier.fillMaxWidth().padding(Dimens.espacioPantalla),
                 colors = EstilosTarjetas.coloresSecundario(),
@@ -219,12 +228,30 @@ fun RegistrosScreens(
                     )
                 }
             }
-            if(uiState.registradoExito){
-                MensajeExitoso(uiState.nombre)
             }
+                if(uiState.registradoExito){
+                    item {
+                        MensajeExitoso(uiState.nombre)
+                    }
+                }
+
+            item {Bienvenida(
+                texto = stringResource(R.string.titulo_administrar_cuentas),
+                descripcion = stringResource(R.string.subtitulo_administrar_cuentas),
+            )
+            }
+                items(cuentas, key = {it.id}){
+                        usuarios ->
+                    UsuariosCards(
+                        usuarioEjemplo = usuarios,
+                        onEstadoCambia = { nuevoEstado -> onEstadoCambia(usuarios.id, nuevoEstado)})
+                }
+            }
+
         }
     }
-}
+
+
 @Composable
 private fun MensajeExitoso(nombre : String){
 
@@ -253,6 +280,7 @@ fun RegistrosScreensView(){
     ElectricAppTheme(false) {
         RegistrosScreens (
             uiState = FormularioRegistros(),
+            cuentas = emptyList(),
             onRutCambia = {},
             onNombreCambia = {},
             onTelefonoCambia = {},
@@ -262,7 +290,8 @@ fun RegistrosScreensView(){
             onGiroCambia = {},
             onContactoCambia = {},
             onLimpiar = {},
-            onRegistrar = {}
+            onRegistrar = {},
+            onEstadoCambia = {_, _ ->}
         )
     }
 }
@@ -271,9 +300,10 @@ fun RegistrosScreensView(){
 @Composable
 fun RegistrosScreensView2(){
 
-    ElectricAppTheme(true) {
+    ElectricAppTheme(false) {
         RegistrosScreens (
             uiState = FormularioRegistros(),
+            cuentas = emptyList(),
             onRutCambia = {},
             onNombreCambia = {},
             onTelefonoCambia = {},
@@ -283,7 +313,8 @@ fun RegistrosScreensView2(){
             onGiroCambia = {},
             onContactoCambia = {},
             onLimpiar = {},
-            onRegistrar = {}
+            onRegistrar = {},
+            onEstadoCambia = {_, _ ->}
         )
     }
 }
