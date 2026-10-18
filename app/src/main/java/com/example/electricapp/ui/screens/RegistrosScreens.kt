@@ -153,7 +153,7 @@ fun RegistrosScreens(
                         etiquetaCorreo = stringResource(R.string.campo_correo),
                         iconoCorreo = R.drawable.ic_correo,
                         modifier = Modifier.padding(Dimens.espacioMed),
-                        error = uiState.errorPassword,
+                        error = uiState.errorCorreo,
                         tecladoTipo = KeyboardType.Email
                     )
 
