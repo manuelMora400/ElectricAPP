@@ -11,12 +11,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +41,8 @@ import com.example.electricapp.ui.components.SeleccionPerfilRegistro
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
+import com.example.electricapp.ui.theme.Exito
+import com.example.electricapp.ui.theme.ExitoFondo
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 import com.example.electricapp.viewModel.FormularioRegistrosViewModel
 import kotlinx.coroutines.channels.ticker
@@ -190,30 +196,53 @@ fun RegistrosScreens(
                         tipoTeclado = KeyboardType.Text
                     )
                 }
-            }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed),
-                modifier = Modifier.padding(Dimens.espacioMed)
-            ) {
-                BotonInicio(
-                    texto = stringResource(R.string.btn_registre_r),
-                    onClick = onRegistrar,
-                    modifier = Modifier.fillMaxWidth(1f)
-                )
-            }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed),
+                    modifier = Modifier.padding(Dimens.espacioMed)
+                ) {
+                    BotonInicio(
+                        texto = stringResource(R.string.btn_registre_r),
+                        onClick = onRegistrar,
+                        modifier = Modifier.fillMaxWidth(1f)
+                    )
+                }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed),
-                modifier = Modifier.padding(Dimens.espacioMed)
-            ) {
-                BotonCerrarSesion(
-                    texto = stringResource(R.string.btn_limpiar),
-                    onClick = onLimpiar,
-                    icono = null
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed),
+                    modifier = Modifier.padding(Dimens.espacioMed)
+                ) {
+                    BotonCerrarSesion(
+                        texto = stringResource(R.string.btn_limpiar),
+                        onClick = onLimpiar,
+                        icono = null
+                    )
+                }
+            }
+            if(uiState.registradoExito){
+                MensajeExitoso(uiState.nombre)
             }
         }
+    }
+}
+@Composable
+private fun MensajeExitoso(nombre : String){
+
+    Card(
+        modifier = Modifier.fillMaxSize(1f),
+        colors = CardDefaults.cardColors(containerColor = ExitoFondo, contentColor = Exito)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_exito),
+            contentDescription = null,
+            tint = Exito,
+            modifier = Modifier.size(Dimens.tamanoIcono)
+        )
+        Text(
+            text = stringResource(R.string.exito_registrado),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(Dimens.espacioPantalla)
+        )
     }
 }
 
