@@ -19,7 +19,6 @@ data class FormularioRegistros(
     val errorTelefono : String? = null,
     val errorCorreo : String? = null,
     val errorPassword : String? = null,
-    val errorRol : String? = null,
     val errorGiro : String? = null,
     val errorCotacto : String? = null,
 
@@ -30,3 +29,11 @@ data class FormularioRegistros(
     val Cliente : Boolean  get() = rol == Rol.CLIENTE
 }
 
+// Clase para probar datos ejemplos
+data class UsuarioEjemplo(
+    val id : Long = 0,
+    val nombre: String,
+    val rol : Rol,
+    val correo : String,
+    val activo : Boolean = true
+)
