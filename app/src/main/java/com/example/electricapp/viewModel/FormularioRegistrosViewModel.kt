@@ -94,7 +94,7 @@ class FormularioRegistrosViewModel : ViewModel(){
         val errorPassword =
 
                 if(estado.password.isBlank()){
-                    "La contraseña del usuario debe estar en blanco"
+                    "La contraseña del usuario no debe estar en blanco"
                 }else if(estado.password.length !in 8..12 ){
                     "La contraseña debe contener entre 8 a 12 caracteres"
                 }else if(!estado.password.contains(".") && !estado.password.contains("-")){
