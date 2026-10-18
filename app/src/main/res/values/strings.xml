@@ -12,7 +12,6 @@
     <string name="Error_password"> Contraseña invalida, intente de nuevo</string>
 
     <!-- Pantalla Vista del Jefe Tecnico -->
-
     <string name="titulo_Empresa"> INDUZTEK </string>
     <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
     <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
@@ -43,4 +42,35 @@
     <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
 
     <string name="btn_cerrar_sesion"> Cerrar sesion </string>
+
+
+
+
+
+    <!--Pantalla Gestionar Usuarios-->
+    <string name="btn_regresar_menu_principal"> Menu principal </string>
+    <string name="titulo_gestionar_cuenta"> Gestionar cuentas </string>
+    <string name="subtitulo_gestionar_cuenta"> Administracion exclusiva del jefe Tecnico </string>
+
+    <string name="titulo_formulario_registro"> Registrar Usuarios </string>
+    <string name="ayuda_formulario_registro"> Complete los datos para agregar una cuenta</string>
+
+    <!-- Campo correo / contraseña ya esta -->
+    <string name="campo_rut_registro"> Rut </string>
+    <string name="campo_nombre_completo_registro">Nombre completo</string>
+    <string name="campo_telefono_registro"> Telefono </string>
+    <string name="campo_perfil_registro"> Perfil/Rol </string>
+    <string name="campo_giro_registro"> Giro </string>
+    <string name="campo_contacto_cargo"> Cargo</string>
+
+    <string name="rol_jefe_tecnico"> Jefe Tecnico </string>
+    <string name="rol_ingeniero"> Ingeniero de pruebas </string>
+    <string name="rol_tecnico"> Tecnico </string>
+    <string name="rol_cliente"> Cliente</string>
+
+    <string name="btn_registre_r"> Registrar </string>
+    <string name="btn_limpiar"> Limpiar </string>
+
+
+
 </resources>

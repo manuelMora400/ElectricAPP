@@ -34,4 +34,5 @@ val TextoSuave = Color(0xFFD6E4EA)          // subtítulo del encabezado
 
 val GrisDeshabilitado = Color(0xFFBDBAC7)
 val Exito = Color(0xFF1B8A4B)               // verde más oscuro, legible sobre blanco
-val ExitoFondo = Color(0xFFE3F5EA)
+val ExitoFondo = Color(0xFF38FC17)
+
