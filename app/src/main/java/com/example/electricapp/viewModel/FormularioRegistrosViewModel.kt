@@ -3,6 +3,7 @@ package com.example.electricapp.viewModel
 import androidx.lifecycle.ViewModel
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
+import com.example.electricapp.model.UsuarioEjemplo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,6 +11,10 @@ import kotlinx.coroutines.flow.update
 
 class FormularioRegistrosViewModel : ViewModel(){
 
+    val cuentasSimulado : List<UsuarioEjemplo> = listOf(
+        UsuarioEjemplo(1,"Manuel Mora", Rol.CLIENTE,"manuel@gmail.com"),
+        UsuarioEjemplo(2,"Martina Jimenez", Rol.INGENIERO, "Marti@gmail.com")
+    )
     private val _uiState = MutableStateFlow(FormularioRegistros())
     val uiState : StateFlow<FormularioRegistros> = _uiState.asStateFlow()
 
@@ -99,34 +104,26 @@ class FormularioRegistrosViewModel : ViewModel(){
                 }else
                     null
 
-        val errorRol =
+        val erroGiro =
 
             if(estado.rol == Rol.CLIENTE){
-                if (estado.giro.isBlank()){
+                if(estado.giro.isBlank()){
                     "El giro en clientes no puede estar vacio"
-                }else if(estado.contactoCargo.isBlank()){
-                    "El contacto cargo no debe estar vacio"
                 }else if(estado.giro.length !in 10..80){
                     "El giro debe contener entre 10 a 80 caracteres"
                 }else
                     null
             }else
-                    null
-
-        val erroGiro =
-            if(estado.giro.isBlank()){
-                "El giro en clientes no puede estar vacio"
-            }else if(estado.giro.length !in 10..80){
-                "El giro debe contener entre 10 a 80 caracteres"
-            }else
                 null
 
         val errorContacto =
-            if(estado.contactoCargo.isBlank()){
-                "El contacto cargo no debe estar vacio"
+            if(estado.rol == Rol.CLIENTE){
+                if(estado.contactoCargo.isBlank()){
+                    "El contacto cargo no debe estar vacio"
+                }else
+                    null
             }else
                 null
-
 
         val hayErrores = listOf(
             errorRut,
@@ -134,7 +131,6 @@ class FormularioRegistrosViewModel : ViewModel(){
             errorTelefono,
             errorCorreo,
             errorPassword,
-            errorRol,
             erroGiro,
             errorContacto).any{it != null}
 
@@ -145,7 +141,6 @@ class FormularioRegistrosViewModel : ViewModel(){
                 errorTelefono = errorTelefono,
                 errorCorreo = errorCorreo,
                 errorPassword = errorPassword,
-                errorRol = errorRol,
                 errorGiro = erroGiro,
                 errorCotacto = errorContacto,
                 registradoExito = !hayErrores
