@@ -11,16 +11,22 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
+import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.ui.components.BotonInicio
+import com.example.electricapp.ui.components.CampoInstalacion
+import com.example.electricapp.ui.components.CampoTag
 import com.example.electricapp.ui.components.ImagenEncabezadoLogin
 import com.example.electricapp.ui.theme.Dimens
+import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.HistorialViewModel
 
 @Composable
@@ -65,14 +71,14 @@ fun HistorialScreen(
                     valor = uiState.tagBuscar,
                     onTagBuscar = onTagBuscar,
                     etiquetaTag = stringResource(R.string.campo_tag),
-                    //icono falta
+                    iconoTag = R.drawable.ic_nombre,
                     error = uiState.tagError
                 )
                 CampoInstalacion(
                     valor = uiState.instalacion,
-                    onTagBuscar = onInstalacion,
-                    etiquetaTag = stringResource(R.string.campo_Instalacion),
-                    //icono falta
+                    onInstalacion = onInstalacion,
+                    etiquetaInstalacion = stringResource(R.string.campo_Instalacion),
+                    iconoInst = R.drawable.ic_busqueda,
                     error = uiState.intalacionError
                 )
             }
@@ -84,5 +90,32 @@ fun HistorialScreen(
                 )
             }
         }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun TagScreensView(){
+
+    ElectricAppTheme(false) {
+        HistorialScreen(
+            uiState = HistorialState(),
+            onTagBuscar = {},
+            onInstalacion = {},
+            realizarBusqueda = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TagScreensVie(){
+
+    ElectricAppTheme(true) {
+        HistorialScreen(
+            uiState = HistorialState(),
+            onTagBuscar = {},
+            onInstalacion = {},
+            realizarBusqueda = {}
+        )
     }
 }
