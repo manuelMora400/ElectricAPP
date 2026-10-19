@@ -14,6 +14,7 @@
     <!-- Pantalla Vista del Jefe Tecnico -->
     <string name="titulo_bienvenida">Bienvenido/a, %1$s</string>
     <string name="titulo_Empresa"> INDUZTEK </string>
+    <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
     <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
     <string name="subtitulo"> Menu principal, Seleccione una opcion: </string>
 
@@ -46,4 +47,38 @@
     <string name="campo_tag"> Buscar por Tag (e.g. TR-01) </string>
     <string name="campo_Instalacion"> Nombre de la instalacion </string>
     <string name="btn_historial"> Buscar </string>
+    <string name="btn_cerrar_sesion"> Cerrar sesion </string>
+
+    <!-- Mensajes para exito -->
+    <string name="exito_registrado"> ¡Registrado Exitosamente!</string>
+
+    <!--Pantalla Gestionar Usuarios-->
+    <string name="btn_regresar_menu_principal"> Menu principal </string>
+    <string name="titulo_gestionar_cuenta"> Gestionar cuentas </string>
+    <string name="subtitulo_gestionar_cuenta"> Administracion exclusiva del jefe Tecnico </string>
+
+    <string name="titulo_formulario_registro"> Registrar Usuarios </string>
+    <string name="ayuda_formulario_registro"> Complete los datos para agregar una cuenta</string>
+
+    <!-- Campo correo / contraseña ya esta -->
+    <string name="campo_rut_registro"> Rut </string>
+    <string name="campo_nombre_completo_registro">Nombre completo</string>
+    <string name="campo_telefono_registro"> Telefono </string>
+    <string name="campo_perfil_registro"> Perfil/Rol </string>
+    <string name="campo_giro_registro"> Giro </string>
+    <string name="campo_contacto_cargo"> Cargo</string>
+
+    <string name="rol_jefe_tecnico"> Jefe Tecnico </string>
+    <string name="rol_ingeniero"> Ingeniero de pruebas </string>
+    <string name="rol_tecnico"> Tecnico </string>
+    <string name="rol_cliente"> Cliente</string>
+
+    <string name="btn_registre_r"> Registrar </string>
+    <string name="btn_limpiar"> Limpiar </string>
+
+    <!-- Pantalla activar/desactivar cuentas -->
+    <string name="activar_cuenta"> Activada </string>
+    <string name="desactivar_cuenta"> Desactivada </string>
+    <string name="titulo_administrar_cuentas"> Activar/Desactivar cuentas</string>
+    <string name="subtitulo_administrar_cuentas"> No puede eliminar las cuenta, solo desactivar</string>
 </resources>
