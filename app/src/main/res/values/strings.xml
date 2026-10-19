@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ElectricApp</string>
 
-    <!--Pantalla de inicio de sesion (Login)-->
+    <!-- Pantalla de inicio de sesion (Login) -->
     <string name="titulo_sesion"> Inicio sesion </string>
     <string name="campo_correo"> Correo </string>
     <string name="campo_password"> Contraseña </string>
@@ -52,7 +52,7 @@
     <!-- Mensajes para exito -->
     <string name="exito_registrado"> ¡Registrado Exitosamente!</string>
 
-    <!--Pantalla Gestionar Usuarios-->
+    <!-- Pantalla Gestionar Usuarios -->
     <string name="btn_regresar_menu_principal"> Menu principal </string>
     <string name="titulo_gestionar_cuenta"> Gestionar cuentas </string>
     <string name="subtitulo_gestionar_cuenta"> Administracion exclusiva del jefe Tecnico </string>
