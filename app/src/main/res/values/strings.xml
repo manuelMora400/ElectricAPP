@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">ElectricApp</string>
 
-    <!--Pantalla de inicio de sesion (Login)-->
-    <string name="titulo_sesion" > Inicio sesion </string>
+    <!-- Pantalla de inicio de sesion (Login) -->
+    <string name="titulo_sesion"> Inicio sesion </string>
     <string name="campo_correo"> Correo </string>
     <string name="campo_password"> Contraseña </string>
     <string name="has_olvidado_password"> ¿haz olvidado tu contraseña? </string>
@@ -12,6 +12,7 @@
     <string name="Error_password"> Contraseña invalida, intente de nuevo</string>
 
     <!-- Pantalla Vista del Jefe Tecnico -->
+    <string name="titulo_bienvenida">Bienvenido/a, %1$s</string>
     <string name="titulo_Empresa"> INDUZTEK </string>
     <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
     <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
@@ -41,14 +42,17 @@
     <string name="titulo_desactivar_personal"> Desactivar personal </string>
     <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
 
+    <!-- Pantalla Historial Protocolos -->
+    <string name="titulo_historial"> Historial de Equipo </string>
+    <string name="campo_tag"> Buscar por Tag (e.g. TR-01) </string>
+    <string name="campo_Instalacion"> Nombre de la instalacion </string>
+    <string name="btn_historial"> Buscar </string>
     <string name="btn_cerrar_sesion"> Cerrar sesion </string>
 
-
-<!-- Mensajes para exito-->
+    <!-- Mensajes para exito -->
     <string name="exito_registrado"> ¡Registrado Exitosamente!</string>
 
-
-    <!--Pantalla Gestionar Usuarios-->
+    <!-- Pantalla Gestionar Usuarios -->
     <string name="btn_regresar_menu_principal"> Menu principal </string>
     <string name="titulo_gestionar_cuenta"> Gestionar cuentas </string>
     <string name="subtitulo_gestionar_cuenta"> Administracion exclusiva del jefe Tecnico </string>
@@ -72,12 +76,9 @@
     <string name="btn_registre_r"> Registrar </string>
     <string name="btn_limpiar"> Limpiar </string>
 
-    <!-- Pantalla activar/desactivar cuentas-->
+    <!-- Pantalla activar/desactivar cuentas -->
     <string name="activar_cuenta"> Activada </string>
     <string name="desactivar_cuenta"> Desactivada </string>
-    
     <string name="titulo_administrar_cuentas"> Activar/Desactivar cuentas</string>
     <string name="subtitulo_administrar_cuentas"> No puede eliminar las cuenta, solo desactivar</string>
-
-
 </resources>
