@@ -35,7 +35,7 @@ fun EncabezadoVistaJefe(
     modifier: Modifier = Modifier
 ){
     Card(
-        modifier = Modifier.fillMaxWidth().padding(17.dp),
+        modifier = modifier.fillMaxWidth(),
         colors = EstilosTarjetas.colores()
     ) {
         Row(
@@ -46,14 +46,14 @@ fun EncabezadoVistaJefe(
             Image(
                 painter = painterResource(icono),
                 contentDescription = null,
-                modifier = modifier
+                modifier = Modifier
                             .align(Alignment.Top)
                             .size(48.dp)
                             .shadow(Dimens.elevation, shape = CircleShape)
                             .clip(CircleShape)
             )
             Column(
-                modifier = Modifier.padding()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = titulo,
@@ -75,8 +75,7 @@ fun EncabezadoView(){
         EncabezadoVistaJefe(
             "INDUZTEK",
             "Dedicada a ingenieria electrica",
-            R.drawable.logo_inicio_sesion,
-            Modifier.padding(20.dp)
+            R.drawable.logo_inicio_sesion
         )
     }
 }
@@ -87,8 +86,7 @@ fun EncabezadoView2(){
         EncabezadoVistaJefe(
             "INDUZTEK",
             "Dedicada a ingenieria electrica",
-            R.drawable.logo_inicio_sesion,
-            Modifier.padding(20.dp)
+            R.drawable.logo_inicio_sesion
         )
     }
 }
