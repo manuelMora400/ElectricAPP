@@ -24,6 +24,7 @@ import com.example.electricapp.model.HistorialState
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.CampoInstalacion
 import com.example.electricapp.ui.components.CampoTag
+import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.components.ImagenEncabezadoLogin
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
@@ -58,9 +59,11 @@ fun HistorialScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ){
-            ImagenEncabezadoLogin(
-                imagen = R.drawable.imagen_encabezado_login,
-                titulo = stringResource(R.string.titulo_historial)
+
+            EncabezadoVistaJefe(
+                titulo = stringResource(R.string.titulo_historial),
+                subTitulo = stringResource(R.string.titulo_bienvenida),
+                icono = R.drawable.logo_inicio_sesion
             )
             Column(
                 modifier = Modifier
