@@ -6,4 +6,7 @@ data class HistorialState(
     //Errores
     val tagError: String? = null,
     val intalacionError: String? = null,
-)
+    val rol : Rol = Rol.CLIENTE
+){
+    val Cliente : Boolean  get() = rol == Rol.CLIENTE
+}

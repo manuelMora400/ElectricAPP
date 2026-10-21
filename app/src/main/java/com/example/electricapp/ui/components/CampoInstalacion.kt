@@ -62,4 +62,12 @@ fun ViewCampoInsta(){
         modifier = Modifier.padding(23.dp),
         error = "Debe ingresar un Tag"
     )
+    CampoInstalacion(
+        valor = "Planta Lampa",
+        onInstalacion = {},
+        etiquetaInstalacion = "Busqueda por Nombre",
+        iconoInst = com.example.electricapp.R.drawable.ic_nombre,
+        modifier = Modifier.padding(23.dp),
+        error = null
+    )
 }

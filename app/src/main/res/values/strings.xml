@@ -90,4 +90,10 @@
 
     <string name="visualizar_instrumentos"> Instrumentos registrados </string>
     <string name="informacion_instrumentos"> Puede visualizar los instrumentos :</string>
+
+    <!-- Pantalla Estado Consulta -->
+    <string name="Consulta_Aprobado">Aprobado</string>
+    <string name="Consulta_Observacion">En observacion</string>
+    <string name="Consulta_Rechazado">Rechazado</string>
+    <string name="Consulta_Remplazado">Actualizado</string>
 </resources>
