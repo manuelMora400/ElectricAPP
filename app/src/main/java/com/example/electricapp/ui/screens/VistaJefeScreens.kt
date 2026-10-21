@@ -29,7 +29,11 @@ import com.example.electricapp.ui.theme.ElectricAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VistaJefeScreens(
-    onClick : () -> Unit
+    onClick : () -> Unit,
+    onGestionUsuarios : () -> Unit,
+    onInstrumentos : () -> Unit,
+    onDesactivarCuentas : () -> Unit,
+    onCerrarSesion : () -> Unit
 ){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
@@ -62,7 +66,7 @@ fun VistaJefeScreens(
                     subtitulo = stringResource(R.string.subtitulo_gestionar_usuarios),
                     icono = R.drawable.ic_gestion_usuarios,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onGestionUsuarios
                 )
                 TarjetaOpciones(
                     titulo = stringResource(R.string.titulo_historial_equipos),
@@ -84,7 +88,7 @@ fun VistaJefeScreens(
                     subtitulo = stringResource(R.string.subtitulo_instrumentos_calibracion),
                     icono = R.drawable.ic_calibracion_instrumento,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onInstrumentos
                 )
 
                 TarjetaOpciones(
@@ -113,12 +117,12 @@ fun VistaJefeScreens(
                     subtitulo = stringResource(R.string.subtitulo_desactivar_personal),
                     icono = R.drawable.ic_desactivar_personal,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onDesactivarCuentas
                 )
                Row(horizontalArrangement = Arrangement.Center) {
                    BotonCerrarSesion(
                        texto = stringResource(R.string.btn_cerrar_sesion),
-                       onClick = onClick
+                       onClick = onCerrarSesion
                    )
                }
             }
@@ -131,7 +135,11 @@ fun VistaJefeScreens(
 fun VistaJefeView(){
     ElectricAppTheme(true) {
         VistaJefeScreens (
-            onClick = {}
+            onClick = {},
+            onGestionUsuarios = {},
+            onInstrumentos = {},
+            onDesactivarCuentas = {},
+            onCerrarSesion = {}
         )
     }
 }
@@ -140,7 +148,11 @@ fun VistaJefeView(){
 fun VistaJefeView2(){
     ElectricAppTheme(false) {
         VistaJefeScreens (
-            onClick = {}
+            onClick = {},
+            onGestionUsuarios = {},
+            onInstrumentos = {},
+            onDesactivarCuentas = {},
+            onCerrarSesion = {}
         )
     }
 }
