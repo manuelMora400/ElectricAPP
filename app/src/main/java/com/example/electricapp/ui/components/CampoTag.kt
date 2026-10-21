@@ -62,4 +62,13 @@ fun ViewCampoTag(){
         modifier = Modifier.padding(23.dp),
         error = "Debe ingresar un Tag"
     )
+    CampoTag(
+        valor = "No se",
+        onTagBuscar = {},
+        etiquetaTag = "Busqueda por Tag",
+        iconoTag = com.example.electricapp.R.drawable.ic_busqueda,
+        modifier = Modifier.padding(23.dp),
+        error = null
+    )
+
 }
