@@ -1,11 +1,15 @@
 package com.example.electricapp.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.model.FormularioLoginState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 
 class FormularioLoginViewModel : ViewModel(){
@@ -24,7 +28,7 @@ class FormularioLoginViewModel : ViewModel(){
         _uiState.update {it.copy(passwordVisible = !it.passwordVisible)}
     }
 
-    fun onIniciar(){
+    fun onIniciar() : Boolean{
 
         val formatoCorreo = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
         val estado = _uiState.value
@@ -52,11 +56,21 @@ class FormularioLoginViewModel : ViewModel(){
                 "La contraseña debe tener un minimo de 8 y maximo de 12 digitos"
             }else
                 null
+
         val hayErrores = listOf(errorCorreo, errorPassword).any{it != null}
         _uiState.update { it.copy(
             errorCorreo = errorCorreo,
             errorPassword = errorPassword,
             logeadoExitoso = !hayErrores
         ) }
+
+        if(!hayErrores){
+            viewModelScope.launch {
+                delay(4000)
+                _uiState.update { it.copy(logeadoExitoso = false) }
+            }
+        }
+        return !hayErrores
     }
+
 }

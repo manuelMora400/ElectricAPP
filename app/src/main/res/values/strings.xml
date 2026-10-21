@@ -3,13 +3,15 @@
 
     <!-- Pantalla de inicio de sesion (Login) -->
     <string name="titulo_sesion"> Inicio sesion </string>
+    <string name="bienvenida_inicio"> Bienvendio/a, Inicie sesion</string>
+    <string name="logeado_exito"> Inicio de sesion correctamente</string>
+    <string name="bienvenido_app"> bienvendio a Electric App, ingrese sus credenciales</string>
     <string name="campo_correo"> Correo </string>
     <string name="campo_password"> Contraseña </string>
-    <string name="has_olvidado_password"> ¿haz olvidado tu contraseña? </string>
     <string name="btn_iniciar_sesion"> Inicie Sesion </string>
     <string name="ocultar_contrasena"> Ocultar su contraseña </string>
     <string name="mostrar_contrasena"> Mostrar contraseña</string>
-    <string name="Error_password"> Contraseña invalida, intente de nuevo</string>
+
 
     <!-- Pantalla Vista del Jefe Tecnico -->
     <string name="titulo_bienvenida">Bienvenido/a, %1$s</string>
@@ -17,28 +19,20 @@
     <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
     <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
     <string name="subtitulo"> Menu principal, Seleccione una opcion: </string>
-
     <string name="titulo_gestionar_usuarios"> Gestion de usuarios </string>
     <string name="subtitulo_gestionar_usuarios"> Administrar cuentas y sus accesos </string>
-
     <string name="titulo_historial_equipos"> Historial de equipos </string>
     <string name="subtitulo_historial_equipos"> Consultar el historial de equipos </string>
-
     <string name="titulo_instrumentos_calibracion"> Instrumentos y calibracion </string>
     <string name="subtitulo_instrumentos_calibracion"> Registrar, actualizar y revisar fechas </string>
-
     <string name="titulo_revisar_protocolos"> Revisar protocolos </string>
     <string name="subtitulo_revisar_protocolos"> Formalizacion u observaciones </string>
-
     <string name="titulo_anular_protocolos"> Anular protocolos </string>
     <string name="subtitulo_anular_protocolos"> Anular un protocolo existente </string>
-
     <string name="titulo_registrar_clientes"> Registrar clientes y equipos </string>
     <string name="subtitulo_registro_cliente"> Clientes, instalaciones y equipos </string>
-
     <string name="titulo_crear_protocolos"> Crear protocolos </string>
     <string name="subtitulo_crear_protocolos"> Crear y registrar mediciones </string>
-
     <string name="titulo_desactivar_personal"> Desactivar personal </string>
     <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
 
@@ -56,7 +50,6 @@
     <string name="btn_regresar_menu_principal"> Menu principal </string>
     <string name="titulo_gestionar_cuenta"> Gestionar cuentas </string>
     <string name="subtitulo_gestionar_cuenta"> Administracion exclusiva del jefe Tecnico </string>
-
     <string name="titulo_formulario_registro"> Registrar Usuarios </string>
     <string name="ayuda_formulario_registro"> Complete los datos para agregar una cuenta</string>
 
@@ -67,12 +60,10 @@
     <string name="campo_perfil_registro"> Perfil/Rol </string>
     <string name="campo_giro_registro"> Giro </string>
     <string name="campo_contacto_cargo"> Cargo</string>
-
     <string name="rol_jefe_tecnico"> Jefe Tecnico </string>
     <string name="rol_ingeniero"> Ingeniero de pruebas </string>
     <string name="rol_tecnico"> Tecnico </string>
     <string name="rol_cliente"> Cliente</string>
-
     <string name="btn_registre_r"> Registrar </string>
     <string name="btn_limpiar"> Limpiar </string>
 
@@ -81,4 +72,22 @@
     <string name="desactivar_cuenta"> Desactivada </string>
     <string name="titulo_administrar_cuentas"> Activar/Desactivar cuentas</string>
     <string name="subtitulo_administrar_cuentas"> No puede eliminar las cuenta, solo desactivar</string>
+
+    <!--Pantalla  Instrumentos y calibracion-->
+    <string name="titulo_Instrumentos_calibracion"> Instrumentos y Calibracion </string>
+    <string name="subtitulo_Instrumentos_calibracion">  Bienvenido, puede administrar los instrumentos </string>
+    <string name="campo_nombre_instrumentos"> Nombre Instrumento </string>
+    <string name="campo_marca_instrumentos"> Marca Instrumento</string>
+    <string name="campo_modelo_Instrumentos"> Modelo Instrumento</string>
+    <string name="campo_numero_serie_instrumentos"> Numero de serie </string>
+    <string name="campo_fecha_calibracion_instrumento"> Fecha de calibracion </string>
+    <string name="campo_fecha_vencimiento_instumento"> Fecha de vencimiento</string>
+    <string name="btn_registrar_instrumento"> Registrar </string>
+    <string name="btn_actualizar_instrumento"> Actualizar </string>
+    <string name="mensaje_registrado_exito_instrumentos"> Instrumento registrado con exito</string>
+    <string name="titulo_instruccion_Instrumentos"> Calibracion </string>
+    <string name="instrucciones_para_calibrar"> formato DD/MM/AAA las fechas</string>
+
+    <string name="visualizar_instrumentos"> Instrumentos registrados </string>
+    <string name="informacion_instrumentos"> Puede visualizar los instrumentos :</string>
 </resources>

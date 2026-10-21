@@ -9,19 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.electricapp.ui.screens.ScreensLogin
+import com.example.electricapp.ui.screens.screensRegistro
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-enum class Pantalla{LOGIN}
+enum class Pantalla{REGISTRO}
 
-private val PANTALLA_INICIAL  = Pantalla.LOGIN
+
+private val REGISTRO_LOL  = Pantalla.REGISTRO
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ElectricAppTheme {
-                 when(PANTALLA_INICIAL){
-                     Pantalla.LOGIN -> ScreensLogin()
+                 when(REGISTRO_LOL){
+                     Pantalla.REGISTRO -> screensRegistro()
                 }
             }
         }
