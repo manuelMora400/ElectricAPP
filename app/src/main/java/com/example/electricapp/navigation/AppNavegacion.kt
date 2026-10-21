@@ -7,6 +7,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.ui.screens.LoginScreens
 import com.example.electricapp.ui.screens.ScreensLogin
 import com.example.electricapp.ui.screens.VistaJefeScreens
+import com.example.electricapp.ui.screens.screensRegistro
+import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -16,6 +18,7 @@ fun AppNavegacion(){
 
     NavHost(navController = navController, startDestination = Rutas.Login.rutas){
 
+        // Pantalla Login
         composable(Rutas.Login.rutas){
             ScreensLogin(
                 onLogeado = {
@@ -25,11 +28,45 @@ fun AppNavegacion(){
                 }
             )
         }
-
+        // Pantalla Vista Jefe
         composable(Rutas.VistaJefe.rutas) {
             VistaJefeScreens (
-                onClick = {
+
+                onGestionUsuarios = {
                     navController.navigate(Rutas.Registros.rutas)
+                },
+                onDesactivarCuentas = {
+                    navController.navigate(Rutas.Registros.rutas)
+                },
+                onInstrumentos = {
+                    navController.navigate(Rutas.Instrumentos.rutas)
+                },
+                onCerrarSesion = {
+                    navController.navigate(Rutas.Login.rutas){
+                        popUpTo(Rutas.VistaJefe.rutas){inclusive = true}
+                    }
+                },
+                onClick = {
+                }
+            )
+        }
+
+        composable(Rutas.Registros.rutas) {
+            screensRegistro(
+                onRegistroExitoso = {
+                    // Mantener en pantalla
+                }
+            )
+        }
+
+        //Pantalla Instrumentos y calibracion
+        composable(Rutas.Instrumentos.rutas) {
+            screensRegistrosInstrumentos(
+                onRegistro = {
+                    // Mantener en pantalla
+                },
+                onActualizado = {
+                    // Mantener en pantalla
                 }
             )
         }
