@@ -9,6 +9,7 @@ data class FormularioLoginState(
     val errorPassword : String? = null,
 
     // Exito
+    val mensajeExitoso : String = "",
     val logeadoExitoso : Boolean = false,
 
     // Accebilidad
