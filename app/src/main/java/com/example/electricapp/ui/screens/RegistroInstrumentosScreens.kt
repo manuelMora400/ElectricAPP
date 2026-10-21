@@ -42,7 +42,9 @@ import com.example.electricapp.viewModel.FormularioInstrumentosViewModel
 @Composable
 fun screensRegistrosInstrumentos(
 
-    viewModel: FormularioInstrumentosViewModel = viewModel()
+    viewModel: FormularioInstrumentosViewModel = viewModel(),
+    onRegistro : () -> Unit,
+    onActualizado: () -> Unit
 ){
     val Uistate by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -54,9 +56,19 @@ fun screensRegistrosInstrumentos(
         onNumSerieCambia = viewModel::onNumSerieCambia,
         onFechaCalibracionCambia = viewModel::onFechaCalifracionCambia,
         onFechaVencimientoCambia = viewModel::onFechaVencimientoCambia,
-        onRegistrar = viewModel::onRegistrar,
+        onRegistrar = {
+            val registradoExito = viewModel.onRegistrar()
+            if(registradoExito){
+                onRegistro()
+            }
+        },
         onLimpiar = viewModel::onLimpiar,
-        onActualizar = viewModel::onActualizar
+        onActualizar = {
+            val actualizado = viewModel.onActualizar()
+            if(actualizado){
+                onActualizado()
+            }
+        }
     )
 }
 
