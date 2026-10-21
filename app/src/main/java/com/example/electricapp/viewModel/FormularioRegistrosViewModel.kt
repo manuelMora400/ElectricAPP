@@ -58,7 +58,7 @@ class FormularioRegistrosViewModel : ViewModel(){
         _uiState.update { it.copy(contactoCargo = valor,  registradoExito = false)}
     }
 
-    fun onRegistrar(){
+    fun onRegistrar() : Boolean{
 
         val formatoCorreo = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
         val estado = _uiState.value
@@ -160,6 +160,7 @@ class FormularioRegistrosViewModel : ViewModel(){
                 registradoExito = !hayErrores
             )
         }
+        return true
     }
 
     fun onLimpiar(){

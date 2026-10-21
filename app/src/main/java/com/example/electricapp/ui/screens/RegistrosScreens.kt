@@ -52,7 +52,8 @@ import kotlinx.coroutines.channels.ticker
 @Composable
 fun screensRegistro(
 
-     viewModel : FormularioRegistrosViewModel = viewModel()
+     viewModel : FormularioRegistrosViewModel = viewModel(),
+     onRegistroExitoso : () -> Unit
 ){
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -71,7 +72,12 @@ fun screensRegistro(
         onGiroCambia = viewModel::onGiroCambia,
         onContactoCambia = viewModel::onContactoCambia,
         onLimpiar = viewModel::onLimpiar,
-        onRegistrar = viewModel::onRegistrar
+        onRegistrar = {
+            val registrado = viewModel.onRegistrar()
+            if(registrado){
+                onRegistroExitoso()
+            }
+        }
     )
 }
 

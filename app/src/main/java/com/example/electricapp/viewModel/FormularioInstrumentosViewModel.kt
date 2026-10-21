@@ -140,8 +140,10 @@ class FormularioInstrumentosViewModel : ViewModel(){
 
             return !hayErrores
     }
-    fun onRegistrar(){
-        if(!validarCampos()) return
+    fun onRegistrar() : Boolean{
+
+        val valido = validarCampos()
+        if(!valido) return false
 
         _uiState.update { it.copy(mensajeExito = true) }
 
@@ -149,12 +151,12 @@ class FormularioInstrumentosViewModel : ViewModel(){
                 delay(7000) // Aplicamos corrutina
                 _uiState.update { it.copy(mensajeExito = false) }
             }
-
+        return true
      }
 
-    fun onActualizar(){
-
-        if(!validarCampos()) return
+    fun onActualizar() : Boolean{
+        val actualizadoValido = validarCampos()
+        if(!actualizadoValido) return false
 
         _uiState.update { it.copy(mensajeExito = true) }
 
@@ -162,7 +164,7 @@ class FormularioInstrumentosViewModel : ViewModel(){
             delay(7000) // Aplicamos corrutina
             _uiState.update { it.copy(mensajeExito = false) }
         }
-
+    return true
     }
 
     fun onLimpiar(){
