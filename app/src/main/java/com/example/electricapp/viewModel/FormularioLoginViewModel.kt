@@ -28,7 +28,7 @@ class FormularioLoginViewModel : ViewModel(){
         _uiState.update {it.copy(passwordVisible = !it.passwordVisible)}
     }
 
-    fun onIniciar(){
+    fun onIniciar() : Boolean{
 
         val formatoCorreo = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
         val estado = _uiState.value
@@ -70,5 +70,7 @@ class FormularioLoginViewModel : ViewModel(){
                 _uiState.update { it.copy(logeadoExitoso = false) }
             }
         }
+        return !hayErrores
     }
+
 }
