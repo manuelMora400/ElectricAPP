@@ -40,8 +40,8 @@ class HistorialViewModel : ViewModel(){
         val errorLugar =
             if ( estado.instalacion.isBlank()){
                 "Instalacion no puede estar vacia"
-            }else if (estado.instalacion.length !in 10..25){
-                "Este campo no acepta menos de 10 y mas de 25 caracteres"
+            }else if (estado.instalacion.length !in 5..15){
+                "Este campo no acepta menos de 5 y mas de 15 caracteres"
             }else{
                 null
             }
