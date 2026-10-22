@@ -57,7 +57,7 @@ fun ViewCampoTag(){
     CampoTag(
         valor = "PT-2026-...",
         onTagBuscar = {},
-        etiquetaTag = "Busqueda por Tag",
+        etiquetaTag = "Busqueda por Serie",
         iconoTag = com.example.electricapp.R.drawable.ic_busqueda,
         modifier = Modifier.padding(23.dp),
         error = "Debe ingresar un Tag"
@@ -65,7 +65,7 @@ fun ViewCampoTag(){
     CampoTag(
         valor = "No se",
         onTagBuscar = {},
-        etiquetaTag = "Busqueda por Tag",
+        etiquetaTag = "Busqueda por Serie",
         iconoTag = com.example.electricapp.R.drawable.ic_busqueda,
         modifier = Modifier.padding(23.dp),
         error = null
