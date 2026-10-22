@@ -37,8 +37,9 @@
     <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
 
     <!-- Pantalla Historial Protocolos -->
-    <string name="titulo_historial"> Historial de Equipo </string>
-    <string name="campo_tag"> Buscar por Tag (e.g. TR-01) </string>
+    <string name="titulo_bienvenidos">Bienvenidos a Consulta de protocolos</string>
+    <string name="titulo_historial"> Historial de Protocolos </string>
+    <string name="campo_tag"> Buscar por Tag (e.g. PT-2026-...) </string>
     <string name="campo_Instalacion"> Nombre de la instalacion </string>
     <string name="btn_historial"> Buscar </string>
     <string name="btn_cerrar_sesion"> Cerrar sesion </string>
