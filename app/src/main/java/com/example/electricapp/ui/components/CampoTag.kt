@@ -55,7 +55,7 @@ fun CampoTag(
 fun ViewCampoTag(){
 
     CampoTag(
-        valor = "TR-10",
+        valor = "PT-2026-...",
         onTagBuscar = {},
         etiquetaTag = "Busqueda por Tag",
         iconoTag = com.example.electricapp.R.drawable.ic_busqueda,
