@@ -99,4 +99,21 @@
     <string name="Consulta_Remplazado">Actualizado</string>
 
     <string name="campo_estado"> Selecione Estado </string>
+
+
+
+
+
+
+
+    <!--Pantalla Vista Tecnico Terreno-->
+    <string name="banner_tecnico"> Panel Tecnico Terreno</string>
+    <string name="tecnico_crear_protoclo"> Crear Protocolo</string>
+    <string name="tecnico_subtitlo_crear_protocolo">Presione para crear protocolos</string>
+    <string name="tecnico_registrar_equipo"> Registrar Equipo </string>
+    <string name="tecnico_subtitulo_registrar_equipo"> Presione para registrar equipo</string>
+    <string name="tecnico_titulo_historial_equipo"> Historial los equipos </string>
+    <string name="tecnico_subtitulo_historial_equipo"> Consulte el historial de los equipos</string>
+    <string name="tecnico_titulo_mis_protocolos"> Revisar protocolos </string>
+    <string name="tecnico_subtitulo_mis_protocolos"> Consulte protocolos </string>
 </resources>
