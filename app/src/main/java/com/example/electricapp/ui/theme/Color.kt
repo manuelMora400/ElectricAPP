@@ -36,3 +36,9 @@ val GrisDeshabilitado = Color(0xFFBDBAC7)
 val Exito = Color(0xFF1B8A4B)               // verde más oscuro, legible sobre blanco
 val ExitoFondo = Color(0xFF38FC17)
 
+//Color para Estado (Aprobado, Rechazado, En Observacion y Actualizado)
+val CuadroAprobado = Color(0xFF38FC17)
+val CuadroRechazado = Color(0xFFC40000)
+val CuadroObservacion = Color(0xFFFF8D00)
+val CuadroActualizado = Color(0xFF1F1D27)
+
