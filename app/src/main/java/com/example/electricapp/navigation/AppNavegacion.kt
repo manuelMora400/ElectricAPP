@@ -1,12 +1,14 @@
 package com.example.electricapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.ui.screens.LoginScreens
 import com.example.electricapp.ui.screens.ScreensLogin
 import com.example.electricapp.ui.screens.VistaJefeScreens
+import com.example.electricapp.ui.screens.buscarProtocolo
 import com.example.electricapp.ui.screens.screensRegistro
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
 import com.example.electricapp.viewModel.FormularioLoginViewModel
@@ -47,6 +49,7 @@ fun AppNavegacion(){
                     }
                 },
                 onClick = {
+                    navController.navigate(Rutas.Consulta.rutas)
                 }
             )
         }
@@ -68,6 +71,16 @@ fun AppNavegacion(){
                 onActualizado = {
                     // Mantener en pantalla
                 }
+            )
+        }
+
+        composable(Rutas.Consulta.rutas){
+            buscarProtocolo(
+                Buscado = {
+                    navController.navigate(Rutas.VistaJefe.rutas)
+                }
+
+
             )
         }
 

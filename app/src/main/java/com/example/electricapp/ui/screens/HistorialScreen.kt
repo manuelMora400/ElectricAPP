@@ -32,17 +32,23 @@ import com.example.electricapp.viewModel.HistorialViewModel
 
 @Composable
 fun buscarProtocolo(
-    viewModel: HistorialViewModel = viewModel()
+    viewModel: HistorialViewModel = viewModel(),
+    Buscado: ()-> Unit
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HistorialScreen(
         uiState = uiState,
         onTagBuscar = viewModel::onTagBuscar,
         onInstalacion = viewModel::onInstalacion,
-        realizarBusqueda = viewModel::realizarBusqueda
+        realizarBusqueda = {
+            val buscando = viewModel.Busqueda()
+            if (buscando){
+                Buscado()
+            }
+        }
     )
 }
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HistorialScreen(
     uiState : HistorialState,
@@ -91,6 +97,9 @@ fun HistorialScreen(
                     onClick = realizarBusqueda,
                     modifier = Modifier.fillMaxSize()
                 )
+            }
+            if (uiState.Cliente){
+
             }
         }
     }

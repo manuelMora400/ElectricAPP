@@ -1,4 +1,11 @@
 package com.example.electricapp.model
 
-enum class Estado {
+import androidx.annotation.StringRes
+import com.example.electricapp.R
+
+enum class Estado(@StringRes val texto : Int) {
+    APROBADO (R.string.Consulta_Aprobado),
+    OBSERVACION (R.string.Consulta_Aprobado),
+    RECHAZADO (R.string.Consulta_Aprobado),
+    ACTUALIZANDO(R.string.Consulta_Remplazado)
 }
