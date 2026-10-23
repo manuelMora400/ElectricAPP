@@ -97,6 +97,6 @@
     <string name="Consulta_Observacion">En observacion</string>
     <string name="Consulta_Rechazado">Rechazado</string>
     <string name="Consulta_Remplazado">Actualizado</string>
-
+    <string name="titulo_cliente"> Bienvenido, Usuario</string>
     <string name="campo_estado"> Selecione Estado </string>
 </resources>
