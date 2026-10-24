@@ -3,6 +3,7 @@ package com.example.electricapp.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.electricapp.model.Rol
 import kotlinx.coroutines.selects.select
 
 class ElectricHelperDb(context : Context) :
@@ -120,9 +121,9 @@ class ElectricHelperDb(context : Context) :
         private const val SQL_INSERTAR_USUARIO =
             "INSERT INTO $TABLA_USUARIO "+
                     "($NOMBRE_USU, $CORREO, $RUT, $TELEFONO, $PASSWORD, $GIRO ,$ACTIVO, $CONTACTO_CARGO,$USER_ROL) VALUES" +
-                    "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','Contra','Giro','1','Cargo',1)"+
+                    "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','','Giro','1','Cargo',1)"+
                     "('Andrea Contreras Silva','acontreras@induztek.cl','15.906.334-8','987541666','','','1','',2)"+
-                    "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','','','1','',2)"
+                    "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','','','1','',3)"
 
 
         private const val SQL_INSERTAR_INSTRUMENTO =
@@ -151,10 +152,49 @@ class ElectricHelperDb(context : Context) :
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
                     "FROM $TABLA_USUARIO u "+
                     "INNER JOIN $TABLA_ROL r ON u.$USER_ROL = r.$ID_ROL"
-
-        override fun onConfigure(db: SQLiteDatabase){
-            super.onConfigure(db)
-            db.setForeignKeyConstraintsEnabled(true)
-        }
     }
+
+    override fun onConfigure(db: SQLiteDatabase){
+        super.onConfigure(db)
+        db.setForeignKeyConstraintsEnabled(true)
+    }
+
+    override fun onCreate (db: SQLiteDatabase){
+        db.execSQL(SQL_CREAR_ROLES)
+        db.execSQL(SQL_CREAR_USUARIO)
+        db.execSQL(SQL_INSERTAR_ROLES)
+        db.execSQL(SQL_INSERTAR_USUARIO)
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS $TABLA_USUARIO")
+        db.execSQL("DROP TABLE IF EXISTS $TABLA_ROL")
+        onCreate(db)
+    }
+
+    fun listaRoles(): List<Rol> {
+        val roles = mutableListOf<Rol>()
+        readableDatabase.rawQuery(
+            "SELECT $ID_ROL, $NOMBRE_ROL FROM $TABLA_ROL ORDER BY $ID_ROL", null
+        ).use { cursor ->
+            while (cursor.moveToNext()){
+                roles.add(
+                    Rol(
+                        id = cursor.getLong(cursor.getColumnIndexOrThrow(ID_ROL)),
+                        nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_ROL))
+                    )
+                )
+            }
+        }
+        return roles
+    }
+
+    fun insertarUsuario(usuario : Usuario):Long =
+        writableDatabase.insert(TABLA_USUARIO, null, valoresDe(usuario))
+
+    fun listaUsuario(): List<Usuario> =
+        consultarUsuarios("$SQL_SELECT_USUARIOS ORDER BY u.$NOMBRE_USU", null)
+
+
+
 }
