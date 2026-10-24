@@ -1,16 +1,14 @@
 package com.example.electricapp.model
 
-// Esta data class no es la base de datos
 data class FormularioRegistros(
 
     val rut : String = "",
     val nombre : String = "",
     val telefono : String = "",
     val correo : String = "",
-    val password : String = "", // Este sera por ahora creada a mano
+    val password : String = "",
     val rol : Rol = Rol.CLIENTE,
 
-    //------------------- SOLO CLIENTE, NULLS PARA EL PERSONAL -------------------//
     val giro : String = "",
     val contactoCargo : String = "",
 

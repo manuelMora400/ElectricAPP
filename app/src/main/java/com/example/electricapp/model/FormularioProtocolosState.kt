@@ -1,6 +1,7 @@
 package com.example.electricapp.model
 
 data class FormularioProtocolosState(
+
     val equipo : String = "",
     val fechaHora : String = "",
     val tecnico : String = "",
