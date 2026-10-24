@@ -29,8 +29,8 @@ class HistorialViewModel : ViewModel(){
         val errorSerie =
             if (estado.tagBuscar.isBlank()){
                 "El campo debe tener informacion"
-            }else if (estado.tagBuscar.length > 12){
-                "El este campo no puede ser mayor a 15 caracteres"
+            }else if (estado.tagBuscar.length > 7){
+                "El este campo no puede ser mayor a 7 caracteres"
             }else if (!estado.tagBuscar.contains("-")){
                 "La serie debe tener - "
             }else{
