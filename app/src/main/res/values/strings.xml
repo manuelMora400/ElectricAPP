@@ -116,4 +116,30 @@
     <string name="tecnico_subtitulo_historial_equipo"> Consulte el historial de los equipos</string>
     <string name="tecnico_titulo_mis_protocolos"> Revisar protocolos </string>
     <string name="tecnico_subtitulo_mis_protocolos"> Consulte protocolos </string>
+
+    <!--Pantalla Crear Protocolo-->
+    <string name="resultado_aprobado">Aprobado</string>
+    <string name="resultado_observado">Observado</string>
+    <string name="resultado_rechazado">Rechazado</string>
+
+    <string name="protocolo_titulo">Crear protocolo</string>
+    <string name="protocolo_subtitulo">Registre la prueba realizada en terreno</string>
+    <string name="protocolo_titulo_datos">Datos del protocolo</string>
+    <string name="protocolo_datos_descripcion">Fecha: %1$s\nTecnico: %2$s</string>
+    <string name="protocolo_campo_equipo">Equipo (TAG - instalacion)</string>
+    <string name="protocolo_campo_temperatura">Temperatura ambiente (°C)</string>
+    <string name="protocolo_campo_humedad" formatted="false">Humedad relativa (%)</string>
+    <string name="protocolo_titulo_medicion">Medicion</string>
+    <string name="protocolo_descripcion_medicion">Resistencia de aislacion del transformador</string>
+    <string name="protocolo_campo_devanado">Devanado probado</string>
+    <string name="protocolo_campo_tension">Tension de prueba (kV)</string>
+    <string name="protocolo_campo_lectura_uno">Lectura a 1 min (MΩ)</string>
+    <string name="protocolo_campo_lectura_diez">Lectura a 10 min (MΩ)</string>
+    <string name="protocolo_titulo_instrumento">Instrumento</string>
+    <string name="protocolo_descripcion_instrumento">Solo se permiten instrumentos con calibracion vigente</string>
+    <string name="protocolo_campo_instrumento">Instrumento utilizado</string>
+    <string name="protocolo_titulo_resultado">Resultado</string>
+    <string name="protocolo_indice">Indice de polarizacion (IP): %1$s</string>
+    <string name="btn_registrar_protocolo">Registrar en terreno</string>
+    <string name="protocolo_registrado_exito">Protocolo registrado en terreno</string>
 </resources>

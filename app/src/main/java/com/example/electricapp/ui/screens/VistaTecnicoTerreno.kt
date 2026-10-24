@@ -29,7 +29,7 @@ import com.example.electricapp.ui.theme.ElectricAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VistaJefeTecnicoScrees(
+fun VistaTecnicoScrees(
 
     onCrearProtocolos : () -> Unit,
     onMisProtocolos   : () -> Unit,
@@ -107,7 +107,7 @@ fun VistaJefeTecnicoScrees(
 fun viewVistaTecnico(){
 
     ElectricAppTheme(true) {
-        VistaJefeTecnicoScrees(
+        VistaTecnicoScrees(
             onCrearProtocolos = {},
             onMisProtocolos = {},
             onRegistrarEquipo = {},
