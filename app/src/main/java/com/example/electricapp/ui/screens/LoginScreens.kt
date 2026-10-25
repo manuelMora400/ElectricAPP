@@ -38,6 +38,7 @@ import com.example.electricapp.ui.components.CampoPassword
 import com.example.electricapp.ui.components.ImagenEncabezadoLogin
 import com.example.electricapp.ui.theme.Dimens
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.styles.EstilosTarjetas
@@ -49,20 +50,19 @@ import com.example.electricapp.viewModel.FormularioLoginViewModel
 @Composable
 fun ScreensLogin(
     viewModel : FormularioLoginViewModel = viewModel(),
-    onLogeado : () -> Unit
+    onLogeado : (Rol) -> Unit
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-
 
     LoginScreens(
         uiState = uiState,
         onCorreoCambia = viewModel::onCorreoCambia,
         onPasswordCambia = viewModel::onPasswordCambia,
         onIniciar = {
-            val valido = viewModel.onIniciar()
-            if (valido){
-                onLogeado()
+
+            val rol = viewModel.onIniciar()
+            if (rol != null){
+                onLogeado(rol)
             }
         },
         onVisibilidad = viewModel::onVisibilidad

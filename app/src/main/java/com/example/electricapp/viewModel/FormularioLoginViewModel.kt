@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.FormularioLoginState
+import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.logeadoExito
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +33,7 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         _uiState.update {it.copy(passwordVisible = !it.passwordVisible)}
     }
 
-    fun onIniciar() : Boolean{
+    fun onIniciar() : Rol?{
 
         val formatoCorreo = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
         val estado = _uiState.value
@@ -69,15 +70,16 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                 errorPassword = errorPassword,
                 logeadoExitoso = false
             ) }
-            return false
+          return null
         }
 
         val cuentaEncontrada = db.buscarCuentasLogin(
             correo = estado.correo,
             password = estado.passwordHash
         )
+        cuentaEncontrada?.rol
 
-        return  if (cuentaEncontrada != null){
+        if (cuentaEncontrada != null){
             _uiState.update {
                 it.copy(
                     errorCorreo = null,
@@ -86,7 +88,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                     rol = cuentaEncontrada.rol
                 )
             }
-            true
         }else{
             _uiState.update {
                 it.copy(
@@ -94,8 +95,9 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                     logeadoExitoso = false
                 )
             }
-            false
+            return null
         }
+        return cuentaEncontrada.rol
     }
     override fun onCleared() {
         db.close()
