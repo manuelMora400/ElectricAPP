@@ -1,9 +1,11 @@
 package com.example.electricapp.viewModel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.FormularioLoginState
+import com.example.electricapp.ui.screens.logeadoExito
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,9 +14,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class FormularioLoginViewModel : ViewModel(){
+class FormularioLoginViewModel(application : Application): AndroidViewModel(application){
 
-    // Privada
+
+    private val db = ElectricHelperDb(application)
+
     private val _uiState = MutableStateFlow(FormularioLoginState())
     val uiState : StateFlow<FormularioLoginState> = _uiState.asStateFlow()
 
@@ -58,19 +62,43 @@ class FormularioLoginViewModel : ViewModel(){
                 null
 
         val hayErrores = listOf(errorCorreo, errorPassword).any{it != null}
-        _uiState.update { it.copy(
-            errorCorreo = errorCorreo,
-            errorPassword = errorPassword,
-            logeadoExitoso = !hayErrores
-        ) }
 
-        if(!hayErrores){
-            viewModelScope.launch {
-                delay(4000)
-                _uiState.update { it.copy(logeadoExitoso = false) }
-            }
+        if (hayErrores){
+            _uiState.update { it.copy(
+                errorCorreo = errorCorreo,
+                errorPassword = errorPassword,
+                logeadoExitoso = false
+            ) }
+            return false
         }
-        return !hayErrores
-    }
 
+        val cuentaEncontrada = db.buscarCuentasLogin(
+            correo = estado.correo,
+            password = estado.passwordHash
+        )
+
+        return  if (cuentaEncontrada != null){
+            _uiState.update {
+                it.copy(
+                    errorCorreo = null,
+                    errorPassword = null,
+                    logeadoExitoso = true,
+                    rol = cuentaEncontrada.rol
+                )
+            }
+            true
+        }else{
+            _uiState.update {
+                it.copy(
+                    errorPassword = "Credenciales incorrectas",
+                    logeadoExitoso = false
+                )
+            }
+            false
+        }
+    }
+    override fun onCleared() {
+        db.close()
+        super.onCleared()
+    }
 }
