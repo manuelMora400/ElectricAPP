@@ -3,7 +3,9 @@ package com.example.electricapp.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.media.audiofx.DynamicsProcessing
 import androidx.core.content.contentValuesOf
+import com.example.electricapp.model.Estado
 import com.example.electricapp.model.FormularioInstrumentosStates
 import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.model.FormularioProtocolosState
@@ -335,5 +337,40 @@ class ElectricHelperDb(context : Context) :
         }
 
         return null
+    }
+
+    fun filtrarProtocolo(): List<HistorialState> {
+        val protocolo = mutableListOf<HistorialState>()
+        val consultaSQL = """
+        SELECT a.$EQUIPO_TAG, a.$DEVANADO, p.$FECHA_HORA_PRUEBA, p.$RESULTADO
+        FROM $TABLA_AISLACION a
+        INNER JOIN $TABLA_PROTOCOLO p ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+    """.trimIndent()
+
+        readableDatabase.rawQuery(consultaSQL, null).use { cursor ->
+            val idxTag = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
+            val idxDevanado = cursor.getColumnIndexOrThrow(DEVANADO)
+            val idxFecha = cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)
+            val idxResultado = cursor.getColumnIndexOrThrow(RESULTADO)
+
+            while (cursor.moveToNext()) {
+                val resultadoStr = cursor.getString(idxResultado)
+                val estadoEnum = try {
+                    Estado.valueOf(resultadoStr)
+                } catch (e: Exception) {
+                    Estado.RECHAZADO
+                }
+
+                protocolo.add(
+                    HistorialState(
+                        tagBuscar = cursor.getString(idxTag),
+                        instalacion = cursor.getString(idxDevanado),
+                        fechaPrueba = cursor.getString(idxFecha),
+                        estado = estadoEnum
+                    )
+                )
+            }
+        }
+        return protocolo
     }
 }

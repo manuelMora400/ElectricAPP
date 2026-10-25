@@ -5,15 +5,17 @@ data class HistorialState(
     val tagBuscar: String = "",
     val instalacion: String = "",
 
-    val fechaPrueba: String? = null,
+    val fechaPrueba: String = "",
     val tagError: String? = null,
     val intalacionError: String? = null,
 
     val busquedaExitosa: Boolean = false,
 
     val rolUsuario: Rol = Rol.CLIENTE,
-
-
+    val estado: Estado = Estado.APROBADO,
     val tituloResultado: String = "",
-    val listaProtocolos: List<ProtocoloItem> = emptyList()
-)
+    val listaProtocolo: List<HistorialState> = emptyList()
+
+){
+    val Cliente : Boolean get() = rolUsuario == Rol.CLIENTE
+}
