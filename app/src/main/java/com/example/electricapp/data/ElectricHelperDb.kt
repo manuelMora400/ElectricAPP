@@ -151,8 +151,8 @@ class ElectricHelperDb(context : Context) :
         private const val SQL_INSERTAR_AISLACION =
             "INSERT INTO $TABLA_AISLACION " +
                     "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA, $LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES " +
-                    "('TR-01','Transformador','234234','12500','31250', 1)"+
-                    "('TR-02','432432','234234','423','4324', 1)"+
+                    "('TR-01','Transformador','234234','12500','31250', 1),"+
+                    "('TR-02','432432','234234','423','4324', 1),"+
                     "('TR-A','432432','234234','423','4324', 1)"
         
         private const val SQL_SELECT_USUARIOS =
@@ -258,12 +258,12 @@ class ElectricHelperDb(context : Context) :
 
 
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
+
         val consultaSql =
             "SELECT u.*, r.$NOMBRE_ROL " +
                     "FROM $TABLA_USUARIO u " +
                     "INNER JOIN $TABLA_ROL r ON u.$USER_ROL = r.$ID_ROL " +
                     "WHERE u.$CORREO = ? AND u.$PASSWORD = ? AND u.$ACTIVO = 1"
-
            readableDatabase.rawQuery(consultaSql, arrayOf(correo, password)).use {  cursor ->
 
                 if(cursor.moveToFirst()){
@@ -278,6 +278,22 @@ class ElectricHelperDb(context : Context) :
            }
         return null
     }
+
+    fun cambiarEstadoUsuario(correo: String, nuevoEstado: Boolean): Boolean {
+        val valores = contentValuesOf().apply {
+            put(ACTIVO, if (nuevoEstado) 1 else 0)
+        }
+
+        val filasAfectadas = writableDatabase.update(
+            TABLA_USUARIO,
+            valores,
+            "$CORREO = ?",
+            arrayOf(correo)
+        )
+
+        return filasAfectadas > 0
+    }
+
 
     fun filtrarCuentasCreadas() : List<FormularioRegistros>{
 
@@ -301,19 +317,21 @@ class ElectricHelperDb(context : Context) :
         return cuentas
     }
 
-    fun buscarProtocolo(Tag: String, Instalacion: String): HistorialState? {
+    fun buscarProtocolo(Tag: String, Instalacion: String, Fecha : String): HistorialState? {
         val consultaSQL =
-            "SELECT $EQUIPO_TAG, $DEVANADO " +
-                    "FROM $TABLA_PROTOCOLO"
+            "SELECT $EQUIPO_TAG, $DEVANADO, $FECHA_HORA_PRUEBA" +
+                    "FROM $TABLA_PROTOCOLO "
 
-        readableDatabase.rawQuery(consultaSQL,arrayOf(Tag, Instalacion)).use { cursor ->
+        readableDatabase.rawQuery(consultaSQL,arrayOf(Tag, Instalacion,Fecha)).use { cursor ->
             if (cursor.moveToFirst()) {
                 val tagIndex = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
                 val tagStr = cursor.getString(tagIndex)
+                val fecha = cursor.getString(cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA))
 
                 return HistorialState(
                     tagBuscar = tagStr,
-                    instalacion = Instalacion
+                    instalacion = Instalacion,
+                    fechaPrueba = fecha
                 )
             }
         }
