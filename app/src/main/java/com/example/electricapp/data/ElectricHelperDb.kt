@@ -8,6 +8,7 @@ import com.example.electricapp.model.FormularioInstrumentosStates
 import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.FormularioRegistros
+import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.selects.select
 
@@ -255,7 +256,6 @@ class ElectricHelperDb(context : Context) :
 
 
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
-
         val consultaSql =
             "SELECT u.*, r.$NOMBRE_ROL " +
                     "FROM $TABLA_USUARIO u " +
@@ -297,5 +297,27 @@ class ElectricHelperDb(context : Context) :
             }
         }
         return cuentas
+    }
+
+    fun buscarProtocolo(Tag: String, Fecha: String): HistorialState? {
+        val consultaSQL =
+            "SELECT p.*, a.$EQUIPO_TAG, a.$FECHA_HORA_PRUEBA " +
+                    "FROM $TABLA_PROTOCOLO p " +
+                    "INNER JOIN $TABLA_AISLACION a ON p.$ID_PROTOCOLO = a.$ID_PROTOCOLO " +
+                    "WHERE p.$EQUIPO_TAG = ? AND a.$FECHA_HORA_PRUEBA = ?"
+
+        readableDatabase.rawQuery(consultaSQL,arrayOf(Tag, Fecha)).use { cursor ->
+            if (cursor.moveToFirst()) {
+                val tagIndex = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
+                val tagStr = cursor.getString(tagIndex)
+
+                return HistorialState(
+                    tagBuscar = tagStr,
+                    instalacion = Fecha
+                )
+            }
+        }
+
+        return null
     }
 }
