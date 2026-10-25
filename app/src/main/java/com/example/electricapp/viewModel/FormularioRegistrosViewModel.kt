@@ -1,34 +1,41 @@
 package com.example.electricapp.viewModel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
-import com.example.electricapp.model.UsuarioEjemplo
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class FormularioRegistrosViewModel : ViewModel(){
+class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(application){
 
-    // Datos para probar (cuenta activada / desactivada)
-    private val _cuentasSimulado = MutableStateFlow(listOf<UsuarioEjemplo>(
-        UsuarioEjemplo(1,"Manuel Mora Acuña", Rol.CLIENTE, "Manuel@gmail.com"),
-        UsuarioEjemplo(2, "Edelaine yenerie miranda", Rol.INGENIERO, "Edesita@gmail.com")
-    ))
 
-    val cuentasSimuladas : StateFlow<List<UsuarioEjemplo>> = _cuentasSimulado.asStateFlow()
+    private val bd = ElectricHelperDb(application)
+    private val _cuentasBD = MutableStateFlow<List<FormularioRegistros>>(emptyList())
+    val cuentasBD: StateFlow<List<FormularioRegistros>> = _cuentasBD.asStateFlow()
 
-    fun onEstadoCambia(id : Long, estadoNuevo : Boolean){
-
-        _cuentasSimulado.update {it.map { nuevo ->
-                if(nuevo.id == id){
-                    nuevo.copy(activo = estadoNuevo)
-                }else
-                    nuevo
-        }}
+    init {
+        cargarCuentas()
     }
-    //------------------------------------------------------------------------------------------//
+    fun cargarCuentas(){
+        _cuentasBD.value = bd.filtrarCuentasCreadas()
+    }
+
+    fun onEstadoCambia(correo : String, estadoNuevo : Boolean){
+        val actualizarEstado = bd.cambiarEstadoUsuario(correo, estadoNuevo)
+         if(actualizarEstado){
+             cargarCuentas()
+        }
+    }
+
+
+
     private val _uiState = MutableStateFlow(FormularioRegistros())
     val uiState : StateFlow<FormularioRegistros> = _uiState.asStateFlow()
 
@@ -148,19 +155,50 @@ class FormularioRegistrosViewModel : ViewModel(){
             erroGiro,
             errorContacto).any{it != null}
 
-        _uiState.update {
-            it.copy(
-                errorRut = errorRut,
-                errorNombre = errorNombre,
-                errorTelefono = errorTelefono,
-                errorCorreo = errorCorreo,
-                errorPassword = errorPassword,
-                errorGiro = erroGiro,
-                errorCotacto = errorContacto,
-                registradoExito = !hayErrores
-            )
+        if(hayErrores){
+            _uiState.update {
+                it.copy(
+                    errorRut = errorRut,
+                    errorNombre = errorNombre,
+                    errorTelefono = errorTelefono,
+                    errorCorreo = errorCorreo,
+                    errorPassword = errorPassword,
+                    errorGiro = erroGiro,
+                    errorCotacto = errorContacto,
+                    registradoExito = false
+                )
+            }
+            return false
         }
-        return true
+
+        val insertado = bd.insertarUsuario(
+            FormularioRegistros(
+                rut = estado.rut,
+                nombre = estado.nombre,
+                telefono = estado.telefono,
+                correo = estado.correo,
+                password = estado.password,
+                giro = estado.giro,
+                contactoCargo = estado.contactoCargo,
+                rol = estado.rol,
+                activo = estado.activo
+            )
+        )
+        if(insertado > 0){
+            _uiState.update { it.copy(registradoExito = true) }
+
+            viewModelScope.launch {
+                delay(4000)
+                _uiState.update { it.copy(registradoExito = false) }
+            }
+            return true
+
+        }else{
+            _uiState.update { it.copy(errorGeneral = "El correo o rut ya se encuentra registrado")}
+            return false
+        }
+
+
     }
 
     fun onLimpiar(){

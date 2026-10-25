@@ -80,7 +80,7 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
         val protocoloEncontrado = db.buscarProtocolo(
             Tag = estado.tagBuscar,
             Instalacion = estado.instalacion,
-            Fecha = estado.fechaPrueba
+            Fecha = estado.fechaPrueba!!
         )
 
         return if (protocoloEncontrado != null) {
