@@ -3,21 +3,26 @@ package com.example.electricapp.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.content.contentValuesOf
+import com.example.electricapp.model.FormularioInstrumentosStates
+import com.example.electricapp.model.FormularioLoginState
+import com.example.electricapp.model.FormularioProtocolosState
+import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.selects.select
 
 class ElectricHelperDb(context : Context) :
-    SQLiteOpenHelper(context, NOMBRE_BD, null, VERSION_BD){
+    SQLiteOpenHelper(context, NombreBD, null, VERSION_BD){
 
     companion object{
         private const val NombreBD = "electric.bd"
         private const val VERSION_BD = 1
 
-        private const val TABLA_ROL  = "ROLES" // TABLA ROLES
+        private const val TABLA_ROL  = "ROLES"
         private const val ID_ROL     = "id_rol"
         private const val NOMBRE_ROL = "nombre_rol"
 
-        private const val TABLA_USUARIO  = "USUARIOS" // TABLA USUARIOS
+        private const val TABLA_USUARIO  = "USUARIOS"
         private const val ID_USUARIO     = "id_usuario"
         private const val NOMBRE_USU     = "nombre"
         private const val CORREO         = "correo"
@@ -29,20 +34,20 @@ class ElectricHelperDb(context : Context) :
         private const val CONTACTO_CARGO = "cargo"
         private const val USER_ROL       = "id_rol"
 
-        private const val TABLA_INSTRUMENTOS = "INSTRUMENTOS" // TABLA INSTRUMENTO
+        private const val TABLA_INSTRUMENTOS = "INSTRUMENTOS"
         private const val ID_INSTRUMENTO     = "id_instrumento"
         private const val NOMBRE_INSTRUMENTO = "nombre_instrumento"
         private const val MARCA              = "marca"
         private const val MODELO             = "modelo"
         private const val NUM_SERIE          = "numero_serie"
 
-        private const val TABLA_CALIBRACION = "CALIBRACION" // TABLA CALIBRACION
+        private const val TABLA_CALIBRACION = "CALIBRACION"
         private const val ID_CALIBRACION    = "id_calibracion"
         private const val INSTRUMENTO_ID    = "id_instrumento"
         private const val FECHA_CALIBRACION = "fecha_calibracion"
         private const val FECHA_VENCIMIENTO = "fecha_vencimiento"
 
-        private const val TABLA_PROTOCOLO = "PROTOCOLO" //TABLA PROTOCOLO
+        private const val TABLA_PROTOCOLO = "PROTOCOLO"
         private const val ID_PROTOCOLO = "id_protocolo"
         private const val FECHA_HORA_PRUEBA = "fecha_prueba"
         private const val TEMPERATURA = "temperatura"
@@ -51,7 +56,7 @@ class ElectricHelperDb(context : Context) :
         private const val RESULTADO = "resultado"
         private const val INSTRU_ID = "id_instrumento"
 
-        private const val TABLA_AISLACION = "AISLACION" //TABLA AISLACION
+        private const val TABLA_AISLACION = "AISLACION"
         private const val ID_PRUEBA = "id_prueba"
         private const val EQUIPO_TAG = "tag"
         private const val DEVANADO = "devanado"
@@ -63,55 +68,55 @@ class ElectricHelperDb(context : Context) :
 
         private const val SQL_CREAR_ROLES =
             "CREATE TABLE $TABLA_ROL ( " +
-                    "$ID_ROL INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "$ID_ROL INTEGER PRIMARY KEY, " +
                     "$NOMBRE_ROL TEXT NOT NULL UNIQUE )"
 
         private const val SQL_CREAR_USUARIO =
             "CREATE TABLE $TABLA_USUARIO (" +
                     "$ID_USUARIO INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "$NOMBRE_USU TEXT NOT NULL " +
-                    "$CORREO TEXT NOT NULL UNIQUE" +
-                    "$RUT TEXT NOT NULL UNIQUE" +
-                    "$TELEFONO TEXT NOT NULL" +
-                    "$PASSWORD TEXT NOT NULL" +
-                    "$GIRO TEXT " +
-                    "$ACTIVO INTEGER DEFAULT 0" +
-                    "$CONTACTO_CARGO TEXT" +
+                    "$NOMBRE_USU TEXT NOT NULL, " +
+                    "$CORREO TEXT NOT NULL UNIQUE," +
+                    "$RUT TEXT NOT NULL UNIQUE," +
+                    "$TELEFONO TEXT NOT NULL," +
+                    "$PASSWORD TEXT NOT NULL," +
+                    "$GIRO TEXT, " +
+                    "$ACTIVO INTEGER DEFAULT 1," +
+                    "$CONTACTO_CARGO TEXT," +
                     "$USER_ROL INTEGER NOT NULL REFERENCES $TABLA_ROL($ID_ROL))"
 
         private const val SQL_CREAR_INSTRUMENTOS =
             "CREATE TABLE $TABLA_INSTRUMENTOS (" +
                     "$ID_INSTRUMENTO INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "$NOMBRE_INSTRUMENTO TEXT NOT NULL" +
-                    "$MARCA TEXT NOT NULL" +
-                    "$MODELO TEXT NOT NULL" +
+                    "$NOMBRE_INSTRUMENTO TEXT NOT NULL," +
+                    "$MARCA TEXT NOT NULL," +
+                    "$MODELO TEXT NOT NULL," +
                     "$NUM_SERIE TEXT NOT NULL UNIQUE)"
 
         private const val SQL_CREAR_CALIBRACION =
             "CREATE TABLE $TABLA_CALIBRACION (" +
                     "$ID_CALIBRACION INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "$FECHA_CALIBRACION TEXT NOT NULL" +
-                    "$FECHA_VENCIMIENTO TEXT NOT NULL" +
+                    "$FECHA_CALIBRACION TEXT NOT NULL," +
+                    "$FECHA_VENCIMIENTO TEXT NOT NULL," +
                     "$INSTRUMENTO_ID INTEGER NOT NULL REFERENCES $TABLA_INSTRUMENTOS($ID_INSTRUMENTO))"
 
         private const val SQL_CREAR_PROTOCOLO =
             "CREATE TABLE $TABLA_PROTOCOLO (" +
                     "$ID_PROTOCOLO INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "$FECHA_HORA_PRUEBA TEXT NOT NULL" +
-                    "$TEMPERATURA TEXT NOT NULL" +
-                    "$HUMEDAD TEXT NOT NULL" +
-                    "$INSTRU_ID INTEGER NOT NULL REFERENCES $TABLA_INSTRUMENTOS($ID_INSTRUMENTO)" +
-                    "$RESULTADO TEXT NOT NULL" +
+                    "$FECHA_HORA_PRUEBA TEXT NOT NULL," +
+                    "$TEMPERATURA TEXT NOT NULL," +
+                    "$HUMEDAD TEXT NOT NULL," +
+                    "$INSTRU_ID INTEGER NOT NULL REFERENCES $TABLA_INSTRUMENTOS($ID_INSTRUMENTO)," +
+                    "$RESULTADO TEXT NOT NULL," +
                     "$USU_ID INTEGER NOT NULL REFERENCES $TABLA_USUARIO($ID_USUARIO))"
 
         private const val SQL_CREAR_AISLACION =
-            "CREAR TABLE $TABLA_AISLACION (" +
+            "CREATE TABLE $TABLA_AISLACION (" +
                     "$ID_PRUEBA INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                    "$EQUIPO_TAG TEXT NOT NULL" +
-                    "$DEVANADO TEXT NOT NULL" +
-                    "$TENSION_PRUEBA TEXT NOT NULL" +
-                    "$LECTURA_1MIN TEXT NOT NULL" +
-                    "$LECTURA_10MIN TEXT NOT NULL" +
+                    "$EQUIPO_TAG TEXT NOT NULL," +
+                    "$DEVANADO TEXT NOT NULL," +
+                    "$TENSION_PRUEBA TEXT NOT NULL," +
+                    "$LECTURA_1MIN TEXT NOT NULL," +
+                    "$LECTURA_10MIN TEXT NOT NULL," +
                     "$PROTOCOLO_ID INTEGER NOT NULL REFERENCES $TABLA_PROTOCOLO($ID_PROTOCOLO))"
 
         private const val SQL_INSERTAR_ROLES =
@@ -134,7 +139,7 @@ class ElectricHelperDb(context : Context) :
         private const val SQL_INSERTAR_CALIBRACION =
             "INSERT INTO $TABLA_CALIBRACION "+
                     "($FECHA_CALIBRACION, $FECHA_VENCIMIENTO, $INSTRUMENTO_ID) VALUES "+
-                    "('15-03-2026','15-03-2027',1)"+
+                    "('15-03-2026','15-03-2027',1),"+
                     "('10-10-2025','10-10-2026',2)"
 
         private const val SQL_INSERTAR_PROTOCOLO =
@@ -144,10 +149,9 @@ class ElectricHelperDb(context : Context) :
 
         private const val SQL_INSERTAR_AISLACION =
             "INSERT INTO $TABLA_AISLACION "+
-                    "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA, $LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES "+
+                    "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA,$LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES "+
                     "('','','','','','',3)"
-
-
+        
         private const val SQL_SELECT_USUARIOS =
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
                     "FROM $TABLA_USUARIO u "+
@@ -160,10 +164,20 @@ class ElectricHelperDb(context : Context) :
     }
 
     override fun onCreate (db: SQLiteDatabase){
+
         db.execSQL(SQL_CREAR_ROLES)
         db.execSQL(SQL_CREAR_USUARIO)
+        db.execSQL(SQL_CREAR_INSTRUMENTOS)
+        db.execSQL(SQL_CREAR_CALIBRACION)
+        db.execSQL(SQL_CREAR_PROTOCOLO)
+        db.execSQL(SQL_CREAR_AISLACION)
         db.execSQL(SQL_INSERTAR_ROLES)
         db.execSQL(SQL_INSERTAR_USUARIO)
+        db.execSQL(SQL_INSERTAR_INSTRUMENTO)
+        db.execSQL(SQL_INSERTAR_CALIBRACION)
+        db.execSQL(SQL_INSERTAR_PROTOCOLO)
+        db.execSQL(SQL_INSERTAR_AISLACION)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -177,24 +191,103 @@ class ElectricHelperDb(context : Context) :
         readableDatabase.rawQuery(
             "SELECT $ID_ROL, $NOMBRE_ROL FROM $TABLA_ROL ORDER BY $ID_ROL", null
         ).use { cursor ->
+            val nombreIndexeado = cursor.getColumnIndexOrThrow(NOMBRE_ROL)
             while (cursor.moveToNext()){
+                val rolNombre = cursor.getString(nombreIndexeado)
                 roles.add(
-                    Rol(
-                        id = cursor.getLong(cursor.getColumnIndexOrThrow(ID_ROL)),
-                        nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_ROL))
-                    )
+                    Rol.valueOf(rolNombre)
                 )
             }
         }
         return roles
     }
+    private fun valoresUsuarios(usuario : FormularioRegistros) = contentValuesOf().apply{
+        put(NOMBRE_USU , usuario.nombre)
+        put(RUT, usuario.rut)
+        put(TELEFONO, usuario.telefono)
+        put(PASSWORD, usuario.password)
+        put(GIRO , usuario.giro)
+        put(ACTIVO, 1)
+        put(USER_ROL, usuario.rol.ordinal + 1)
+        put(CONTACTO_CARGO,usuario.contactoCargo)
+    }
 
-    fun insertarUsuario(usuario : Usuario):Long =
-        writableDatabase.insert(TABLA_USUARIO, null, valoresDe(usuario))
+    fun insertarUsuario(usuario : FormularioRegistros):Long =
+        writableDatabase.insert(TABLA_USUARIO, null, valoresUsuarios(usuario))
 
-    fun listaUsuario(): List<Usuario> =
-        consultarUsuarios("$SQL_SELECT_USUARIOS ORDER BY u.$NOMBRE_USU", null)
+    private fun valoresInstrumentos(instrumento : FormularioInstrumentosStates) = contentValuesOf().apply {
+        put(NOMBRE_INSTRUMENTO, instrumento.nombre)
+        put(MARCA , instrumento.marca)
+        put(MODELO, instrumento.modelo)
+        put(NUM_SERIE, instrumento.numSerie)
+    }
+
+    fun insertarInstrumentos(instrumentos : FormularioInstrumentosStates) : Long =
+        writableDatabase.insert(TABLA_INSTRUMENTOS, null, valoresInstrumentos(instrumentos))
+
+
+    private fun valoresCalibraciones(calibracion : FormularioInstrumentosStates) = contentValuesOf().apply {
+        put(FECHA_CALIBRACION, calibracion.fechaCalibracion)
+        put(FECHA_VENCIMIENTO, calibracion.fechaVencimiento)
+
+    }
+
+    fun insertarCalibraciones(calibracion: FormularioInstrumentosStates) : Long =
+        writableDatabase.insert(TABLA_CALIBRACION, null, valoresCalibraciones(calibracion))
+
+    private fun valoresProtocolos(protocolos : FormularioProtocolosState,idUsuario : Int,idInstrumento : Int) = contentValuesOf().apply {
+        put(FECHA_HORA_PRUEBA, protocolos.fechaHora)
+        put(TEMPERATURA, protocolos.temperatura)
+        put(HUMEDAD, protocolos.humedad)
+        put(RESULTADO, protocolos.resultado?.name ?: "RECHAZADO")
+        put(USU_ID, idUsuario)
+        put(INSTRU_ID, idInstrumento)
+    }
+
+    fun insertarProtocolos(protocolos: FormularioProtocolosState, idUsuario : Int,idInstrumento : Int) : Long =
+        writableDatabase.insert(TABLA_PROTOCOLO, null, valoresProtocolos(protocolos, idUsuario, idInstrumento))
 
 
 
+    fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
+
+        val consultaSql =
+                    "SELECT u.*, $NOMBRE_ROL FROM $TABLA_USUARIO  " + " INNER JOIN r.$TABLA_ROL r ON u.$USER_ROL = r.$ID_ROL " +
+                    " WHERE u.$CORREO = ? AND u.$PASSWORD = ? AND u.$ACTIVO = 1"
+           readableDatabase.rawQuery(consultaSql, arrayOf(correo, password)).use {  cursor ->
+
+                if(cursor.moveToFirst()){
+                    val rol = cursor.getColumnIndexOrThrow(NOMBRE_ROL)
+                    val rolStr = cursor.getString(rol)
+                    return FormularioLoginState(
+                        correo = correo,
+                        passwordHash = password,
+                        rol = Rol.valueOf(rolStr)
+                    )
+                }
+           }
+        return null
+    }
+
+    fun filtrarCuentasCreadas() : List<FormularioRegistros>{
+
+        val cuentas = mutableListOf<FormularioRegistros>()
+        readableDatabase.rawQuery(
+            "SELECT $NOMBRE_USU, $CORREO, $ACTIVO " +
+            " FROM $TABLA_USUARIO", null
+        ).use { cursor ->
+
+            while (cursor.moveToNext()){
+                val estadoIndex = cursor.getColumnIndexOrThrow(ACTIVO)
+                cuentas.add(
+                    FormularioRegistros(
+                        nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
+                        correo = cursor.getString(cursor.getColumnIndexOrThrow(CORREO)),
+                        activo = cursor.getInt(estadoIndex) == 1
+                    )
+                )
+            }
+        }
+        return cuentas
+    }
 }
