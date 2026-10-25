@@ -1,7 +1,9 @@
 package com.example.electricapp.viewModel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.HistorialState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +12,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HistorialViewModel : ViewModel(){
+class HistorialViewModel (application : Application): AndroidViewModel(application){
+
+    private val db = ElectricHelperDb(application)
+
     private val _uiState = MutableStateFlow(HistorialState())
 
     val uiState: StateFlow<HistorialState> = _uiState.asStateFlow()
@@ -58,7 +63,36 @@ class HistorialViewModel : ViewModel(){
                 delay(4000)
                 _uiState.update { it.copy(busquedaExitosa = false) }
             }
+
         }
         return !Errores
+
+        val protocoloEncontrado = db.buscarProtocolo(
+            Tag = estado.tagBuscar,
+            Fecha = estado.instalacion
+        )
+
+        return if (protocoloEncontrado != null){
+            _uiState.update {
+                it.copy(
+                    tagError = null,
+                    intalacionError = null,
+                    busquedaExitosa = true
+                )
+            }
+            true
+        } else {
+            _uiState.update {
+                it.copy(
+                    intalacionError = "Fecha no encontrada",
+                    busquedaExitosa = false
+                )
+            }
+            false
+        }
+    }
+    override fun onCleared() {
+        db.close()
+        super.onCleared()
     }
 }
