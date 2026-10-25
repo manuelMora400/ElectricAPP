@@ -255,8 +255,6 @@ class ElectricHelperDb(context : Context) :
     fun insertarProtocolos(protocolos: FormularioProtocolosState, idUsuario : Int,idInstrumento : Int) : Long =
         writableDatabase.insert(TABLA_PROTOCOLO, null, valoresProtocolos(protocolos, idUsuario, idInstrumento))
 
-
-
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
 
         val consultaSql =
