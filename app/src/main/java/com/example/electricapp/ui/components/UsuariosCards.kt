@@ -12,24 +12,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.electricapp.R
+import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
-import com.example.electricapp.model.UsuarioEjemplo
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
 @Composable
 fun UsuariosCards(
-    usuarioEjemplo: UsuarioEjemplo,
+    usuario: FormularioRegistros,
     onEstadoCambia : (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ){
 
     Card(
-        modifier = Modifier.fillMaxWidth(1f).padding(Dimens.espacioMed)
+        modifier = modifier.fillMaxWidth(1f).padding(Dimens.espacioMed)
 
     ) {
 
@@ -43,22 +42,22 @@ fun UsuariosCards(
                 verticalArrangement = Arrangement.spacedBy(17.dp)
             ){
                 Text(
-                    text = usuarioEjemplo.nombre,
+                    text = usuario.nombre,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(Dimens.espacioChico)
                 )
                 Text(
-                    text = usuarioEjemplo.correo,
+                    text = usuario.correo,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(Dimens.espacioChico)
                 )
                 Etiqueta(
-                    texto = if(usuarioEjemplo.activo) R.string.activar_cuenta else R.string.desactivar_cuenta,
-                    activo = usuarioEjemplo.activo
+                    texto = if(usuario.activo) R.string.activar_cuenta else R.string.desactivar_cuenta,
+                    activo = usuario.activo
                 )
             }
             Switch(
-                checked = usuarioEjemplo.activo,
+                checked = usuario.activo,
                 onCheckedChange = {nuevo -> onEstadoCambia(nuevo)}
             )
         }
@@ -70,11 +69,11 @@ fun UsuariosCards(
 fun UsuariosCardsView(){
     ElectricAppTheme(true) {
         UsuariosCards(
-            usuarioEjemplo = UsuarioEjemplo(
-                1,
+            usuario = FormularioRegistros(
+
                 "Manuel Mora",
-                Rol.INGENIERO,
-                "Manuel@gmail.com"
+                "Manuel@gmail.com",
+                rol = Rol.CLIENTE
             ),
             onEstadoCambia = {}
         )
