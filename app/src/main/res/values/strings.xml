@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ElectricApp</string>
 
-    <!-- Pantalla de inicio de sesion (Login) -->
+
     <string name="titulo_sesion"> Inicio sesion </string>
     <string name="bienvenida_inicio"> Bienvendio/a, Inicie sesion</string>
     <string name="logeado_exito"> Inicio de sesion correctamente</string>
@@ -13,7 +13,7 @@
     <string name="mostrar_contrasena"> Mostrar contraseña</string>
 
 
-    <!-- Pantalla Vista del Jefe Tecnico -->
+
     <string name="titulo_bienvenida">Bienvenido/a, %1$s</string>
     <string name="titulo_Empresa"> INDUZTEK </string>
     <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
@@ -36,7 +36,7 @@
     <string name="titulo_desactivar_personal"> Desactivar personal </string>
     <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
 
-    <!-- Pantalla Historial Protocolos -->
+
     <string name="titulo_bienvenidos">Bienvenidos a Consulta de protocolos</string>
     <string name="titulo_historial"> Historial de Protocolos </string>
     <string name="campo_tag"> Buscar por Tag (e.g. TR-10) </string>
@@ -44,17 +44,17 @@
     <string name="btn_historial"> Buscar </string>
     <string name="btn_cerrar_sesion"> Cerrar sesion </string>
 
-    <!-- Mensajes para exito -->
+
     <string name="exito_registrado"> ¡Registrado Exitosamente!</string>
 
-    <!-- Pantalla Gestionar Usuarios -->
+
     <string name="btn_regresar_menu_principal"> Menu principal </string>
     <string name="titulo_gestionar_cuenta"> Gestionar cuentas </string>
     <string name="subtitulo_gestionar_cuenta"> Administracion exclusiva del jefe Tecnico </string>
     <string name="titulo_formulario_registro"> Registrar Usuarios </string>
     <string name="ayuda_formulario_registro"> Complete los datos para agregar una cuenta</string>
 
-    <!-- Campo correo / contraseña ya esta -->
+
     <string name="campo_rut_registro"> Rut </string>
     <string name="campo_nombre_completo_registro">Nombre completo</string>
     <string name="campo_telefono_registro"> Telefono </string>
@@ -68,13 +68,13 @@
     <string name="btn_registre_r"> Registrar </string>
     <string name="btn_limpiar"> Limpiar </string>
 
-    <!-- Pantalla activar/desactivar cuentas -->
+
     <string name="activar_cuenta"> Activada </string>
     <string name="desactivar_cuenta"> Desactivada </string>
     <string name="titulo_administrar_cuentas"> Activar/Desactivar cuentas</string>
     <string name="subtitulo_administrar_cuentas"> No puede eliminar las cuenta, solo desactivar</string>
 
-    <!--Pantalla  Instrumentos y calibracion-->
+
     <string name="titulo_Instrumentos_calibracion"> Instrumentos y Calibracion </string>
     <string name="subtitulo_Instrumentos_calibracion">  Bienvenido, puede administrar los instrumentos </string>
     <string name="campo_nombre_instrumentos"> Nombre Instrumento </string>
@@ -92,7 +92,7 @@
     <string name="visualizar_instrumentos"> Instrumentos registrados </string>
     <string name="informacion_instrumentos"> Puede visualizar los instrumentos :</string>
 
-    <!-- Pantalla Estado Consulta -->
+
     <string name="Consulta_Aprobado">Aprobado</string>
     <string name="Consulta_Observacion">En observacion</string>
     <string name="Consulta_Rechazado">Rechazado</string>
@@ -106,7 +106,7 @@
 
 
 
-    <!--Pantalla Vista Tecnico Terreno-->
+
     <string name="banner_tecnico"> Panel Tecnico Terreno</string>
     <string name="tecnico_crear_protoclo"> Crear Protocolo</string>
     <string name="tecnico_subtitlo_crear_protocolo">Presione para crear protocolos</string>
@@ -117,7 +117,7 @@
     <string name="tecnico_titulo_mis_protocolos"> Revisar protocolos </string>
     <string name="tecnico_subtitulo_mis_protocolos"> Consulte protocolos </string>
 
-    <!--Pantalla Crear Protocolo-->
+
     <string name="resultado_aprobado">Aprobado</string>
     <string name="resultado_observado">Observado</string>
     <string name="resultado_rechazado">Rechazado</string>
