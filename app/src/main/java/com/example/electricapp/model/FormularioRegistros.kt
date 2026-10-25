@@ -19,19 +19,9 @@ data class FormularioRegistros(
     val errorPassword : String? = null,
     val errorGiro : String? = null,
     val errorCotacto : String? = null,
-
+    val errorGeneral : String?= null,
     val registradoExito : Boolean = false
 
 ){
-    // Esto es para desplegar una opcion extra al formulario si es solo cliente
     val Cliente : Boolean  get() = rol == Rol.CLIENTE
 }
-
-// Clase para probar datos ejemplos
-data class UsuarioEjemplo(
-    val id : Long = 0,
-    val nombre: String,
-    val rol : Rol,
-    val correo : String,
-    val activo : Boolean = true
-)
