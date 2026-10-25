@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.electricapp.R
@@ -36,23 +37,25 @@ fun ProtocoloCards(
                 verticalArrangement = Arrangement.spacedBy(17.dp)
             ) {
                 Text(
-                    text = protocolo.tagBuscar,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(Dimens.espacioChico)
+                    text = protocolo.fechaPrueba,
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = protocolo.instalacion,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(Dimens.espacioChico)
+                    text = "Tag: ${protocolo.tagBuscar}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = "Instalación: ${protocolo.instalacion}",
+                    style = MaterialTheme.typography.titleMedium
                 )
                 etiqueta(
                     text =
                         when (protocolo.estado) {
-                            Estado.APROBADO -> R.string.Consulta_Aprobado
-                            Estado.OBSERVACION -> R.string.Consulta_Observacion
-                            else -> R.string.Consulta_Rechazado
+                            Estado.APROBADO -> (R.string.Consulta_Aprobado)
+                            Estado.OBSERVACION -> (R.string.Consulta_Observacion)
+                            else -> (R.string.Consulta_Rechazado)
                         },
-                    state = Estado.RECHAZADO
+                    state = protocolo.estado
 
                 )
             }

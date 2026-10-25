@@ -6,15 +6,7 @@
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="PreviewBotonCerrarSesion">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="viewCardOpciones">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="ViewCampoPassword">
+      <SelectionState runConfigName="CamposFormularioView">
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>

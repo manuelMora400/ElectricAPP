@@ -16,9 +16,17 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val db = ElectricHelperDb(application)
 
+    private val _protocoloDb = MutableStateFlow<List<HistorialState>>(emptyList())
+
     private val _uiState = MutableStateFlow(HistorialState())
     val uiState: StateFlow<HistorialState> = _uiState.asStateFlow()
 
+    init {
+        cargarProtocolo()
+    }
+    fun cargarProtocolo(){
+        _protocoloDb.value = db.filtrarProtocolo()
+    }
     fun onTagBuscar(valor: String) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -37,10 +45,6 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
                 busquedaExitosa = false
             )
         }
-    }
-
-    fun onFechaPrueba(valor: String?) {
-        _uiState.update { currentState -> currentState.copy(fechaPrueba = valor) }
     }
 
     fun Busqueda(): Boolean {
