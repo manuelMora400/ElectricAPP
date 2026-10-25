@@ -3,7 +3,7 @@ data class FormularioLoginState(
 
     val correo : String = "",
     val passwordHash : String = "",
-    val rol : Rol? = null,
+    val rol : Rol = Rol.CLIENTE,
     val activo : Boolean = true,
 
     val errorCorreo : String? = null,
