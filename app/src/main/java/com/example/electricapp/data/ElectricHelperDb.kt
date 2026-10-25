@@ -151,7 +151,9 @@ class ElectricHelperDb(context : Context) :
         private const val SQL_INSERTAR_AISLACION =
             "INSERT INTO $TABLA_AISLACION " +
                     "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA, $LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES " +
-                    "('403294','432432','234234','423','4324', 1)"
+                    "('TR-01','Transformador','234234','12500','31250', 1)"+
+                    "('TR-02','432432','234234','423','4324', 1)"+
+                    "('TR-A','432432','234234','423','4324', 1)"
         
         private const val SQL_SELECT_USUARIOS =
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
@@ -299,21 +301,19 @@ class ElectricHelperDb(context : Context) :
         return cuentas
     }
 
-    fun buscarProtocolo(Tag: String, Fecha: String): HistorialState? {
+    fun buscarProtocolo(Tag: String, Instalacion: String): HistorialState? {
         val consultaSQL =
-            "SELECT p.*, a.$EQUIPO_TAG, a.$FECHA_HORA_PRUEBA " +
-                    "FROM $TABLA_PROTOCOLO p " +
-                    "INNER JOIN $TABLA_AISLACION a ON p.$ID_PROTOCOLO = a.$ID_PROTOCOLO " +
-                    "WHERE p.$EQUIPO_TAG = ? AND a.$FECHA_HORA_PRUEBA = ?"
+            "SELECT $EQUIPO_TAG, $DEVANADO " +
+                    "FROM $TABLA_PROTOCOLO"
 
-        readableDatabase.rawQuery(consultaSQL,arrayOf(Tag, Fecha)).use { cursor ->
+        readableDatabase.rawQuery(consultaSQL,arrayOf(Tag, Instalacion)).use { cursor ->
             if (cursor.moveToFirst()) {
                 val tagIndex = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
                 val tagStr = cursor.getString(tagIndex)
 
                 return HistorialState(
                     tagBuscar = tagStr,
-                    instalacion = Fecha
+                    instalacion = Instalacion
                 )
             }
         }
