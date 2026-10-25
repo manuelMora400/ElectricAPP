@@ -8,7 +8,7 @@ data class FormularioRegistros(
     val correo : String = "",
     val password : String = "",
     val rol : Rol = Rol.CLIENTE,
-
+    val activo : Boolean = true,
     val giro : String = "",
     val contactoCargo : String = "",
 
