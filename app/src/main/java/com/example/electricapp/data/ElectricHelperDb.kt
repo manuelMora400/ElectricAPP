@@ -61,8 +61,8 @@ class ElectricHelperDb(context : Context) :
         private const val EQUIPO_TAG = "tag"
         private const val DEVANADO = "devanado"
         private const val TENSION_PRUEBA= "tension"
-        private const val LECTURA_1MIN= "1_min"
-        private const val LECTURA_10MIN= "10_min"
+        private const val LECTURA_1MIN= "min_1"
+        private const val LECTURA_10MIN= "min_10"
         private const val PROTOCOLO_ID= "id_protocolo"
 
 
@@ -114,7 +114,7 @@ class ElectricHelperDb(context : Context) :
                     "$ID_PRUEBA INTEGER PRIMARY KEY AUTOINCREMENT, "+
                     "$EQUIPO_TAG TEXT NOT NULL," +
                     "$DEVANADO TEXT NOT NULL," +
-                    "$TENSION_PRUEBA TEXT NOT NULL," +
+                    "$TENSION_PRUEBA TEXT NOT NULL, " +
                     "$LECTURA_1MIN TEXT NOT NULL," +
                     "$LECTURA_10MIN TEXT NOT NULL," +
                     "$PROTOCOLO_ID INTEGER NOT NULL REFERENCES $TABLA_PROTOCOLO($ID_PROTOCOLO))"
@@ -125,10 +125,10 @@ class ElectricHelperDb(context : Context) :
 
         private const val SQL_INSERTAR_USUARIO =
             "INSERT INTO $TABLA_USUARIO "+
-                    "($NOMBRE_USU, $CORREO, $RUT, $TELEFONO, $PASSWORD, $GIRO ,$ACTIVO, $CONTACTO_CARGO,$USER_ROL) VALUES" +
-                    "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','','Giro','1','Cargo',1)"+
-                    "('Andrea Contreras Silva','acontreras@induztek.cl','15.906.334-8','987541666','','','1','',2)"+
-                    "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','','','1','',3)"
+                    "($NOMBRE_USU, $CORREO, $RUT, $TELEFONO, $PASSWORD, $GIRO ,$ACTIVO, $CONTACTO_CARGO,$USER_ROL) VALUES " +
+                    "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','Lolsitox-.','Giro',1,'Cargo',1)," +
+                    "('Andrea Contreras Silva','acontreras@induztek.cl','15.906.334-8','987541666','Cololo.-892','Giro',1,'Cargo',2)," +
+                    "('Valentina Soto','vsoto@induztek.cl','18.871.905-7','987541666','Ude.-oloDE','giro',1,'Cargo',3)"
 
 
         private const val SQL_INSERTAR_INSTRUMENTO =
@@ -140,17 +140,17 @@ class ElectricHelperDb(context : Context) :
             "INSERT INTO $TABLA_CALIBRACION "+
                     "($FECHA_CALIBRACION, $FECHA_VENCIMIENTO, $INSTRUMENTO_ID) VALUES "+
                     "('15-03-2026','15-03-2027',1),"+
-                    "('10-10-2025','10-10-2026',2)"
+                    "('10-10-2025','10-10-2026',1)"
 
         private const val SQL_INSERTAR_PROTOCOLO =
             "INSERT INTO $TABLA_PROTOCOLO "+
-                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRUMENTO_ID, $RESULTADO, $USU_ID) VALUES "+
-                    "('','','',6,'',5)"
+                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRU_ID, $RESULTADO, $USU_ID) VALUES "+
+                    "('24-10-2026 10:00','20°C','50%',1,'APROBADO',1)"
 
         private const val SQL_INSERTAR_AISLACION =
-            "INSERT INTO $TABLA_AISLACION "+
-                    "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA,$LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES "+
-                    "('','','','','','',3)"
+            "INSERT INTO $TABLA_AISLACION " +
+                    "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA, $LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES " +
+                    "('403294','432432','234234','423','4324', 1)"
         
         private const val SQL_SELECT_USUARIOS =
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
@@ -181,6 +181,10 @@ class ElectricHelperDb(context : Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS $TABLA_AISLACION")
+        db.execSQL("DROP TABLE IF EXISTS $TABLA_PROTOCOLO")
+        db.execSQL("DROP TABLE IF EXISTS $TABLA_CALIBRACION")
+        db.execSQL("DROP TABLE IF EXISTS $TABLA_INSTRUMENTOS")
         db.execSQL("DROP TABLE IF EXISTS $TABLA_USUARIO")
         db.execSQL("DROP TABLE IF EXISTS $TABLA_ROL")
         onCreate(db)
@@ -203,6 +207,7 @@ class ElectricHelperDb(context : Context) :
     }
     private fun valoresUsuarios(usuario : FormularioRegistros) = contentValuesOf().apply{
         put(NOMBRE_USU , usuario.nombre)
+        put(CORREO, usuario.correo)
         put(RUT, usuario.rut)
         put(TELEFONO, usuario.telefono)
         put(PASSWORD, usuario.password)
@@ -226,14 +231,14 @@ class ElectricHelperDb(context : Context) :
         writableDatabase.insert(TABLA_INSTRUMENTOS, null, valoresInstrumentos(instrumentos))
 
 
-    private fun valoresCalibraciones(calibracion : FormularioInstrumentosStates) = contentValuesOf().apply {
+    private fun valoresCalibraciones(calibracion : FormularioInstrumentosStates, idInstrumentos : Int) = contentValuesOf().apply {
         put(FECHA_CALIBRACION, calibracion.fechaCalibracion)
         put(FECHA_VENCIMIENTO, calibracion.fechaVencimiento)
-
+        put(ID_INSTRUMENTO, idInstrumentos)
     }
 
-    fun insertarCalibraciones(calibracion: FormularioInstrumentosStates) : Long =
-        writableDatabase.insert(TABLA_CALIBRACION, null, valoresCalibraciones(calibracion))
+    fun insertarCalibraciones(calibracion: FormularioInstrumentosStates,idInstrumentos : Int) : Long =
+        writableDatabase.insert(TABLA_CALIBRACION, null, valoresCalibraciones(calibracion, idInstrumentos))
 
     private fun valoresProtocolos(protocolos : FormularioProtocolosState,idUsuario : Int,idInstrumento : Int) = contentValuesOf().apply {
         put(FECHA_HORA_PRUEBA, protocolos.fechaHora)
@@ -252,8 +257,11 @@ class ElectricHelperDb(context : Context) :
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
 
         val consultaSql =
-                    "SELECT u.*, $NOMBRE_ROL FROM $TABLA_USUARIO  " + " INNER JOIN r.$TABLA_ROL r ON u.$USER_ROL = r.$ID_ROL " +
-                    " WHERE u.$CORREO = ? AND u.$PASSWORD = ? AND u.$ACTIVO = 1"
+            "SELECT u.*, r.$NOMBRE_ROL " +
+                    "FROM $TABLA_USUARIO u " +
+                    "INNER JOIN $TABLA_ROL r ON u.$USER_ROL = r.$ID_ROL " +
+                    "WHERE u.$CORREO = ? AND u.$PASSWORD = ? AND u.$ACTIVO = 1"
+
            readableDatabase.rawQuery(consultaSql, arrayOf(correo, password)).use {  cursor ->
 
                 if(cursor.moveToFirst()){
@@ -264,7 +272,7 @@ class ElectricHelperDb(context : Context) :
                         passwordHash = password,
                         rol = Rol.valueOf(rolStr)
                     )
-                }
+                }else null
            }
         return null
     }
