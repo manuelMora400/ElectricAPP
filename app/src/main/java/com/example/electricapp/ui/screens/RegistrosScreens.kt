@@ -1,7 +1,6 @@
 package com.example.electricapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,25 +16,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
-import com.example.electricapp.model.UsuarioEjemplo
 import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.BotonCerrarSesion
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.CampoCorreo
-import com.example.electricapp.ui.components.CampoPassword
 import com.example.electricapp.ui.components.CamposFormularios
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.components.SeleccionPerfilRegistro
@@ -45,9 +39,8 @@ import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.ui.theme.Exito
 import com.example.electricapp.ui.theme.ExitoFondo
-import com.example.electricapp.viewModel.FormularioLoginViewModel
 import com.example.electricapp.viewModel.FormularioRegistrosViewModel
-import kotlinx.coroutines.channels.ticker
+
 
 @Composable
 fun screensRegistro(
@@ -57,7 +50,7 @@ fun screensRegistro(
 ){
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val cuentas by viewModel.cuentasSimuladas.collectAsStateWithLifecycle()
+    val cuentas by viewModel.cuentasBD.collectAsStateWithLifecycle()
 
     RegistrosScreens (
         uiState = uiState,
@@ -85,7 +78,7 @@ fun screensRegistro(
 fun RegistrosScreens(
 
     uiState : FormularioRegistros,
-    cuentas : List<UsuarioEjemplo>,
+    cuentas : List<FormularioRegistros>,
     onRutCambia : (String) -> Unit,
     onNombreCambia : (String) -> Unit,
     onTelefonoCambia : (String) -> Unit,
@@ -96,7 +89,7 @@ fun RegistrosScreens(
     onContactoCambia : (String) -> Unit,
     onLimpiar : () -> Unit,
     onRegistrar : () -> Unit,
-    onEstadoCambia :(Long, Boolean) -> Unit
+    onEstadoCambia :(String, Boolean) -> Unit
 
 ){
     Scaffold(
@@ -246,11 +239,11 @@ fun RegistrosScreens(
                 descripcion = stringResource(R.string.subtitulo_administrar_cuentas),
             )
             }
-                items(cuentas, key = {it.id}){
+                items(cuentas, key = {it.correo}){
                         usuarios ->
                     UsuariosCards(
-                        usuarioEjemplo = usuarios,
-                        onEstadoCambia = { nuevoEstado -> onEstadoCambia(usuarios.id, nuevoEstado)})
+                        usuario = usuarios,
+                        onEstadoCambia = { nuevoEstado -> onEstadoCambia(usuarios.correo, nuevoEstado)})
                 }
             }
 
@@ -278,6 +271,8 @@ private fun MensajeExitoso(nombre : String){
         )
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable

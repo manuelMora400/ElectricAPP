@@ -4,15 +4,16 @@ data class FormularioLoginState(
     val correo : String = "",
     val passwordHash : String = "",
     val rol : Rol? = null,
-    // Posibles errores
+    val activo : Boolean = true,
+
     val errorCorreo : String? = null,
     val errorPassword : String? = null,
+    val errorGeneral : String?  = null,
 
-    // Exito
     val mensajeExitoso : String = "",
     val logeadoExitoso : Boolean = false,
 
-    // Accebilidad
+
     val passwordVisible : Boolean = false
 )
 

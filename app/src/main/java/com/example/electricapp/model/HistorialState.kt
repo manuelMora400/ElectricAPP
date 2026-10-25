@@ -13,6 +13,7 @@ data class HistorialState(
 
     val rolUsuario: Rol = Rol.CLIENTE,
 
+
     val tituloResultado: String = "",
     val listaProtocolos: List<ProtocoloItem> = emptyList()
 )
