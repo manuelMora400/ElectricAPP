@@ -15,4 +15,3 @@ enum class Rol(@StringRes val texto : Int){
     CLIENTE(R.string.rol_cliente)
 
 }
-

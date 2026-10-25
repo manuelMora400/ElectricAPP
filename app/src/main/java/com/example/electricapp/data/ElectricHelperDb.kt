@@ -8,6 +8,7 @@ import com.example.electricapp.model.FormularioInstrumentosStates
 import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.FormularioRegistros
+import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.selects.select
 
@@ -150,7 +151,9 @@ class ElectricHelperDb(context : Context) :
         private const val SQL_INSERTAR_AISLACION =
             "INSERT INTO $TABLA_AISLACION " +
                     "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA, $LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES " +
-                    "('403294','432432','234234','423','4324', 1)"
+                    "('TR-01','Transformador','234234','12500','31250', 1)"+
+                    "('TR-02','432432','234234','423','4324', 1)"+
+                    "('TR-A','432432','234234','423','4324', 1)"
         
         private const val SQL_SELECT_USUARIOS =
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
@@ -255,7 +258,6 @@ class ElectricHelperDb(context : Context) :
 
 
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
-
         val consultaSql =
             "SELECT u.*, r.$NOMBRE_ROL " +
                     "FROM $TABLA_USUARIO u " +
@@ -297,5 +299,25 @@ class ElectricHelperDb(context : Context) :
             }
         }
         return cuentas
+    }
+
+    fun buscarProtocolo(Tag: String, Instalacion: String): HistorialState? {
+        val consultaSQL =
+            "SELECT $EQUIPO_TAG, $DEVANADO " +
+                    "FROM $TABLA_PROTOCOLO"
+
+        readableDatabase.rawQuery(consultaSQL,arrayOf(Tag, Instalacion)).use { cursor ->
+            if (cursor.moveToFirst()) {
+                val tagIndex = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
+                val tagStr = cursor.getString(tagIndex)
+
+                return HistorialState(
+                    tagBuscar = tagStr,
+                    instalacion = Instalacion
+                )
+            }
+        }
+
+        return null
     }
 }

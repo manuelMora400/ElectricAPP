@@ -9,3 +9,9 @@ enum class Estado(@StringRes val texto : Int) {
     RECHAZADO (R.string.Consulta_Aprobado),
     ACTUALIZANDO(R.string.Consulta_Remplazado)
 }
+data class ProtocoloItem(
+    val fecha: String,
+    val codigo: String,
+    val estado: Estado,
+    val detalleReemplazo: String? = null
+)

@@ -1,17 +1,18 @@
 package com.example.electricapp.model
 
 data class HistorialState(
+
     val tagBuscar: String = "",
     val instalacion: String = "",
 
-    //Errores
+    val fechaPrueba: String? = null,
     val tagError: String? = null,
     val intalacionError: String? = null,
 
-    val mensajeExitoso : String = "",
-    val busquedaExitosa : Boolean = false,
+    val busquedaExitosa: Boolean = false,
 
-    val rol : Rol = Rol.CLIENTE
-){
-    val Cliente : Boolean  get() = rol == Rol.CLIENTE
-}
+    val rolUsuario: Rol = Rol.CLIENTE,
+
+    val tituloResultado: String = "",
+    val listaProtocolos: List<ProtocoloItem> = emptyList()
+)
