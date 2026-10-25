@@ -27,7 +27,6 @@ val TextoOscuro = Color(0xFF101820)
 val TextoClaro = Color(0xFFECEAF4)
 val TextoSuave = Color(0xFFD6E4EA)
 
-
 val GrisDeshabilitado = Color(0xFFBDBAC7)
 val Exito = Color(0xFF1B8A4B)
 val ExitoFondo = Color(0xFF38FC17)
@@ -37,4 +36,6 @@ val CuadroAprobado = Color(0xFF38FC17)
 val CuadroRechazado = Color(0xFFC40000)
 val CuadroObservacion = Color(0xFFFF8D00)
 val CuadroActualizado = Color(0xFF1F1D27)
+
+val LightGray = Color(0xFF414141)
 
