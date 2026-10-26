@@ -1,7 +1,9 @@
 package com.example.electricapp.viewModel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.FormularioInstrumentosStates
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,9 +11,31 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
-class FormularioInstrumentosViewModel : ViewModel(){
+class FormularioInstrumentosViewModel(application: Application) : AndroidViewModel(application){
+
+    private val db = ElectricHelperDb(application)
+
+    private val _instrumentosBD = MutableStateFlow<List<FormularioInstrumentosStates>>(emptyList())
+    val instrumentosBD : StateFlow<List<FormularioInstrumentosStates>> = _instrumentosBD.asStateFlow()
+
+    init {
+        cargarInstrumentos()
+    }
+
+    fun cargarInstrumentos(){
+        val hoy = formatoFecha(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()))
+
+
+        _instrumentosBD.value = db.listaInstrumentos().map { instrumento ->
+            val vencimiento = formatoFecha(instrumento.fechaVencimiento)
+            instrumento.copy(vencido = hoy != null && vencimiento != null && vencimiento < hoy)
+        }
+    }
 
     private val _uiState = MutableStateFlow(FormularioInstrumentosStates())
 
@@ -135,7 +159,7 @@ class FormularioInstrumentosViewModel : ViewModel(){
             errorNumeroSerie = errorNumSerie,
             errorFechaCalibracion = errorFechaCalibracion,
             errorFechaVencimiento = errorFechaVencimiento,
-            mensajeExito = !hayErrores
+            mensajeExito = false
         ) }
 
             return !hayErrores
@@ -145,23 +169,52 @@ class FormularioInstrumentosViewModel : ViewModel(){
         val valido = validarCampos()
         if(!valido) return false
 
+        val estado = _uiState.value
+
+
+        if(db.buscarInstrumentoPorSerie(estado.numSerie) != null){
+            _uiState.update { it.copy(errorNumeroSerie = "Ya existe un instrumento con ese numero de serie") }
+            return false
+        }
+
+
+        val idInstrumento = db.insertarInstrumentos(estado)
+        if(idInstrumento <= 0){
+            _uiState.update { it.copy(errorNumeroSerie = "No se pudo registrar el instrumento") }
+            return false
+        }
+        db.insertarCalibraciones(estado, idInstrumento.toInt())
+        cargarInstrumentos()
+
         _uiState.update { it.copy(mensajeExito = true) }
 
             viewModelScope.launch {
-                delay(7000) // Aplicamos corrutina
+                delay(7000)
                 _uiState.update { it.copy(mensajeExito = false) }
             }
         return true
      }
 
+
     fun onActualizar() : Boolean{
         val actualizadoValido = validarCampos()
         if(!actualizadoValido) return false
 
+        val estado = _uiState.value
+        val idInstrumento = db.buscarInstrumentoPorSerie(estado.numSerie)
+
+        if(idInstrumento == null){
+            _uiState.update { it.copy(errorNumeroSerie = "No existe un instrumento con ese numero de serie") }
+            return false
+        }
+
+        db.insertarCalibraciones(estado, idInstrumento)
+        cargarInstrumentos()
+
         _uiState.update { it.copy(mensajeExito = true) }
 
         viewModelScope.launch {
-            delay(7000) // Aplicamos corrutina
+            delay(7000)
             _uiState.update { it.copy(mensajeExito = false) }
         }
     return true
@@ -169,6 +222,11 @@ class FormularioInstrumentosViewModel : ViewModel(){
 
     fun onLimpiar(){
         _uiState.value = FormularioInstrumentosStates()
+    }
+
+    override fun onCleared() {
+        db.close()
+        super.onCleared()
     }
 }
 

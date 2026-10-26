@@ -5,28 +5,23 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.HistorialState
-import kotlinx.coroutines.delay
+import com.example.electricapp.model.Rol
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class HistorialViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = ElectricHelperDb(application)
 
-    private val _protocoloDb = MutableStateFlow<List<HistorialState>>(emptyList())
-
     private val _uiState = MutableStateFlow(HistorialState())
     val uiState: StateFlow<HistorialState> = _uiState.asStateFlow()
 
-    init {
-        cargarProtocolo()
+    fun onRol(rol: Rol) {
+        _uiState.update { currentState -> currentState.copy(rolUsuario = rol) }
     }
-    fun cargarProtocolo(){
-        _protocoloDb.value = db.filtrarProtocolo()
-    }
+
     fun onTagBuscar(valor: String) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -53,8 +48,8 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
         val errorSerie = when {
             estado.tagBuscar.isBlank() ->
                 "El campo debe tener información"
-            estado.tagBuscar.length > 7 ->
-                "Este campo no puede ser mayor a 7 caracteres"
+            estado.tagBuscar.length > 12 ->
+                "Este campo no puede ser mayor a 12 caracteres"
             !estado.tagBuscar.contains("-") ->
                 "La serie debe tener -"
             else -> null
@@ -63,8 +58,8 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
         val errorLugar = when {
             estado.instalacion.isBlank() ->
                 "Instalación no puede estar vacía"
-            estado.instalacion.length !in 5..15 ->
-                "Este campo no acepta menos de 5 y más de 15 caracteres"
+            estado.instalacion.length !in 5..30 ->
+                "Este campo no acepta menos de 5 y más de 30 caracteres"
             else -> null
         }
 
@@ -81,26 +76,27 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
             return false
         }
 
-        val protocoloEncontrado = db.buscarProtocolo(
-            Tag = estado.tagBuscar,
-            Instalacion = estado.instalacion,
-            Fecha = estado.fechaPrueba!!
+        val protocolosEncontrados = db.filtrarProtocolo(
+            tag = estado.tagBuscar.trim(),
+            instalacion = estado.instalacion.trim()
         )
 
-        return if (protocoloEncontrado != null) {
+        return if (protocolosEncontrados.isNotEmpty()) {
             _uiState.update {
                 it.copy(
                     tagError = null,
                     intalacionError = null,
-                    busquedaExitosa = true
+                    busquedaExitosa = true,
+                    listaProtocolo = protocolosEncontrados
                 )
             }
             true
         } else {
             _uiState.update {
                 it.copy(
-                    intalacionError = "Instalación no encontrada",
-                    busquedaExitosa = false
+                    intalacionError = "No hay protocolos para ese TAG en esa instalación",
+                    busquedaExitosa = false,
+                    listaProtocolo = emptyList()
                 )
             }
             false

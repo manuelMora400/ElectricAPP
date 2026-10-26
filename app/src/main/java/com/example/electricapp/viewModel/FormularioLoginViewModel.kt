@@ -2,17 +2,14 @@ package com.example.electricapp.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.model.Rol
-import com.example.electricapp.ui.screens.logeadoExito
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+
 
 
 class FormularioLoginViewModel(application : Application): AndroidViewModel(application){
@@ -41,8 +38,8 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         val errorCorreo =
             if(estado.correo.isBlank()){
                 "El correo es obligatorio"
-            }else if (estado.correo.length > 25){
-                "El correo es muy largo"
+            }else if (estado.correo.length > 120){
+                "El correo no debe tener mas de 120 caracteres"
             }else if(!formatoCorreo.matches(estado.correo)){
                 "Formato invalido"
             }else if(estado.correo != estado.correo.trim()){
@@ -55,8 +52,8 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                 "La contraseña no puede estar vacia"
             }else if(!estado.passwordHash.any{it.isUpperCase()}){
                 "La contraseña debe contener al menos una letra en mayuscula"
-            }else if(!estado.passwordHash.contains(".") || !estado.passwordHash.contains("-")){
-                "La contraseña debe contener al menos un (.) y (-)"
+            }else if(!estado.passwordHash.contains(".") && !estado.passwordHash.contains("-")){
+                "La contraseña debe contener al menos un punto ( . ) o guion ( - )"
             }else if (estado.passwordHash.length !in 8..12){
                 "La contraseña debe tener un minimo de 8 y maximo de 12 digitos"
             }else
@@ -77,11 +74,22 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
             correo = estado.correo,
             password = estado.passwordHash
         )
-        cuentaEncontrada?.rol
+
+        if (cuentaEncontrada != null && cuentaEncontrada.rol == Rol.INGENIERO){
+            _uiState.update {
+                it.copy(
+                    errorPassword = "El perfil Ingeniero estara disponible en la proxima entrega",
+                    logeadoExitoso = false
+                )
+            }
+            return null
+        }
 
         if (cuentaEncontrada != null){
             _uiState.update {
                 it.copy(
+                    idUsuario = cuentaEncontrada.idUsuario,
+                    nombre = cuentaEncontrada.nombre,
                     errorCorreo = null,
                     errorPassword = null,
                     logeadoExitoso = true,
@@ -99,6 +107,12 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         }
         return cuentaEncontrada.rol
     }
+
+
+    fun onCerrarSesion(){
+        _uiState.value = FormularioLoginState()
+    }
+
     override fun onCleared() {
         db.close()
         super.onCleared()
