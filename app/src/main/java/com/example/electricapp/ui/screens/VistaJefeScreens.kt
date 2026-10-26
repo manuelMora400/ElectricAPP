@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.electricapp.R
 import com.example.electricapp.ui.components.Bienvenida
+import com.example.electricapp.ui.components.BotonCamara
 import com.example.electricapp.ui.components.BotonCerrarSesion
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.components.TarjetaOpciones
@@ -29,7 +30,11 @@ import com.example.electricapp.ui.theme.ElectricAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VistaJefeScreens(
-    onClick : () -> Unit,
+    onHistorial : () -> Unit,
+    onRevisarProtocolos : () -> Unit,
+    onAnularProtocolos : () -> Unit,
+    onRegistrarClientes : () -> Unit,
+    onCrearProtocolos : () -> Unit,
     onGestionUsuarios : () -> Unit,
     onInstrumentos : () -> Unit,
     onDesactivarCuentas : () -> Unit,
@@ -57,6 +62,11 @@ fun VistaJefeScreens(
                     texto = stringResource(R.string.titulo_rol),
                     descripcion = stringResource(R.string.subtitulo)
                 )
+
+
+                BotonCamara(
+                    texto = stringResource(R.string.btn_tomar_foto)
+                )
             Column(
                 modifier = Modifier.padding(Dimens.espacioPantalla),
                 verticalArrangement = Arrangement.spacedBy(Dimens.espacioTitulo)
@@ -73,14 +83,14 @@ fun VistaJefeScreens(
                     subtitulo = stringResource(R.string.subtitulo_historial_equipos),
                     icono = R.drawable.ic_historial_equipo,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onHistorial
                 )
                 TarjetaOpciones(
                     titulo = stringResource(R.string.titulo_revisar_protocolos),
                     subtitulo = stringResource(R.string.subtitulo_revisar_protocolos),
                     icono = R.drawable.ic_revisar_protocolos,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onRevisarProtocolos
                 )
 
                 TarjetaOpciones(
@@ -96,21 +106,21 @@ fun VistaJefeScreens(
                     subtitulo = stringResource(R.string.subtitulo_anular_protocolos),
                     icono = R.drawable.ic_anular_protocolos,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onAnularProtocolos
                 )
                 TarjetaOpciones(
                     titulo = stringResource(R.string.titulo_registrar_clientes),
                     subtitulo = stringResource(R.string.subtitulo_registro_cliente),
                     icono = R.drawable.ic_registrar_client_equipo,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onRegistrarClientes
                 )
                 TarjetaOpciones(
                     titulo = stringResource(R.string.titulo_crear_protocolos),
                     subtitulo = stringResource(R.string.subtitulo_crear_protocolos),
                     icono = R.drawable.ic_crear_protocolos,
                     modifier = Modifier.padding(),
-                    onClick = onClick
+                    onClick = onCrearProtocolos
                 )
                 TarjetaOpciones(
                     titulo = stringResource(R.string.titulo_desactivar_personal),
@@ -135,7 +145,11 @@ fun VistaJefeScreens(
 fun VistaJefeView(){
     ElectricAppTheme(true) {
         VistaJefeScreens (
-            onClick = {},
+            onHistorial = {},
+            onRevisarProtocolos = {},
+            onAnularProtocolos = {},
+            onRegistrarClientes = {},
+            onCrearProtocolos = {},
             onGestionUsuarios = {},
             onInstrumentos = {},
             onDesactivarCuentas = {},
@@ -148,7 +162,11 @@ fun VistaJefeView(){
 fun VistaJefeView2(){
     ElectricAppTheme(false) {
         VistaJefeScreens (
-            onClick = {},
+            onHistorial = {},
+            onRevisarProtocolos = {},
+            onAnularProtocolos = {},
+            onRegistrarClientes = {},
+            onCrearProtocolos = {},
             onGestionUsuarios = {},
             onInstrumentos = {},
             onDesactivarCuentas = {},

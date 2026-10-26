@@ -3,7 +3,6 @@ package com.example.electricapp.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.media.audiofx.DynamicsProcessing
 import androidx.core.content.contentValuesOf
 import com.example.electricapp.model.Estado
 import com.example.electricapp.model.FormularioInstrumentosStates
@@ -12,14 +11,13 @@ import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
-import kotlinx.coroutines.selects.select
 
 class ElectricHelperDb(context : Context) :
     SQLiteOpenHelper(context, NombreBD, null, VERSION_BD){
 
     companion object{
         private const val NombreBD = "electric.bd"
-        private const val VERSION_BD = 1
+        private const val VERSION_BD = 2
 
         private const val TABLA_ROL  = "ROLES"
         private const val ID_ROL     = "id_rol"
@@ -57,11 +55,13 @@ class ElectricHelperDb(context : Context) :
         private const val HUMEDAD = "humedad"
         private const val USU_ID = "id_usuario"
         private const val RESULTADO = "resultado"
+        private const val ESTADO_PROTOCOLO = "estado"
         private const val INSTRU_ID = "id_instrumento"
 
         private const val TABLA_AISLACION = "AISLACION"
         private const val ID_PRUEBA = "id_prueba"
         private const val EQUIPO_TAG = "tag"
+        private const val INSTALACION = "instalacion"
         private const val DEVANADO = "devanado"
         private const val TENSION_PRUEBA= "tension"
         private const val LECTURA_1MIN= "min_1"
@@ -110,12 +110,14 @@ class ElectricHelperDb(context : Context) :
                     "$HUMEDAD TEXT NOT NULL," +
                     "$INSTRU_ID INTEGER NOT NULL REFERENCES $TABLA_INSTRUMENTOS($ID_INSTRUMENTO)," +
                     "$RESULTADO TEXT NOT NULL," +
+                    "$ESTADO_PROTOCOLO TEXT NOT NULL DEFAULT 'REGISTRADO_TERRENO'," +
                     "$USU_ID INTEGER NOT NULL REFERENCES $TABLA_USUARIO($ID_USUARIO))"
 
         private const val SQL_CREAR_AISLACION =
             "CREATE TABLE $TABLA_AISLACION (" +
                     "$ID_PRUEBA INTEGER PRIMARY KEY AUTOINCREMENT, "+
                     "$EQUIPO_TAG TEXT NOT NULL," +
+                    "$INSTALACION TEXT NOT NULL," +
                     "$DEVANADO TEXT NOT NULL," +
                     "$TENSION_PRUEBA TEXT NOT NULL, " +
                     "$LECTURA_1MIN TEXT NOT NULL," +
@@ -131,31 +133,46 @@ class ElectricHelperDb(context : Context) :
                     "($NOMBRE_USU, $CORREO, $RUT, $TELEFONO, $PASSWORD, $GIRO ,$ACTIVO, $CONTACTO_CARGO,$USER_ROL) VALUES " +
                     "('Ricardo Espinoza Lagos','respinoza@induztek.cl','13.871.905-7','987541666','Lolsitox-.','Giro',1,'Cargo',1)," +
                     "('Andrea Contreras Silva','acontreras@induztek.cl','15.906.334-8','987541666','Cololo.-892','Giro',1,'Cargo',2)," +
-                    "('Valentina Soto','vsoto@induztek.cl','18.871.905-7','987541666','Ude.-oloDE','giro',1,'Cargo',3)"
+                    "('Valentina Soto','vsoto@induztek.cl','18.871.905-7','987541666','Ude.-oloDE','giro',1,'Cargo',3)," +
+                    "('Marcela Fuentes Rojas','mfuentes@envpacifico.ejemplo','14.226.791-8','+56900000101','Cliente.-01','Agroindustria',1,'Jefa de Mantenimiento',4)," +
+                    "('Tomas Leiva Araya','tleiva@losaromos.ejemplo','18.390.452-3','+56900000104','Cliente.-02','Salud',1,'Supervisor Electrico',4)," +
+                    "('Patricio Navarro Soto','pnavarro@cerroalto.ejemplo','12.645.308-6','+56900000103','Cliente.-03','Mineria',1,'Jefe de Mantenimiento Electrico',4)"
 
 
         private const val SQL_INSERTAR_INSTRUMENTO =
             "INSERT INTO $TABLA_INSTRUMENTOS "+
                     "($NOMBRE_INSTRUMENTO, $MARCA, $MODELO, $NUM_SERIE) VALUES "+
-                    "('Megóhmetro 5 kV','Megger','MIT525','MIT-0045821')"
+                    "('Megóhmetro 5 kV','Megger','MIT525','MIT-0045821'),"+
+                    "('Megóhmetro 10 kV','Megger','MIT1025','MIT-0071233'),"+
+                    "('Medidor de relación (TTR)','Megger','TTR300','TTR-30044'),"+
+                    "('Micro-ohmímetro','Megger','DLRO10X','DLR-10882'),"+
+                    "('Equipo de inyección secundaria','Omicron','CMC 356','CMC-HB411')"
 
         private const val SQL_INSERTAR_CALIBRACION =
             "INSERT INTO $TABLA_CALIBRACION "+
                     "($FECHA_CALIBRACION, $FECHA_VENCIMIENTO, $INSTRUMENTO_ID) VALUES "+
-                    "('15-03-2026','15-03-2027',1),"+
-                    "('10-10-2025','10-10-2026',1)"
+                    "('15/03/2026','15/03/2027',1),"+
+                    "('10/10/2025','10/10/2026',2),"+
+                    "('02/06/2026','02/06/2027',3),"+
+                    "('20/08/2025','20/08/2026',4),"+
+                    "('05/01/2026','05/01/2027',5)"
+
 
         private const val SQL_INSERTAR_PROTOCOLO =
             "INSERT INTO $TABLA_PROTOCOLO "+
-                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRU_ID, $RESULTADO, $USU_ID) VALUES "+
-                    "('24-10-2026 10:00','20°C','50%',1,'APROBADO',1)"
+                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRU_ID, $RESULTADO, $ESTADO_PROTOCOLO, $USU_ID) VALUES "+
+                    "('14/09/2024 10:00','18','55',1,'APROBADO','FORMALIZADO',3),"+
+                    "('13/09/2025 10:00','21','48',1,'APROBADO','FORMALIZADO',3),"+
+                    "('26/09/2026 09:30','19','60',1,'OBSERVADO','REGISTRADO_TERRENO',3),"+
+                    "('26/09/2026 11:00','19','60',1,'APROBADO','REGISTRADO_TERRENO',3)"
 
         private const val SQL_INSERTAR_AISLACION =
             "INSERT INTO $TABLA_AISLACION " +
-                    "($EQUIPO_TAG, $DEVANADO, $TENSION_PRUEBA, $LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES " +
-                    "('TR-01','Transformador','234234','12500','31250', 1),"+
-                    "('TR-02','432432','234234','423','4324', 1),"+
-                    "('TR-A','432432','234234','423','4324', 1)"
+                    "($EQUIPO_TAG, $INSTALACION, $DEVANADO, $TENSION_PRUEBA, $LECTURA_1MIN, $LECTURA_10MIN, $PROTOCOLO_ID) VALUES " +
+                    "('TR-01','Planta Lampa','AT-T','5','12500','31250', 1),"+
+                    "('TR-01','Planta Lampa','AT-T','5','9800','21560', 2),"+
+                    "('TR-01','Planta Lampa','AT-T','5','6100','10980', 3),"+
+                    "('TR-02','Planta Lampa','AT-T','5','15200','36480', 4)"
         
         private const val SQL_SELECT_USUARIOS =
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
@@ -245,17 +262,74 @@ class ElectricHelperDb(context : Context) :
     fun insertarCalibraciones(calibracion: FormularioInstrumentosStates,idInstrumentos : Int) : Long =
         writableDatabase.insert(TABLA_CALIBRACION, null, valoresCalibraciones(calibracion, idInstrumentos))
 
+
+    fun buscarInstrumentoPorSerie(numSerie : String) : Int?{
+        readableDatabase.rawQuery(
+            "SELECT $ID_INSTRUMENTO FROM $TABLA_INSTRUMENTOS WHERE $NUM_SERIE = ?",
+            arrayOf(numSerie)
+        ).use { cursor ->
+            if(cursor.moveToFirst()){
+                return cursor.getInt(cursor.getColumnIndexOrThrow(ID_INSTRUMENTO))
+            }
+        }
+        return null
+    }
+
+    fun listaInstrumentos() : List<FormularioInstrumentosStates>{
+
+        val instrumentos = mutableListOf<FormularioInstrumentosStates>()
+        val consultaSql =
+            "SELECT i.$ID_INSTRUMENTO, i.$NOMBRE_INSTRUMENTO, i.$MARCA, i.$MODELO, i.$NUM_SERIE, " +
+                    "c.$FECHA_CALIBRACION, c.$FECHA_VENCIMIENTO " +
+                    "FROM $TABLA_INSTRUMENTOS i " +
+                    "INNER JOIN $TABLA_CALIBRACION c ON c.$INSTRUMENTO_ID = i.$ID_INSTRUMENTO " +
+                    "WHERE c.$ID_CALIBRACION = (SELECT MAX($ID_CALIBRACION) FROM $TABLA_CALIBRACION " +
+                    "WHERE $INSTRUMENTO_ID = i.$ID_INSTRUMENTO) " +
+                    "ORDER BY i.$NOMBRE_INSTRUMENTO"
+
+        readableDatabase.rawQuery(consultaSql, null).use { cursor ->
+            while (cursor.moveToNext()){
+                instrumentos.add(
+                    FormularioInstrumentosStates(
+                        id = cursor.getInt(cursor.getColumnIndexOrThrow(ID_INSTRUMENTO)),
+                        nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_INSTRUMENTO)),
+                        marca = cursor.getString(cursor.getColumnIndexOrThrow(MARCA)),
+                        modelo = cursor.getString(cursor.getColumnIndexOrThrow(MODELO)),
+                        numSerie = cursor.getString(cursor.getColumnIndexOrThrow(NUM_SERIE)),
+                        fechaCalibracion = cursor.getString(cursor.getColumnIndexOrThrow(FECHA_CALIBRACION)),
+                        fechaVencimiento = cursor.getString(cursor.getColumnIndexOrThrow(FECHA_VENCIMIENTO))
+                    )
+                )
+            }
+        }
+        return instrumentos
+    }
+
     private fun valoresProtocolos(protocolos : FormularioProtocolosState,idUsuario : Int,idInstrumento : Int) = contentValuesOf().apply {
         put(FECHA_HORA_PRUEBA, protocolos.fechaHora)
         put(TEMPERATURA, protocolos.temperatura)
         put(HUMEDAD, protocolos.humedad)
         put(RESULTADO, protocolos.resultado?.name ?: "RECHAZADO")
+        put(ESTADO_PROTOCOLO, "REGISTRADO_TERRENO")
         put(USU_ID, idUsuario)
         put(INSTRU_ID, idInstrumento)
     }
 
     fun insertarProtocolos(protocolos: FormularioProtocolosState, idUsuario : Int,idInstrumento : Int) : Long =
         writableDatabase.insert(TABLA_PROTOCOLO, null, valoresProtocolos(protocolos, idUsuario, idInstrumento))
+
+    private fun valoresAislacion(protocolos : FormularioProtocolosState, tag : String, instalacion : String, idProtocolo : Int) = contentValuesOf().apply {
+        put(EQUIPO_TAG, tag)
+        put(INSTALACION, instalacion)
+        put(DEVANADO, protocolos.devanado)
+        put(TENSION_PRUEBA, protocolos.tensionPrueba)
+        put(LECTURA_1MIN, protocolos.lecturaUnMinuto)
+        put(LECTURA_10MIN, protocolos.lecturaDiezMinutos)
+        put(PROTOCOLO_ID, idProtocolo)
+    }
+
+    fun insertarAislacion(protocolos : FormularioProtocolosState, tag : String, instalacion : String, idProtocolo : Int) : Long =
+        writableDatabase.insert(TABLA_AISLACION, null, valoresAislacion(protocolos, tag, instalacion, idProtocolo))
 
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
 
@@ -270,6 +344,8 @@ class ElectricHelperDb(context : Context) :
                     val rol = cursor.getColumnIndexOrThrow(NOMBRE_ROL)
                     val rolStr = cursor.getString(rol)
                     return FormularioLoginState(
+                        idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO)),
+                        nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
                         correo = correo,
                         passwordHash = password,
                         rol = Rol.valueOf(rolStr)
@@ -317,56 +393,40 @@ class ElectricHelperDb(context : Context) :
         return cuentas
     }
 
-    fun buscarProtocolo(Tag: String, Instalacion: String, Fecha : String): HistorialState? {
-        val consultaSQL =
-            "SELECT $EQUIPO_TAG, $DEVANADO, $FECHA_HORA_PRUEBA" +
-                    "FROM $TABLA_PROTOCOLO "
 
-        readableDatabase.rawQuery(consultaSQL,arrayOf(Tag, Instalacion,Fecha)).use { cursor ->
-            if (cursor.moveToFirst()) {
-                val tagIndex = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
-                val tagStr = cursor.getString(tagIndex)
-                val fecha = cursor.getString(cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA))
-
-                return HistorialState(
-                    tagBuscar = tagStr,
-                    instalacion = Instalacion,
-                    fechaPrueba = fecha
-                )
-            }
-        }
-
-        return null
-    }
-
-    fun filtrarProtocolo(): List<HistorialState> {
+    fun filtrarProtocolo(tag : String, instalacion : String): List<HistorialState> {
         val protocolo = mutableListOf<HistorialState>()
         val consultaSQL = """
-        SELECT a.$EQUIPO_TAG, a.$DEVANADO, p.$FECHA_HORA_PRUEBA, p.$RESULTADO
+        SELECT a.$EQUIPO_TAG, a.$INSTALACION, p.$FECHA_HORA_PRUEBA, p.$RESULTADO, p.$ESTADO_PROTOCOLO
         FROM $TABLA_AISLACION a
         INNER JOIN $TABLA_PROTOCOLO p ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+        WHERE a.$EQUIPO_TAG LIKE ? AND a.$INSTALACION LIKE ?
+        ORDER BY p.$ID_PROTOCOLO DESC
     """.trimIndent()
 
-        readableDatabase.rawQuery(consultaSQL, null).use { cursor ->
+
+        readableDatabase.rawQuery(consultaSQL, arrayOf(tag, "%$instalacion%")).use { cursor ->
             val idxTag = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
-            val idxDevanado = cursor.getColumnIndexOrThrow(DEVANADO)
+            val idxInstalacion = cursor.getColumnIndexOrThrow(INSTALACION)
             val idxFecha = cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)
             val idxResultado = cursor.getColumnIndexOrThrow(RESULTADO)
+            val idxEstado = cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO)
 
             while (cursor.moveToNext()) {
                 val resultadoStr = cursor.getString(idxResultado)
-                val estadoEnum = try {
-                    Estado.valueOf(resultadoStr)
-                } catch (e: Exception) {
-                    Estado.RECHAZADO
+                val estadoEnum = when (resultadoStr) {
+                    "APROBADO" -> Estado.APROBADO
+                    "OBSERVADO" -> Estado.OBSERVACION
+                    else -> Estado.RECHAZADO
                 }
 
                 protocolo.add(
                     HistorialState(
                         tagBuscar = cursor.getString(idxTag),
-                        instalacion = cursor.getString(idxDevanado),
+                        instalacion = cursor.getString(idxInstalacion),
                         fechaPrueba = cursor.getString(idxFecha),
-                        estado = estadoEnum
+                        estado = estadoEnum,
+                        formalizado = cursor.getString(idxEstado) == "FORMALIZADO"
                     )
                 )
             }

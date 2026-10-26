@@ -1,9 +1,11 @@
 package com.example.electricapp.viewModel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.ElectricHelperDb
+import com.example.electricapp.model.FormularioInstrumentosStates
 import com.example.electricapp.model.FormularioProtocolosState
-import com.example.electricapp.model.InstrumentoEjemplo
 import com.example.electricapp.model.ResultadoPrueba
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +18,10 @@ import java.util.Date
 import java.util.Locale
 
 
-class FormularioProtocolosViewModel : ViewModel(){
+class FormularioProtocolosViewModel(application: Application) : AndroidViewModel(application){
+
+    private val db = ElectricHelperDb(application)
+
 
     val equipos = listOf(
         "TR-01 - Planta Lampa",
@@ -27,13 +32,14 @@ class FormularioProtocolosViewModel : ViewModel(){
 
     val devanados = listOf("AT-BT", "AT-T", "BT-T")
 
-    val instrumentos = listOf(
-        InstrumentoEjemplo("Megohmetro 5 kV", "15/03/2027"),
-        InstrumentoEjemplo("Megohmetro 10 kV", "10/10/2026")
-    )
-    private val tecnicoSesion = "Matias Godoy Herrera"
 
-    //------------------------------------------------------------------------------------------//
+    val instrumentos = db.listaInstrumentos()
+    val nombresInstrumentos = instrumentos.map { textoInstrumento(it) }
+
+
+    private var idTecnico = 0
+    private var tecnicoSesion = ""
+
     private val _uiState = MutableStateFlow(estadoInicial())
     val uiState : StateFlow<FormularioProtocolosState> = _uiState.asStateFlow()
 
@@ -72,6 +78,16 @@ class FormularioProtocolosViewModel : ViewModel(){
         _uiState.update { it.copy(instrumento = valor, errorInstrumento = errorCalibracion(valor), mensajeExito = false) }
     }
 
+    fun onTecnicoSesion(id : Int, nombre : String){
+        idTecnico = id
+        tecnicoSesion = nombre
+        _uiState.update { it.copy(tecnico = nombre) }
+    }
+
+    private fun textoInstrumento(instrumento : FormularioInstrumentosStates) : String{
+        return "${instrumento.nombre} (${instrumento.numSerie})"
+    }
+
     private fun estadoInicial() : FormularioProtocolosState{
         return FormularioProtocolosState(
             fechaHora = fechaActual("dd/MM/yyyy HH:mm"),
@@ -103,7 +119,7 @@ class FormularioProtocolosViewModel : ViewModel(){
 
     private fun errorCalibracion(nombre : String) : String?{
 
-        val instrumento = instrumentos.find { it.nombre == nombre }
+        val instrumento = instrumentos.find { textoInstrumento(it) == nombre }
         if(instrumento == null) return null
 
         val hoy = formatoFecha(fechaActual("dd/MM/yyyy"))
@@ -239,7 +255,8 @@ class FormularioProtocolosViewModel : ViewModel(){
             errorLecturaUnMinuto = errorLecturaUno,
             errorLecturaDiezMinutos = errorLecturaDiez,
             errorInstrumento = errorInstrumento,
-            mensajeExito = !hayErrores
+            errorGeneral = null,
+            mensajeExito = false
         ) }
 
         return !hayErrores
@@ -250,8 +267,29 @@ class FormularioProtocolosViewModel : ViewModel(){
         val valido = validarCampos()
         if(!valido) return false
 
+        val estado = _uiState.value
+        val instrumento = instrumentos.find { textoInstrumento(it) == estado.instrumento }
 
-        _uiState.update { it.copy(mensajeExito = true) }
+        if(instrumento == null || idTecnico == 0){
+            _uiState.update { it.copy(errorGeneral = "No se pudo registrar, vuelva a iniciar sesion") }
+            return false
+        }
+
+
+        val partes = estado.equipo.split(" - ")
+        val tag = partes[0]
+        val instalacion = if(partes.size > 1) partes[1] else ""
+
+
+        val idProtocolo = db.insertarProtocolos(estado, idTecnico, instrumento.id)
+        if(idProtocolo <= 0){
+            _uiState.update { it.copy(errorGeneral = "No se pudo registrar el protocolo") }
+            return false
+        }
+        db.insertarAislacion(estado, tag, instalacion, idProtocolo.toInt())
+
+
+        _uiState.value = estadoInicial().copy(mensajeExito = true)
 
         viewModelScope.launch {
             delay(7000)
@@ -262,5 +300,10 @@ class FormularioProtocolosViewModel : ViewModel(){
 
     fun onLimpiar(){
         _uiState.value = estadoInicial()
+    }
+
+    override fun onCleared() {
+        db.close()
+        super.onCleared()
     }
 }

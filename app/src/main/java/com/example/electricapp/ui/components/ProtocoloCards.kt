@@ -23,6 +23,7 @@ import com.example.electricapp.ui.theme.ElectricAppTheme
 @Composable
 fun ProtocoloCards(
     protocolo: HistorialState,
+    esCliente: Boolean = false,
     modifier: Modifier = Modifier
 ){
     Card(
@@ -48,16 +49,24 @@ fun ProtocoloCards(
                     text = "Instalación: ${protocolo.instalacion}",
                     style = MaterialTheme.typography.titleMedium
                 )
-                etiqueta(
-                    text =
-                        when (protocolo.estado) {
-                            Estado.APROBADO -> (R.string.Consulta_Aprobado)
-                            Estado.OBSERVACION -> (R.string.Consulta_Observacion)
-                            else -> (R.string.Consulta_Rechazado)
-                        },
-                    state = protocolo.estado
 
-                )
+                if (esCliente && !protocolo.formalizado) {
+                    etiqueta(
+                        text = R.string.pendiente_formalizacion,
+                        state = Estado.OBSERVACION
+                    )
+                } else {
+                    etiqueta(
+                        text =
+                            when (protocolo.estado) {
+                                Estado.APROBADO -> (R.string.Consulta_Aprobado)
+                                Estado.OBSERVACION -> (R.string.Consulta_Observacion)
+                                else -> (R.string.Consulta_Rechazado)
+                            },
+                        state = protocolo.estado
+
+                    )
+                }
             }
         }
     }

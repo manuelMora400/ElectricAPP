@@ -14,7 +14,9 @@ data class HistorialState(
     val rolUsuario: Rol = Rol.CLIENTE,
     val estado: Estado = Estado.APROBADO,
     val tituloResultado: String = "",
-    val listaProtocolo: List<HistorialState> = emptyList()
+    val listaProtocolo: List<HistorialState> = emptyList(),
+
+    val formalizado: Boolean = false
 
 ){
     val Cliente : Boolean get() = rolUsuario == Rol.CLIENTE

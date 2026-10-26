@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,6 +33,7 @@ import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.CamposFormularios
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
+import com.example.electricapp.ui.components.InstrumentosCards
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
@@ -47,9 +49,11 @@ fun screensRegistrosInstrumentos(
     onActualizado: () -> Unit
 ){
     val Uistate by viewModel.uiState.collectAsStateWithLifecycle()
+    val instrumentos by viewModel.instrumentosBD.collectAsStateWithLifecycle()
 
     RegistroInstrumentosScreens(
         uistate = Uistate,
+        instrumentos = instrumentos,
         onNombreCambia = viewModel::onNombreCambia,
         onMarcaCambia = viewModel::onMarcaCambia,
         onModeloCambia = viewModel::onModeloCambia,
@@ -76,6 +80,7 @@ fun screensRegistrosInstrumentos(
 fun RegistroInstrumentosScreens(
 
     uistate : FormularioInstrumentosStates,
+    instrumentos : List<FormularioInstrumentosStates>,
     onNombreCambia : (String) -> Unit,
     onMarcaCambia  : (String) -> Unit,
     onModeloCambia : (String) -> Unit,
@@ -226,6 +231,10 @@ fun RegistroInstrumentosScreens(
                     descripcion = stringResource(R.string.informacion_instrumentos)
                 )
             }
+
+            items(instrumentos) { instrumento ->
+                InstrumentosCards(instrumento = instrumento)
+            }
         }
     }
 }
@@ -264,6 +273,7 @@ fun RegistramentosInstrumentosScreenView(){
 
         RegistroInstrumentosScreens(
             uistate = FormularioInstrumentosStates(),
+            instrumentos = emptyList(),
             onNombreCambia = {},
             onMarcaCambia = {},
             onModeloCambia = {},
