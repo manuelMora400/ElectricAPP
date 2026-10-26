@@ -102,11 +102,6 @@
 
 
 
-
-
-
-
-
     <string name="banner_tecnico"> Panel Tecnico Terreno</string>
     <string name="tecnico_crear_protoclo"> Crear Protocolo</string>
     <string name="tecnico_subtitlo_crear_protocolo">Presione para crear protocolos</string>
@@ -142,4 +137,20 @@
     <string name="protocolo_indice">Indice de polarizacion (IP): %1$s</string>
     <string name="btn_registrar_protocolo">Registrar en terreno</string>
     <string name="protocolo_registrado_exito">Protocolo registrado en terreno</string>
+
+
+    <string name="en_desarrollo">Disponible en la proxima entrega</string>
+    <string name="pendiente_formalizacion">Pendiente de formalizacion</string>
+
+
+    <string name="btn_tomar_foto">Tomar foto</string>
+    <string name="foto_tomada">Foto tomada con la camara</string>
+    <string name="permiso_camara_denegado">Sin permiso de camara no se puede tomar la foto</string>
+    <string name="sin_camara">No se encontro una aplicacion de camara</string>
+
+
+    <string name="instrumento_vigente">Vigente</string>
+    <string name="instrumento_vencido">Vencido</string>
+    <string name="instrumento_serie">N° serie: %1$s</string>
+    <string name="instrumento_vence">Vence: %1$s</string>
 </resources>
