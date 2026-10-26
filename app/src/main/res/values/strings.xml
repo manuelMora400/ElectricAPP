@@ -1,3 +1,156 @@
 <resources>
     <string name="app_name">ElectricApp</string>
+
+
+    <string name="titulo_sesion"> Inicio sesion </string>
+    <string name="bienvenida_inicio"> Bienvendio/a, Inicie sesion</string>
+    <string name="logeado_exito"> Inicio de sesion correctamente</string>
+    <string name="bienvenido_app"> bienvendio a Electric App, ingrese sus credenciales</string>
+    <string name="campo_correo"> Correo </string>
+    <string name="campo_password"> Contraseña </string>
+    <string name="btn_iniciar_sesion"> Inicie Sesion </string>
+    <string name="ocultar_contrasena"> Ocultar su contraseña </string>
+    <string name="mostrar_contrasena"> Mostrar contraseña</string>
+
+
+
+    <string name="titulo_bienvenida">Bienvenido/a, %1$s</string>
+    <string name="titulo_Empresa"> INDUZTEK </string>
+    <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
+    <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
+    <string name="subtitulo"> Menu principal, Seleccione una opcion: </string>
+    <string name="titulo_gestionar_usuarios"> Gestion de usuarios </string>
+    <string name="subtitulo_gestionar_usuarios"> Administrar cuentas y sus accesos </string>
+    <string name="titulo_historial_equipos"> Historial de equipos </string>
+    <string name="subtitulo_historial_equipos"> Consultar el historial de equipos </string>
+    <string name="titulo_instrumentos_calibracion"> Instrumentos y calibracion </string>
+    <string name="subtitulo_instrumentos_calibracion"> Registrar, actualizar y revisar fechas </string>
+    <string name="titulo_revisar_protocolos"> Revisar protocolos </string>
+    <string name="subtitulo_revisar_protocolos"> Formalizacion u observaciones </string>
+    <string name="titulo_anular_protocolos"> Anular protocolos </string>
+    <string name="subtitulo_anular_protocolos"> Anular un protocolo existente </string>
+    <string name="titulo_registrar_clientes"> Registrar clientes y equipos </string>
+    <string name="subtitulo_registro_cliente"> Clientes, instalaciones y equipos </string>
+    <string name="titulo_crear_protocolos"> Crear protocolos </string>
+    <string name="subtitulo_crear_protocolos"> Crear y registrar mediciones </string>
+    <string name="titulo_desactivar_personal"> Desactivar personal </string>
+    <string name="subtitulo_desactivar_personal"> Deshabilitar el acceso del personal </string>
+
+
+    <string name="titulo_bienvenidos">Bienvenidos a Consulta de protocolos</string>
+    <string name="titulo_historial"> Historial de Protocolos </string>
+    <string name="campo_tag"> Buscar por Tag (e.g. TR-10) </string>
+    <string name="campo_Instalacion"> Nombre de la instalacion </string>
+    <string name="btn_historial"> Buscar </string>
+    <string name="btn_cerrar_sesion"> Cerrar sesion </string>
+
+
+    <string name="exito_registrado"> ¡Registrado Exitosamente!</string>
+
+
+    <string name="btn_regresar_menu_principal"> Menu principal </string>
+    <string name="titulo_gestionar_cuenta"> Gestionar cuentas </string>
+    <string name="subtitulo_gestionar_cuenta"> Administracion exclusiva del jefe Tecnico </string>
+    <string name="titulo_formulario_registro"> Registrar Usuarios </string>
+    <string name="ayuda_formulario_registro"> Complete los datos para agregar una cuenta</string>
+
+
+    <string name="campo_rut_registro"> Rut </string>
+    <string name="campo_nombre_completo_registro">Nombre completo</string>
+    <string name="campo_telefono_registro"> Telefono </string>
+    <string name="campo_perfil_registro"> Perfil/Rol </string>
+    <string name="campo_giro_registro"> Giro </string>
+    <string name="campo_contacto_cargo"> Cargo</string>
+    <string name="rol_jefe_tecnico"> Jefe Tecnico </string>
+    <string name="rol_ingeniero"> Ingeniero de pruebas </string>
+    <string name="rol_tecnico"> Tecnico </string>
+    <string name="rol_cliente"> Cliente</string>
+    <string name="btn_registre_r"> Registrar </string>
+    <string name="btn_limpiar"> Limpiar </string>
+
+
+    <string name="activar_cuenta"> Activada </string>
+    <string name="desactivar_cuenta"> Desactivada </string>
+    <string name="titulo_administrar_cuentas"> Activar/Desactivar cuentas</string>
+    <string name="subtitulo_administrar_cuentas"> No puede eliminar las cuenta, solo desactivar</string>
+
+
+    <string name="titulo_Instrumentos_calibracion"> Instrumentos y Calibracion </string>
+    <string name="subtitulo_Instrumentos_calibracion">  Bienvenido, puede administrar los instrumentos </string>
+    <string name="campo_nombre_instrumentos"> Nombre Instrumento </string>
+    <string name="campo_marca_instrumentos"> Marca Instrumento</string>
+    <string name="campo_modelo_Instrumentos"> Modelo Instrumento</string>
+    <string name="campo_numero_serie_instrumentos"> Numero de serie </string>
+    <string name="campo_fecha_calibracion_instrumento"> Fecha de calibracion </string>
+    <string name="campo_fecha_vencimiento_instumento"> Fecha de vencimiento</string>
+    <string name="btn_registrar_instrumento"> Registrar </string>
+    <string name="btn_actualizar_instrumento"> Actualizar </string>
+    <string name="mensaje_registrado_exito_instrumentos"> Instrumento registrado con exito</string>
+    <string name="titulo_instruccion_Instrumentos"> Calibracion </string>
+    <string name="instrucciones_para_calibrar"> formato DD/MM/AAA las fechas</string>
+
+    <string name="visualizar_instrumentos"> Instrumentos registrados </string>
+    <string name="informacion_instrumentos"> Puede visualizar los instrumentos :</string>
+
+
+    <string name="Consulta_Aprobado">Aprobado</string>
+    <string name="Consulta_Observacion">En observacion</string>
+    <string name="Consulta_Rechazado">Rechazado</string>
+    <string name="Consulta_Remplazado">Actualizado</string>
+    <string name="titulo_cliente"> Bienvenido, Usuario</string>
+    <string name="campo_estado"> Selecione Estado </string>
+
+
+
+    <string name="banner_tecnico"> Panel Tecnico Terreno</string>
+    <string name="tecnico_crear_protoclo"> Crear Protocolo</string>
+    <string name="tecnico_subtitlo_crear_protocolo">Presione para crear protocolos</string>
+    <string name="tecnico_registrar_equipo"> Registrar Equipo </string>
+    <string name="tecnico_subtitulo_registrar_equipo"> Presione para registrar equipo</string>
+    <string name="tecnico_titulo_historial_equipo"> Historial los equipos </string>
+    <string name="tecnico_subtitulo_historial_equipo"> Consulte el historial de los equipos</string>
+    <string name="tecnico_titulo_mis_protocolos"> Revisar protocolos </string>
+    <string name="tecnico_subtitulo_mis_protocolos"> Consulte protocolos </string>
+
+
+    <string name="resultado_aprobado">Aprobado</string>
+    <string name="resultado_observado">Observado</string>
+    <string name="resultado_rechazado">Rechazado</string>
+
+    <string name="protocolo_titulo">Crear protocolo</string>
+    <string name="protocolo_subtitulo">Registre la prueba realizada en terreno</string>
+    <string name="protocolo_titulo_datos">Datos del protocolo</string>
+    <string name="protocolo_datos_descripcion">Fecha: %1$s\nTecnico: %2$s</string>
+    <string name="protocolo_campo_equipo">Equipo (TAG - instalacion)</string>
+    <string name="protocolo_campo_temperatura">Temperatura ambiente (°C)</string>
+    <string name="protocolo_campo_humedad" formatted="false">Humedad relativa (%)</string>
+    <string name="protocolo_titulo_medicion">Medicion</string>
+    <string name="protocolo_descripcion_medicion">Resistencia de aislacion del transformador</string>
+    <string name="protocolo_campo_devanado">Devanado probado</string>
+    <string name="protocolo_campo_tension">Tension de prueba (kV)</string>
+    <string name="protocolo_campo_lectura_uno">Lectura a 1 min (MΩ)</string>
+    <string name="protocolo_campo_lectura_diez">Lectura a 10 min (MΩ)</string>
+    <string name="protocolo_titulo_instrumento">Instrumento</string>
+    <string name="protocolo_descripcion_instrumento">Solo se permiten instrumentos con calibracion vigente</string>
+    <string name="protocolo_campo_instrumento">Instrumento utilizado</string>
+    <string name="protocolo_titulo_resultado">Resultado</string>
+    <string name="protocolo_indice">Indice de polarizacion (IP): %1$s</string>
+    <string name="btn_registrar_protocolo">Registrar en terreno</string>
+    <string name="protocolo_registrado_exito">Protocolo registrado en terreno</string>
+
+
+    <string name="en_desarrollo">Disponible en la proxima entrega</string>
+    <string name="pendiente_formalizacion">Pendiente de formalizacion</string>
+
+
+    <string name="btn_tomar_foto">Tomar foto</string>
+    <string name="foto_tomada">Foto tomada con la camara</string>
+    <string name="permiso_camara_denegado">Sin permiso de camara no se puede tomar la foto</string>
+    <string name="sin_camara">No se encontro una aplicacion de camara</string>
+
+
+    <string name="instrumento_vigente">Vigente</string>
+    <string name="instrumento_vencido">Vencido</string>
+    <string name="instrumento_serie">N° serie: %1$s</string>
+    <string name="instrumento_vence">Vence: %1$s</string>
 </resources>
