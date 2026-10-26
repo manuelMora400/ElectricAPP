@@ -1,13 +1,12 @@
 package com.example.electricapp.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.HistorialState
+import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.CampoInstalacion
 import com.example.electricapp.ui.components.CampoTag
@@ -30,9 +30,16 @@ import com.example.electricapp.viewModel.HistorialViewModel
 @Composable
 fun buscarProtocolo(
     viewModel: HistorialViewModel = viewModel(),
+    rol: Rol,
     Buscado: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+
+    LaunchedEffect(rol) {
+        viewModel.onRol(rol)
+    }
+
     HistorialScreen(
         uiState = uiState,
         onTagBuscar = viewModel::onTagBuscar,
@@ -63,7 +70,7 @@ fun HistorialScreen(
         ) {
             EncabezadoVistaJefe(
                 titulo = stringResource(R.string.titulo_historial),
-                subTitulo = stringResource(R.string.titulo_bienvenida),
+                subTitulo = stringResource(R.string.titulo_bienvenidos),
                 icono = R.drawable.logo_inicio_sesion
             )
 
@@ -92,22 +99,19 @@ fun HistorialScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 BotonInicio(
-                    texto = "Buscar",
+                    texto = stringResource(R.string.btn_historial),
                     onClick = realizarBusqueda,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    contentPadding = PaddingValues(bottom = 16.dp)
-                ) {
-                    items(uiState.listaProtocolo) { protocoloItem ->
-                        ProtocoloCards(
-                            protocolo = protocoloItem
-                        )
-                    }
+                Spacer(modifier = Modifier.height(12.dp))
+
+
+                uiState.listaProtocolo.forEach { protocoloItem ->
+                    ProtocoloCards(
+                        protocolo = protocoloItem,
+                        esCliente = uiState.Cliente
+                    )
                 }
             }
         }

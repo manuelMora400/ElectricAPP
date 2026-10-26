@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -48,15 +49,22 @@ import com.example.electricapp.viewModel.FormularioProtocolosViewModel
 fun screensCrearProtocolos(
 
     viewModel : FormularioProtocolosViewModel = viewModel(),
+    idTecnico : Int,
+    nombreTecnico : String,
     onRegistrado : () -> Unit
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Se le pasa al ViewModel quien inicio sesion (una sola vez)
+    LaunchedEffect(idTecnico) {
+        viewModel.onTecnicoSesion(idTecnico, nombreTecnico)
+    }
 
     CrearProtocolosScreens(
         uiState = uiState,
         equipos = viewModel.equipos,
         devanados = viewModel.devanados,
-        instrumentos = viewModel.instrumentos.map { it.nombre },
+        instrumentos = viewModel.nombresInstrumentos,
         onEquipoCambia = viewModel::onEquipoCambia,
         onTemperaturaCambia = viewModel::onTemperaturaCambia,
         onHumedadCambia = viewModel::onHumedadCambia,
@@ -246,6 +254,18 @@ fun CrearProtocolosScreens(
 
                     EtiquetaResultado(uiState.resultado)
                 }
+                }
+            }
+
+
+            if(uiState.errorGeneral != null){
+                item {
+                    Text(
+                        text = uiState.errorGeneral,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(Dimens.espacioPantalla)
+                    )
                 }
             }
 

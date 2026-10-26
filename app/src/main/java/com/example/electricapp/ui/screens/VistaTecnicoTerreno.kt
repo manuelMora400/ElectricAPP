@@ -74,7 +74,7 @@ fun VistaTecnicoScrees(
 
                 TarjetaOpciones(
                     titulo = stringResource(R.string.tecnico_registrar_equipo),
-                    subtitulo = stringResource(R.string.tecnico_subtitlo_crear_protocolo),
+                    subtitulo = stringResource(R.string.tecnico_subtitulo_registrar_equipo),
                     icono = R.drawable.ic_historial_equipo,
                     onClick = onRegistrarEquipo
                 )
