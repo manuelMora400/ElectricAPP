@@ -26,13 +26,8 @@ data class FormularioProtocolosState(
     val errorLecturaUnMinuto : String? = null,
     val errorLecturaDiezMinutos : String? = null,
     val errorInstrumento : String? = null,
+    val errorGeneral : String? = null,
 
     val mensajeExitoso : String = "",
     val mensajeExito : Boolean = false
-)
-
-
-data class InstrumentoEjemplo(
-    val nombre : String,
-    val fechaVencimiento : String
 )
