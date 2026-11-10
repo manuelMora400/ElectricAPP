@@ -2,13 +2,14 @@
     <string name="app_name">ElectricApp</string>
 
 
-    <string name="titulo_sesion"> Inicio sesion </string>
-    <string name="bienvenida_inicio"> Bienvendio/a, Inicie sesion</string>
+    <string name="titulo_sesion"> Inicio sesión </string>
+    <string name="bienvenida_inicio"> Bienvenido/a, Inicie sesión</string>
     <string name="logeado_exito"> Inicio de sesion correctamente</string>
     <string name="bienvenido_app"> bienvendio a Electric App, ingrese sus credenciales</string>
-    <string name="campo_correo"> Correo </string>
+    <string name="campo_correo">  ej: jose@induztek.cl </string>
     <string name="campo_password"> Contraseña </string>
     <string name="btn_iniciar_sesion"> Inicie Sesion </string>
+    <string name="btn_olvido_password"> ¿Olvidaste tu contraseña?</string>
     <string name="ocultar_contrasena"> Ocultar su contraseña </string>
     <string name="mostrar_contrasena"> Mostrar contraseña</string>
 
@@ -16,7 +17,7 @@
 
     <string name="titulo_bienvenida">Bienvenido/a, %1$s</string>
     <string name="titulo_Empresa"> INDUZTEK </string>
-    <string name="subtitulo_empresa"> Dedicada a la ingenieria electrica</string>
+    <string name="subtitulo_empresa"> Dedicada a la ingeniería electrica</string>
     <string name="titulo_rol"> Bienvenido, Jefe Tecnico </string>
     <string name="subtitulo"> Menu principal, Seleccione una opcion: </string>
     <string name="titulo_gestionar_usuarios"> Gestion de usuarios </string>

@@ -4,11 +4,11 @@ import androidx.compose.ui.unit.dp
 
 object Dimens {
 
-    // Imagenes
+
     val tamanoLogo = 25.dp
     val bordeLogo = 5.dp
     val altoImagen = 200.dp
-    val altoImagenEncabezado = 100.dp
+    val padEncabezado = 32.dp
 
 
     // Botones
