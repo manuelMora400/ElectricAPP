@@ -2,6 +2,9 @@ package com.example.electricapp.ui.components
 
 import androidx.compose.material3.Button
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.electricapp.ui.styles.EstilosBotones
@@ -27,16 +33,25 @@ fun BotonInicio(
     @DrawableRes icono : Int? = null
 ){
 
-    Button(
+    val interacionBoton = remember { MutableInteractionSource() }
+    val presiona by interacionBoton.collectIsPressedAsState()
 
+    val escalado by animateFloatAsState(
+        targetValue = if(presiona) 0.90f else 1f
+    )
+
+    Button(
         onClick = onClick,
         enabled = siHabilitado,
-        modifier = Modifier.estiloAltoBoton(),
         shape = EstilosBotones.formaBoton,
         colors = EstilosBotones.ColorPrincipal(),
         elevation = EstilosBotones.elevacion(),
-        contentPadding = EstilosBotones.rellenar
-
+        contentPadding = EstilosBotones.rellenar,
+        interactionSource = interacionBoton,
+        modifier = modifier.graphicsLayer{
+            scaleX = escalado
+            scaleY = escalado
+        }
     ){
         if(icono != null){
             Icon(

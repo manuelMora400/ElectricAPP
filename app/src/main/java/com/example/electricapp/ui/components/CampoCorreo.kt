@@ -33,7 +33,7 @@ fun CampoCorreo(
         value = valor,
         onValueChange = onValorCambia,
         modifier = Modifier.fillMaxWidth(),
-        label = {Text(etiquetaCorreo)},
+        placeholder = {Text(etiquetaCorreo)},
         leadingIcon = {
             Icon(
                 painter = painterResource(id = iconoCorreo),
