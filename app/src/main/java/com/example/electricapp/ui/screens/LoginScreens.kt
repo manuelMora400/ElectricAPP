@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -65,7 +66,8 @@ fun ScreensLogin(
                 onLogeado(rol)
             }
         },
-        onVisibilidad = viewModel::onVisibilidad
+        onVisibilidad = viewModel::onVisibilidad,
+        onOlvido = {}
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,8 +77,10 @@ fun LoginScreens(
     onCorreoCambia : (String) -> Unit,
     onPasswordCambia : (String) -> Unit,
     onVisibilidad : () -> Unit,
-    onIniciar : () -> Unit
+    onIniciar : () -> Unit,
+    onOlvido : () -> Unit
 ){
+
     Scaffold (
         containerColor = MaterialTheme.colorScheme.background
     ){ innerPadding ->
@@ -90,59 +94,53 @@ fun LoginScreens(
                 subTitulo = stringResource(R.string.subtitulo_empresa),
                 icono = R.drawable.logo_inicio_sesion
             )
-            Spacer(modifier = Modifier.height(32.dp))
 
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                             .padding(Dimens.espacioPantalla),
-                    elevation = EstilosTarjetas.elevacion(),
-                    shape = EstilosTarjetas.forma,
-                    border = EstilosTarjetas.bordeado()
-                ) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(Dimens.espacioPantalla),
+                verticalArrangement = Arrangement.spacedBy(Dimens.espacioMed)
+            ) {
+                Bienvenida(
+                    texto = stringResource(R.string.titulo_sesion),
+                    descripcion = stringResource(R.string.bienvenida_inicio)
+                )
+                CampoCorreo(
+                    valor = uiState.correo,
+                    onValorCambia = onCorreoCambia,
+                    etiquetaCorreo = stringResource(R.string.campo_correo),
+                    iconoCorreo = R.drawable.ic_correo,
+                    error = uiState.errorCorreo
+                )
+                CampoPassword(
+                    valor = uiState.passwordHash,
+                    onContrasenaCambia = onPasswordCambia,
+                    etiquetaContrasena = stringResource(R.string.campo_password),
+                    visible = uiState.passwordVisible,
+                    onVisibilidad ,
+                    error = uiState.errorPassword
+                )
+            }
+                BotonInicio(
+                    texto = stringResource(R.string.btn_iniciar_sesion),
+                    onClick = onIniciar,
+                    modifier = Modifier.fillMaxWidth().height(60.dp)
+                )
+            if(uiState.logeadoExitoso){
+                logeadoExito(uiState.mensajeExitoso)
+            }
 
-                    Row(
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Bienvenida(
-                            texto = stringResource(R.string.titulo_sesion),
-                            descripcion = stringResource(R.string.bienvenida_inicio)
-                        )
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed)){
-
-                        CampoCorreo(
-                            valor = uiState.correo,
-                            onValorCambia = onCorreoCambia,
-                            etiquetaCorreo = stringResource(R.string.campo_correo),
-                            iconoCorreo = R.drawable.ic_correo,
-                            error = uiState.errorCorreo
-                        )
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed)){
-                        CampoPassword(
-                            valor = uiState.passwordHash,
-                            onContrasenaCambia = onPasswordCambia,
-                            etiquetaContrasena = stringResource(R.string.campo_password),
-                            visible = uiState.passwordVisible,
-                            onVisibilidad ,
-                            error = uiState.errorPassword
-                        )
-                    }
-                }
-
-                Row(horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed)) {
-                    BotonInicio(
-                        texto = stringResource(R.string.btn_iniciar_sesion),
-                        onClick = onIniciar,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-                if(uiState.logeadoExitoso){
-                    logeadoExito(uiState.mensajeExitoso)
-                }
+            TextButton(
+                onClick = onOlvido,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = stringResource(R.string.btn_olvido_password),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
+}
 
 
 @Composable
@@ -180,7 +178,8 @@ fun LoginScreensView(){
             onCorreoCambia = {},
             onPasswordCambia = {},
             onVisibilidad = {},
-            onIniciar = {}
+            onIniciar = {},
+            onOlvido = {}
         )
     }
 }
@@ -195,7 +194,8 @@ fun LoginScreensVie(){
             onCorreoCambia = {},
             onPasswordCambia = {},
             onVisibilidad = {},
-            onIniciar = {}
+            onIniciar = {},
+            onOlvido = {}
         )
     }
 }
