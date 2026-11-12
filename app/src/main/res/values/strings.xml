@@ -33,6 +33,9 @@
     <string name="jefe_instrumentos_sub">%1$d registrados</string>
     <string name="jefe_cantidad_admin"> Dashboard actividades </string>
 
+    <!-- Iniciales para logo -->
+    <string name="logo_iniciales_jefe"> "JF" </string>
+
     <string name="subtitulo">Menú principal, seleccione una opción:</string>
     <string name="titulo_gestionar_usuarios">Gestión de cuentas</string>
     <string name="subtitulo_gestionar_usuarios">Administrar cuentas y sus accesos</string>

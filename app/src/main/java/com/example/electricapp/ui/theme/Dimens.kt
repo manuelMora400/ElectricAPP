@@ -6,6 +6,7 @@ object Dimens {
 
 
     val tamanoLogo = 25.dp
+    val tamanoLogoPerfil = 45.dp
     val bordeLogo = 5.dp
     val altoImagen = 200.dp
     val padEncabezado = 32.dp
