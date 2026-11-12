@@ -34,6 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresPanelJefe
 import com.example.electricapp.ui.components.Bienvenida
+import com.example.electricapp.ui.components.LogoPerfil
 import com.example.electricapp.ui.components.TarjetaOpciones
 import com.example.electricapp.ui.components.tarjetaContadores
 import com.example.electricapp.ui.styles.EstilosTarjetas
@@ -90,6 +91,16 @@ fun VistaJefeContenido(
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.topbar_jefe)) },
+                actions = {
+
+                    // llamamos el componente perfilLogo -> por ahora onInstrumentos
+                    // aun no existe perfil Jefe tecnico
+                    LogoPerfil(
+                        stringResource(R.string.logo_iniciales_jefe),
+                        onInstrumentos,
+                        modifier = Modifier.padding(Dimens.espacioMed))
+                },
+
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Primario,
                     titleContentColor = Color.White
