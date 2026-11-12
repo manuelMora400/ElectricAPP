@@ -73,9 +73,6 @@ fun AppNavegacion(){
                 onDesactivarCuentas = {
                     navController.navigate(Rutas.Registros.rutas)
                 },
-                onRegistrarClientes = {
-                    navController.navigate(Rutas.Registros.rutas)
-                },
                 onInstrumentos = {
                     navController.navigate(Rutas.Instrumentos.rutas)
                 },

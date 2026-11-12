@@ -6,6 +6,7 @@ object Dimens {
 
 
     val tamanoLogo = 25.dp
+    val tamanoLogoPerfil = 45.dp
     val bordeLogo = 5.dp
     val altoImagen = 200.dp
     val padEncabezado = 32.dp
@@ -26,7 +27,7 @@ object Dimens {
 
     // tarjetas
     val radioTarjeta = 10.dp
-    val elevacionTarjeta = 7.dp
+    val elevacionTarjeta = 10.dp
 
 
     //  vista-jefe

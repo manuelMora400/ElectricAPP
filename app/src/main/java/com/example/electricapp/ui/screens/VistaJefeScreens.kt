@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -33,14 +34,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresPanelJefe
 import com.example.electricapp.ui.components.Bienvenida
+import com.example.electricapp.ui.components.LogoPerfil
 import com.example.electricapp.ui.components.TarjetaOpciones
 import com.example.electricapp.ui.components.tarjetaContadores
+import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.ui.theme.Primario
 import com.example.electricapp.viewModel.JefeTecnicoViewModel
 
-// ---------- Con ViewModel (la que llama la navegación) ----------
 
 @Composable
 fun VistaJefeScreens(
@@ -48,7 +50,6 @@ fun VistaJefeScreens(
     onHistorial: () -> Unit,
     onRevisarProtocolos: () -> Unit,
     onAnularProtocolos: () -> Unit,
-    onRegistrarClientes: () -> Unit,
     onCrearProtocolos: () -> Unit,
     onGestionUsuarios: () -> Unit,
     onInstrumentos: () -> Unit,
@@ -64,7 +65,6 @@ fun VistaJefeScreens(
         onHistorial = onHistorial,
         onRevisarProtocolos = onRevisarProtocolos,
         onAnularProtocolos = onAnularProtocolos,
-        onRegistrarClientes = onRegistrarClientes,
         onCrearProtocolos = onCrearProtocolos,
         onGestionUsuarios = onGestionUsuarios,
         onInstrumentos = onInstrumentos,
@@ -73,8 +73,6 @@ fun VistaJefeScreens(
     )
 }
 
-// ---------- Con estado (la que usan los previews) ----------
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VistaJefeContenido(
@@ -82,7 +80,6 @@ fun VistaJefeContenido(
     onHistorial: () -> Unit,
     onRevisarProtocolos: () -> Unit,
     onAnularProtocolos: () -> Unit,
-    onRegistrarClientes: () -> Unit,
     onCrearProtocolos: () -> Unit,
     onGestionUsuarios: () -> Unit,
     onInstrumentos: () -> Unit,
@@ -94,6 +91,16 @@ fun VistaJefeContenido(
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(R.string.topbar_jefe)) },
+                actions = {
+
+                    // llamamos el componente perfilLogo -> por ahora onInstrumentos
+                    // aun no existe perfil Jefe tecnico
+                    LogoPerfil(
+                        stringResource(R.string.logo_iniciales_jefe),
+                        onInstrumentos,
+                        modifier = Modifier.padding(Dimens.espacioMed))
+                },
+
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Primario,
                     titleContentColor = Color.White
@@ -111,11 +118,17 @@ fun VistaJefeContenido(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            Bienvenida(
-                texto = stringResource(R.string.titulo_rol),
-                descripcion = stringResource(R.string.subtitulo)
-            )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = EstilosTarjetas.colores()
+            ) {
+                Bienvenida(
+                    texto = stringResource(R.string.titulo_rol),
+                    descripcion = stringResource(R.string.subtitulo)
+                )
+            }
 
+            TituloSeccion(stringResource(R.string.jefe_cantidad_admin))
             // Indicadores: el número va en "valor", la etiqueta es texto simple
             Row(
                 modifier = Modifier
@@ -147,7 +160,6 @@ fun VistaJefeContenido(
                     titulo = stringResource(R.string.titulo_cuentas_jefe),
                     subtitulo = stringResource(R.string.jefe_cuentas_sub, estado.cuentasActivas),
                     icono = R.drawable.ic_gestion_usuarios,
-                    colorDeIcono = Color(0xFF6A3FA0),
                     onClick = onGestionUsuarios,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -155,7 +167,6 @@ fun VistaJefeContenido(
                     titulo = stringResource(R.string.titulo_instrumentos_jefe),
                     subtitulo = stringResource(R.string.jefe_instrumentos_sub, estado.instrumentosRegistrados),
                     icono = R.drawable.ic_calibracion_instrumento,
-                    colorDeIcono = Color(0xFFC2185B),
                     onClick = onInstrumentos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -168,18 +179,9 @@ fun VistaJefeContenido(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 TarjetaOpciones(
-                    titulo = stringResource(R.string.titulo_registrar_clientes),
-                    subtitulo = stringResource(R.string.subtitulo_registro_cliente),
-                    icono = R.drawable.ic_registrar_client_equipo,
-                    colorDeIcono = Color(0xFF455A9E),
-                    onClick = onRegistrarClientes,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-                TarjetaOpciones(
                     titulo = stringResource(R.string.titulo_desactivar_personal),
                     subtitulo = stringResource(R.string.subtitulo_desactivar_personal),
                     icono = R.drawable.ic_desactivar_personal,
-                    colorDeIcono = Color(0xFFE65100),
                     onClick = onDesactivarCuentas,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -197,7 +199,6 @@ fun VistaJefeContenido(
                     titulo = stringResource(R.string.titulo_historial_equipos),
                     subtitulo = stringResource(R.string.subtitulo_historial_equipos),
                     icono = R.drawable.ic_historial_equipo,
-                    colorDeIcono = Color(0xFF7E57C2),
                     onClick = onHistorial,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -205,7 +206,6 @@ fun VistaJefeContenido(
                     titulo = stringResource(R.string.titulo_anular_protocolos),
                     subtitulo = stringResource(R.string.subtitulo_anular_protocolos),
                     icono = R.drawable.ic_anular_protocolos,
-                    colorDeIcono = Color(0xFFD32F2F),
                     onClick = onAnularProtocolos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -221,7 +221,6 @@ fun VistaJefeContenido(
                     titulo = stringResource(R.string.titulo_revisar_protocolos),
                     subtitulo = stringResource(R.string.subtitulo_revisar_protocolos),
                     icono = R.drawable.ic_revisar_protocolos,
-                    colorDeIcono = Color(0xFF00796B),
                     onClick = onRevisarProtocolos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -229,7 +228,6 @@ fun VistaJefeContenido(
                     titulo = stringResource(R.string.titulo_crear_protocolos),
                     subtitulo = stringResource(R.string.subtitulo_crear_protocolos),
                     icono = R.drawable.ic_crear_protocolos,
-                    colorDeIcono = Color(0xFF1565C0),
                     onClick = onCrearProtocolos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -257,9 +255,14 @@ fun VistaJefeView() {
     ElectricAppTheme(true) {
         VistaJefeContenido(
             estado = ContadoresPanelJefe(cuentasActivas = 7, instrumentosRegistrados = 3),
-            onHistorial = {}, onRevisarProtocolos = {}, onAnularProtocolos = {},
-            onRegistrarClientes = {}, onCrearProtocolos = {}, onGestionUsuarios = {},
-            onInstrumentos = {}, onDesactivarCuentas = {}, onCerrarSesion = {}
+            onHistorial = {},
+            onRevisarProtocolos = {},
+            onAnularProtocolos = {},
+            onCrearProtocolos = {},
+            onGestionUsuarios = {},
+            onInstrumentos = {},
+            onDesactivarCuentas = {},
+            onCerrarSesion = {}
         )
     }
 }
@@ -270,9 +273,14 @@ fun VistaJefeView2() {
     ElectricAppTheme(false) {
         VistaJefeContenido(
             estado = ContadoresPanelJefe(cuentasActivas = 7, instrumentosRegistrados = 3),
-            onHistorial = {}, onRevisarProtocolos = {}, onAnularProtocolos = {},
-            onRegistrarClientes = {}, onCrearProtocolos = {}, onGestionUsuarios = {},
-            onInstrumentos = {}, onDesactivarCuentas = {}, onCerrarSesion = {}
+            onHistorial = {},
+            onRevisarProtocolos = {},
+            onAnularProtocolos = {},
+            onCrearProtocolos = {},
+            onGestionUsuarios = {},
+            onInstrumentos = {},
+            onDesactivarCuentas = {},
+            onCerrarSesion = {}
         )
     }
 }

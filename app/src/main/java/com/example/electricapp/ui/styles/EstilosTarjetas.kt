@@ -33,7 +33,7 @@ object EstilosTarjetas{
     @Composable
     fun bordeado(): BorderStroke{
         return BorderStroke(
-            width = 1.dp,
+            width = 3.dp,
             color = MaterialTheme.colorScheme.outline
         )
     }
