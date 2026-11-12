@@ -433,4 +433,16 @@ class ElectricHelperDb(context : Context) :
         }
         return protocolo
     }
+
+    // Contenedor para almacenar los contadores de la card del panel
+    private fun contador(sql: String, listar : Array<String>? = null) : Int{
+        return readableDatabase.rawQuery(sql, listar).use { cursor ->
+            if(cursor.moveToFirst()) cursor.getInt(0) else 0
+        }
+    }
+
+    // Funciones para almacenar las cantidades en el panel de jefe
+    fun cantidadCuentasActivas() : Int = contador("SELECT COUNT(*) FROM $TABLA_USUARIO WHERE $ACTIVO = 1")
+    fun cantidadInstRegistrados() : Int = contador("SELECT COUNT(*) FROM $TABLA_INSTRUMENTOS")
+
 }
