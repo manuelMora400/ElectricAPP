@@ -1,32 +1,28 @@
 package com.example.electricapp.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,17 +32,18 @@ import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.CampoCorreo
 import com.example.electricapp.ui.components.CampoPassword
-import com.example.electricapp.ui.components.ImagenEncabezadoLogin
 import com.example.electricapp.ui.theme.Dimens
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
-import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.ElectricAppTheme
-import com.example.electricapp.ui.theme.Exito
-import com.example.electricapp.ui.theme.ExitoFondo
 import com.example.electricapp.viewModel.FormularioLoginViewModel
+
+
+// Se elimino la card que mantenia los campos formularios
+//  y se actualizo el componente vista jefe  para adaptarse
+// por ultimo se agrega una animacion que "Hunde el boton"
 
 @Composable
 fun ScreensLogin(
@@ -118,16 +115,31 @@ fun LoginScreens(
                     onVisibilidad ,
                     error = uiState.errorPassword
                 )
+
+                //Esto nos permite hacer un mensaje error Credemciales "Como efecto"
+                var errorCredenciales by remember {mutableStateOf("")}
+
+                if(uiState.errorGeneral != null){
+                    errorCredenciales = uiState.errorGeneral
+                }
+
+                AnimatedVisibility(
+                    visible = uiState.errorGeneral != null,
+                    enter = expandVertically()  + fadeIn(),
+                    exit = shrinkVertically  () + fadeOut()
+                ) {
+                    Text(
+                        text = errorCredenciales,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
                 BotonInicio(
                     texto = stringResource(R.string.btn_iniciar_sesion),
                     onClick = onIniciar,
                     modifier = Modifier.fillMaxWidth().height(60.dp)
                 )
-            if(uiState.logeadoExitoso){
-                logeadoExito(uiState.mensajeExitoso)
-            }
-
             TextButton(
                 onClick = onOlvido,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -141,31 +153,6 @@ fun LoginScreens(
         }
     }
 }
-
-
-@Composable
- fun logeadoExito(nombre : String){
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = EstilosTarjetas.elevacion(),
-        border = EstilosTarjetas.bordeado(),
-        shape = EstilosTarjetas.forma,
-        colors = CardDefaults.cardColors(containerColor = ExitoFondo, contentColor = Exito)
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_exito),
-            contentDescription = null,
-            tint = Exito,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            text = stringResource(R.string.logeado_exito),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(Dimens.espacioPantalla)
-        )
-    }
- }
 
 @Preview(showBackground = true)
 @Composable

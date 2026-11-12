@@ -21,10 +21,10 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
     val uiState : StateFlow<FormularioLoginState> = _uiState.asStateFlow()
 
     fun onCorreoCambia (valor : String){
-        _uiState.update{it.copy(correo = valor, errorCorreo = null, logeadoExitoso = false)}
+        _uiState.update{it.copy(correo = valor, errorCorreo = null, errorGeneral = null, logeadoExitoso = false)}
     }
     fun onPasswordCambia(valor : String){
-        _uiState.update { it.copy(passwordHash = valor, errorPassword = null, logeadoExitoso = false) }
+        _uiState.update { it.copy(passwordHash = valor, errorPassword = null, errorGeneral = null, logeadoExitoso = false) }
     }
     fun onVisibilidad (){
         _uiState.update {it.copy(passwordVisible = !it.passwordVisible)}
@@ -99,7 +99,7 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         }else{
             _uiState.update {
                 it.copy(
-                    errorPassword = "Credenciales incorrectas",
+                    errorGeneral = "Credenciales incorrectas",
                     logeadoExitoso = false
                 )
             }

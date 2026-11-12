@@ -57,6 +57,7 @@ fun MenuClienteScreens(
                         titulo = stringResource(R.string.titulo_historial_equipos),
                         subtitulo = stringResource(R.string.subtitulo_historial_equipos),
                         icono = R.drawable.ic_historial_equipo,
+                        colorDeIcono = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(),
                         onClick = onClick
                     )
