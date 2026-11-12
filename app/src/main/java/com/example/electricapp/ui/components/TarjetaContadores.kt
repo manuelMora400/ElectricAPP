@@ -1,5 +1,11 @@
 package com.example.electricapp.ui.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,12 +39,22 @@ fun tarjetaContadores(
             modifier = Modifier.fillMaxWidth().padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = valor.toString(),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            // esta animacion permitira si agregamos una cuenta 7 + 1 -> subira  a 8 con una animacion
+            // viserversa si se desactiva restara.
+            AnimatedContent(
+                targetState = valor,
+                transitionSpec =  {
+                    slideInVertically {it / 2 } + fadeIn() togetherWith slideOutVertically { -it / 2 } + fadeOut()
+                },
+                label = "Contador para dashboard"
+            ) { numero ->
+                Text(
+                    text = numero.toString(),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
             Text(
                 text = etiqueta,
                 style = MaterialTheme.typography.bodySmall,
