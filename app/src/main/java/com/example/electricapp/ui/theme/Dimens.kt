@@ -26,7 +26,7 @@ object Dimens {
 
     // tarjetas
     val radioTarjeta = 10.dp
-    val elevacionTarjeta = 7.dp
+    val elevacionTarjeta = 10.dp
 
 
     //  vista-jefe
