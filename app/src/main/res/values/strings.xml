@@ -31,6 +31,7 @@
     <string name="jefe_instrumentos">Instr. registrados</string>
     <string name="jefe_cuentas_sub">%1$d activas</string>
     <string name="jefe_instrumentos_sub">%1$d registrados</string>
+    <string name="jefe_cantidad_admin"> Dashboard actividades </string>
 
     <string name="subtitulo">Menú principal, seleccione una opción:</string>
     <string name="titulo_gestionar_usuarios">Gestión de cuentas</string>
