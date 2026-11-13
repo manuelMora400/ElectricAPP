@@ -9,4 +9,5 @@ sealed class Rutas(val rutas: String){
     data object TecnicoTerreno : Rutas("tecnico")
     data object CrearProtocolos : Rutas("crear_protocolos")
     data object MenuCliente : Rutas("menu_cliente")
+    data object RegistrarCuentas : Rutas("crear_cuenta")
 }
