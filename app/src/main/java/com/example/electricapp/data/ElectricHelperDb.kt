@@ -370,22 +370,39 @@ class ElectricHelperDb(context : Context) :
         return filasAfectadas > 0
     }
 
+    // esta funcion permitara almancenar el nombre por el id
+    private fun rolDesdeId(id: Int): Rol = when (id) {
+        1 -> Rol.JEFE_TECNICO
+        2 -> Rol.INGENIERO
+        3 -> Rol.TECNICO
+        4 -> Rol.CLIENTE
+        else -> Rol.CLIENTE
+    }
 
-    fun filtrarCuentasCreadas() : List<FormularioRegistros>{
+    // Se modifica la query ahora nos trae el nombre del rol para ponerlo en una etiquetita en components
+    fun filtrarCuentasCreadas(): List<FormularioRegistros> {
 
         val cuentas = mutableListOf<FormularioRegistros>()
+
         readableDatabase.rawQuery(
-            "SELECT $NOMBRE_USU, $CORREO, $ACTIVO " +
-            " FROM $TABLA_USUARIO", null
+            "SELECT $NOMBRE_USU, $CORREO, $RUT, $ACTIVO, $USER_ROL " +
+                    "FROM $TABLA_USUARIO", null
         ).use { cursor ->
 
-            while (cursor.moveToNext()){
-                val estadoIndex = cursor.getColumnIndexOrThrow(ACTIVO)
+            val indiceNombre = cursor.getColumnIndexOrThrow(NOMBRE_USU)
+            val indiceCorreo = cursor.getColumnIndexOrThrow(CORREO)
+            val indiceRut = cursor.getColumnIndexOrThrow(RUT)
+            val indiceActivo = cursor.getColumnIndexOrThrow(ACTIVO)
+            val indiceRol = cursor.getColumnIndexOrThrow(USER_ROL)
+
+            while (cursor.moveToNext()) {
                 cuentas.add(
                     FormularioRegistros(
-                        nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
-                        correo = cursor.getString(cursor.getColumnIndexOrThrow(CORREO)),
-                        activo = cursor.getInt(estadoIndex) == 1
+                        nombre = cursor.getString(indiceNombre),
+                        correo = cursor.getString(indiceCorreo),
+                        rut = cursor.getString(indiceRut),
+                        activo = cursor.getInt(indiceActivo) == 1,
+                        rol = rolDesdeId(cursor.getInt(indiceRol))
                     )
                 )
             }
