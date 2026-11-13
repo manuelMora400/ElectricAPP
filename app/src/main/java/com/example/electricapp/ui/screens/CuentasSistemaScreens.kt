@@ -1,6 +1,7 @@
 package com.example.electricapp.ui.screens
 
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -87,8 +88,8 @@ fun RegistrosScreens(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAgregarCuenta,
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.background
             ) {
                 Icon(painter = painterResource(R.drawable.ic_agregar),
                     contentDescription = stringResource(R.string.agregar_cuenta))
@@ -112,7 +113,8 @@ fun RegistrosScreens(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth().padding(innerPadding),
-            contentPadding = PaddingValues(bottom = 80.dp)
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 88.dp),
+            verticalArrangement = Arrangement.spacedBy(Dimens.espacioPantalla)
 
         ) {
             /* comentado por el momento (estoy separando pantallas)

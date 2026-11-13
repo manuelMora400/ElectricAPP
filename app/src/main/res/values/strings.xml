@@ -39,7 +39,18 @@
     <!-- administracion Cuenta-->
     <string name="agregar_cuenta"> Agregar nueva cuenta </string>
     <string name="titulo_cuentas_sistema"> Cuentas del sistema </string>
+    <string name="agregar_cuentas_sistema"> Crear cuentas </string>
+    <string name="ayuda_rut"> ej: 22257085-5 </string>
+    <string name="ayuda_nombre">ej: sergei leonidas</string>
+    <string name="ayuda_telefono"> ej: +56921312908</string>
+    <string name="ayuda_correo"> ej: sergei@gmail.com </string>
+    <string name="ayuda_giro"> Evasora colina </string>
+    <string name="ayuda_cargo"> ej: Contadora </string>
     <string name="volver">Volver</string>
+
+    <!-- Agregar cuenta -->
+    <string name="datos_personales"> Datos Personales del usuario</string>
+    <string name="perfil_usuario"> Seleccion un perfil </string>
 
     <string name="subtitulo">Menú principal, seleccione una opción:</string>
     <string name="titulo_gestionar_usuarios">Gestión de cuentas</string>
