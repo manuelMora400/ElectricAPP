@@ -36,6 +36,11 @@
     <!-- Iniciales para logo -->
     <string name="logo_iniciales_jefe"> "JF" </string>
 
+    <!-- administracion Cuenta-->
+    <string name="agregar_cuenta"> Agregar nueva cuenta </string>
+    <string name="titulo_cuentas_sistema"> Cuentas del sistema </string>
+    <string name="volver">Volver</string>
+
     <string name="subtitulo">Menú principal, seleccione una opción:</string>
     <string name="titulo_gestionar_usuarios">Gestión de cuentas</string>
     <string name="subtitulo_gestionar_usuarios">Administrar cuentas y sus accesos</string>
