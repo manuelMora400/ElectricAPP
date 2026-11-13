@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!--Permiso al usuario de SMS-->
+    <uses-permission android:name="android.permission.SEND_SMS"/> <!--Este es para pedir enviar SMS al usuario-->
+    <uses-permission android:name="android.permission.READ_SMS"/> <!--Este es para que la aplicacion Lea el SMS -->
+
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -14,6 +18,11 @@
 
     <uses-feature android:name="android.hardware.camera"
         android:required="false"/>
+
+    <!--Para utilizar la funcion de SMS-->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
