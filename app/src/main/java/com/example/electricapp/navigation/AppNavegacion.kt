@@ -97,7 +97,13 @@ fun AppNavegacion(){
         composable(Rutas.Registros.rutas) {
             screensRegistro(
                 onRegistroExitoso = {
-                }
+                },
+
+                //rutas nuevas
+                onAgregarCuenta = {
+                    enDesarrollo()
+                },
+                onVolver = { navController.popBackStack() }
             )
         }
 
