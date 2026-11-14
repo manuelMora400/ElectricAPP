@@ -10,9 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.R
+import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.ScreensLogin
+import com.example.electricapp.ui.screens.VistaIngenieroContenido
 import com.example.electricapp.ui.screens.VistaJefeScreens
 import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
@@ -56,6 +58,7 @@ fun AppNavegacion(){
                        Rol.JEFE_TECNICO -> Rutas.VistaJefe.rutas
                        Rol.TECNICO -> Rutas.TecnicoTerreno.rutas
                        Rol.CLIENTE -> Rutas.MenuCliente.rutas
+                       Rol.INGENIERO -> Rutas.VistaIngeniero.rutas
                        else -> Rutas.Login.rutas
                    }
                     navController.navigate(destino){
@@ -161,4 +164,17 @@ fun AppNavegacion(){
                 }
             )
     }
+
+        composable(Rutas.VistaIngeniero.rutas) {
+            VistaIngenieroContenido(
+                estado = ContadoresPanelIngeniero(),
+                nombreIngeniero = uiState.nombre.substringBefore(" "),
+                onRevisarProtocolos = { enDesarrollo() },
+                onHistorial = { navController.navigate(Rutas.Consulta.rutas) },
+                onInstrumentos = { enDesarrollo() },
+                onPerfil = { enDesarrollo() },
+                onFormalizados = { enDesarrollo() },
+                onCerrarSesion = { cerrarSesion(Rutas.VistaIngeniero.rutas) }
+            )
+        }
 }}
