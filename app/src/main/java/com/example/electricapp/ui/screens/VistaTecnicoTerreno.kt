@@ -69,7 +69,6 @@ fun VistaTecnicoScrees(
                     titulo = stringResource(R.string.tecnico_crear_protoclo),
                     subtitulo = stringResource(R.string.tecnico_subtitlo_crear_protocolo),
                     icono = R.drawable.ic_crear_protocolos,
-                    colorDeIcono = MaterialTheme.colorScheme.primary,
                     onClick = onCrearProtocolos
                 )
 
@@ -77,7 +76,6 @@ fun VistaTecnicoScrees(
                     titulo = stringResource(R.string.tecnico_registrar_equipo),
                     subtitulo = stringResource(R.string.tecnico_subtitulo_registrar_equipo),
                     icono = R.drawable.ic_historial_equipo,
-                    colorDeIcono = MaterialTheme.colorScheme.primary,
                     onClick = onRegistrarEquipo
                 )
 
@@ -85,7 +83,6 @@ fun VistaTecnicoScrees(
                     titulo = stringResource(R.string.tecnico_titulo_historial_equipo),
                     subtitulo = stringResource(R.string.tecnico_subtitulo_historial_equipo),
                     icono = R.drawable.ic_busqueda,
-                    colorDeIcono = MaterialTheme.colorScheme.primary,
                     onClick = onHistorialDeEquipo
                 )
 
@@ -93,7 +90,6 @@ fun VistaTecnicoScrees(
                     titulo = stringResource(R.string.tecnico_titulo_mis_protocolos),
                     subtitulo = stringResource(R.string.tecnico_subtitulo_mis_protocolos),
                     icono = R.drawable.ic_revisar_protocolos,
-                    colorDeIcono = MaterialTheme.colorScheme.primary,
                     onClick = onMisProtocolos
                 )
             }

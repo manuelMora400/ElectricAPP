@@ -33,8 +33,31 @@ object EstilosTarjetas{
     @Composable
     fun bordeado(): BorderStroke{
         return BorderStroke(
-            width = 1.dp,
+            width = 3.dp,
             color = MaterialTheme.colorScheme.outline
         )
     }
+
+
+    // Estilos para los paneles De los menus
+
+    val formaPanel = RoundedCornerShape(Dimens.radioPanel)
+
+    @Composable
+    fun coloresPanel(): CardColors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
+    )
+
+    @Composable
+    fun bordeSuave(): BorderStroke = BorderStroke(
+        width = Dimens.bordePanel,
+        color = MaterialTheme.colorScheme.outlineVariant
+    )
+
+    @Composable
+    fun sinElevacion(): CardElevation = CardDefaults.cardElevation(
+        defaultElevation = 0.dp,
+        pressedElevation = 0.dp
+    )
 }

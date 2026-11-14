@@ -31,6 +31,26 @@
     <string name="jefe_instrumentos">Instr. registrados</string>
     <string name="jefe_cuentas_sub">%1$d activas</string>
     <string name="jefe_instrumentos_sub">%1$d registrados</string>
+    <string name="jefe_cantidad_admin"> Dashboard actividades </string>
+
+    <!-- Iniciales para logo -->
+    <string name="logo_iniciales_jefe"> "JF" </string>
+
+    <!-- administracion Cuenta-->
+    <string name="agregar_cuenta"> Agregar nueva cuenta </string>
+    <string name="titulo_cuentas_sistema"> Cuentas del sistema </string>
+    <string name="agregar_cuentas_sistema"> Crear cuentas </string>
+    <string name="ayuda_rut"> ej: 22257085-5 </string>
+    <string name="ayuda_nombre">ej: sergei leonidas</string>
+    <string name="ayuda_telefono"> ej: +56921312908</string>
+    <string name="ayuda_correo"> ej: sergei@gmail.com </string>
+    <string name="ayuda_giro"> Evasora colina </string>
+    <string name="ayuda_cargo"> ej: Contadora </string>
+    <string name="volver">Volver</string>
+
+    <!-- Agregar cuenta -->
+    <string name="datos_personales"> Datos Personales del usuario</string>
+    <string name="perfil_usuario"> Seleccion un perfil </string>
 
     <string name="subtitulo">Menú principal, seleccione una opción:</string>
     <string name="titulo_gestionar_usuarios">Gestión de cuentas</string>
@@ -178,4 +198,19 @@
     <string name="ing_perfil_sub">Datos y clave</string>
     <string name="ing_formalizados_sub">Protocolos cerrados</string>
 
+
+    <!-- AlertDialog cuenta creada-->
+    <string name="dialogo_titulo_cuenta_creada">¡Cuenta creada!</string>
+    <string name="dialogo_titulo_clave">Clave visible solo para el usuario</string>
+    <string name="dialogo_descripcion_clave">Se generó una clave temporal y se enviará por SMS al número: %1$s</string>
+    <string name="dialogo_aviso_cerrar">Si cierra sin enviar el SMS, el usuario no recibirá su clave.</string>
+    <string name="btn_enviar_sms">Enviar SMS</string>
+    <string name="btn_cerrar">Cerrar</string>
+
+
+    <!-- Mensajes del envio por SMS Toast y texto del SMS -->
+    <string name="sms_enviado">SMS enviado al usuario</string>
+    <string name="sms_error">No se pudo enviar el SMS, revise la señal o la SIM</string>
+    <string name="permiso_sms_denegado">Sin permiso de SMS no se puede enviar la clave</string>
+    <string name="sms_mensaje_clave">ElectricApp: su clave temporal es %1$s. Cambiela al iniciar sesion.</string>
 </resources>

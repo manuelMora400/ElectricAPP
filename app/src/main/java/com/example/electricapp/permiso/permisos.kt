@@ -13,4 +13,13 @@ object permiso {
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
+
+    // permiso para SMS
+    fun tienePermisoSMS(contexto : Context) : Boolean{
+        return ContextCompat.checkSelfPermission(
+            contexto,
+            Manifest.permission.SEND_SMS
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
 }

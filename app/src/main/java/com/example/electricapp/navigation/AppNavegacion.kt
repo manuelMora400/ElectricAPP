@@ -19,6 +19,7 @@ import com.example.electricapp.ui.screens.VistaJefeScreens
 import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
 import com.example.electricapp.ui.screens.screensCrearProtocolos
+import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
 import com.example.electricapp.viewModel.FormularioLoginViewModel
@@ -76,9 +77,6 @@ fun AppNavegacion(){
                 onDesactivarCuentas = {
                     navController.navigate(Rutas.Registros.rutas)
                 },
-                onRegistrarClientes = {
-                    navController.navigate(Rutas.Registros.rutas)
-                },
                 onInstrumentos = {
                     navController.navigate(Rutas.Instrumentos.rutas)
                 },
@@ -103,7 +101,21 @@ fun AppNavegacion(){
         composable(Rutas.Registros.rutas) {
             screensRegistro(
                 onRegistroExitoso = {
-                }
+                },
+
+                //rutas -> ir a crear cuenta
+                onAgregarCuenta = {
+                    navController.navigate(Rutas.RegistrarCuentas.rutas)
+                },
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
+        // Pantalla crear cuenta
+        composable (Rutas.RegistrarCuentas.rutas){
+            screensRegistrarCuentas(
+                onRegistroExitoso = {},
+                onVolver = {navController.popBackStack()}
             )
         }
 

@@ -120,7 +120,6 @@ fun VistaIngenieroContenido(
                     titulo = stringResource(R.string.titulo_historial_equipos),
                     subtitulo = stringResource(R.string.subtitulo_historial_equipos),
                     icono = R.drawable.ic_historial_equipo,
-                    colorDeIcono = Color(0xFF7E57C2),
                     onClick = onHistorial,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -128,7 +127,6 @@ fun VistaIngenieroContenido(
                     titulo = stringResource(R.string.titulo_instrumentos_jefe),
                     subtitulo = stringResource(R.string.ing_instrumentos_sub),
                     icono = R.drawable.ic_calibracion_instrumento,
-                    colorDeIcono = Color(0xFFC2185B),
                     onClick = onInstrumentos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -142,7 +140,6 @@ fun VistaIngenieroContenido(
                     titulo = stringResource(R.string.ing_perfil),
                     subtitulo = stringResource(R.string.ing_perfil_sub),
                     icono = R.drawable.ic_nombre,
-                    colorDeIcono = Color(0xFF455A9E),
                     onClick = onPerfil,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
@@ -150,7 +147,6 @@ fun VistaIngenieroContenido(
                     titulo = stringResource(R.string.ing_formalizados),
                     subtitulo = stringResource(R.string.ing_formalizados_sub),
                     icono = R.drawable.ic_exito,
-                    colorDeIcono = Color(0xFF00796B),
                     onClick = onFormalizados,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
