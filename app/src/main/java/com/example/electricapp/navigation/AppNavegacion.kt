@@ -100,8 +100,6 @@ fun AppNavegacion(){
 
         composable(Rutas.Registros.rutas) {
             screensRegistro(
-                onRegistroExitoso = {
-                },
 
                 //rutas -> ir a crear cuenta
                 onAgregarCuenta = {
