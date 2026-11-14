@@ -21,7 +21,6 @@ import com.example.electricapp.R
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.styles.EstilosTarjetas
-import com.example.electricapp.ui.theme.CuadroRechazado
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
@@ -90,13 +89,13 @@ fun UsuariosCards(
                     etiquetaRol(
                         texto = texto,
                         colorFondo = MaterialTheme.colorScheme.primary ,
-                        colorTexto = MaterialTheme.colorScheme.onSecondary
+                        colorTexto = MaterialTheme.colorScheme.onPrimary
                     )
                     if(!usuario.activo){
                         etiquetaRol(
                             texto = stringResource(R.string.desactivar_cuenta),
-                            colorFondo = CuadroRechazado,
-                            colorTexto = MaterialTheme.colorScheme.onSecondary
+                            colorFondo = MaterialTheme.colorScheme.error,
+                            colorTexto = MaterialTheme.colorScheme.onError
                         )
                     }
                 }
