@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.electricapp.R
+import com.example.electricapp.ui.styles.EstilosCampos
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
@@ -47,7 +48,8 @@ fun CamposFormularios(
             )
         },
         isError = error != null,
-        supportingText ={if(error != null) Text(error)},
+        supportingText = if (error != null) { { Text(error) } } else null, // nuevo evitamos q el error deforme lo visual
+        shape = EstilosCampos.forma,
         keyboardOptions = KeyboardOptions(
             keyboardType = tipoTeclado,
             imeAction = ImeAction.Next
