@@ -186,4 +186,20 @@
     <string name="instrumento_vencido">Vencido</string>
     <string name="instrumento_serie">N° serie: %1$s</string>
     <string name="instrumento_vence">Vence: %1$s</string>
+
+
+    <!-- AlertDialog cuenta creada-->
+    <string name="dialogo_titulo_cuenta_creada">¡Cuenta creada!</string>
+    <string name="dialogo_titulo_clave">Clave visible solo para el usuario</string>
+    <string name="dialogo_descripcion_clave">Se generó una clave temporal y se enviará por SMS al número: %1$s</string>
+    <string name="dialogo_aviso_cerrar">Si cierra sin enviar el SMS, el usuario no recibirá su clave.</string>
+    <string name="btn_enviar_sms">Enviar SMS</string>
+    <string name="btn_cerrar">Cerrar</string>
+
+
+    <!-- Mensajes del envio por SMS Toast y texto del SMS -->
+    <string name="sms_enviado">SMS enviado al usuario</string>
+    <string name="sms_error">No se pudo enviar el SMS, revise la señal o la SIM</string>
+    <string name="permiso_sms_denegado">Sin permiso de SMS no se puede enviar la clave</string>
+    <string name="sms_mensaje_clave">ElectricApp: su clave temporal es %1$s. Cambiela al iniciar sesion.</string>
 </resources>
