@@ -166,4 +166,16 @@
     <string name="instrumento_vencido">Vencido</string>
     <string name="instrumento_serie">N° serie: %1$s</string>
     <string name="instrumento_vence">Vence: %1$s</string>
+
+    <!-- Ingeniero -->
+    <string name="ing_topbar">Induztek · Ingeniería</string>
+    <string name="ing_por_revisar">Por revisar</string>
+    <string name="ing_formalizados">Formalizados</string>
+    <string name="ing_btn_revisar">Revisar protocolos (%1$d)</string>
+    <string name="ing_seccion_accesos">Accesos</string>
+    <string name="ing_instrumentos_sub">Ver vigencia</string>
+    <string name="ing_perfil">Mi perfil</string>
+    <string name="ing_perfil_sub">Datos y clave</string>
+    <string name="ing_formalizados_sub">Protocolos cerrados</string>
+
 </resources>
