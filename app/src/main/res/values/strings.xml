@@ -15,6 +15,8 @@
     <string name="placeholder_correo">nombre@induztek.cl</string>
     <string name="placeholder_password">Tu contraseña</string>
 
+    <string name="confirmar_password"> Confirmar contraseña </string>
+
 
     <string name="titulo_bienvenida">Bienvenido/a, %1$s</string>
     <string name="titulo_Empresa">INDUZTEK</string>
@@ -51,6 +53,9 @@
     <!-- Agregar cuenta -->
     <string name="datos_personales"> Datos Personales del usuario</string>
     <string name="perfil_usuario"> Seleccion un perfil </string>
+
+    <string name="cambiar_clave"> Crea tu contraseña </string>
+    <string name="titulo_cambia_clave"> Hola %1$s, por su seguridad crea una contraseña nueva.</string>
 
     <string name="subtitulo">Menú principal, seleccione una opción:</string>
     <string name="titulo_gestionar_usuarios">Gestión de cuentas</string>
@@ -101,6 +106,7 @@
     <string name="rol_cliente">Cliente</string>
     <string name="btn_registre_r">Registrar</string>
     <string name="btn_limpiar">Limpiar</string>
+    <string name="btn_confirmar_clave"> Guardar y continuar</string>
 
 
     <string name="activar_cuenta">Activada</string>
@@ -213,4 +219,8 @@
     <string name="sms_error">No se pudo enviar el SMS, revise la señal o la SIM</string>
     <string name="permiso_sms_denegado">Sin permiso de SMS no se puede enviar la clave</string>
     <string name="sms_mensaje_clave">ElectricApp: su clave temporal es %1$s. Cambiela al iniciar sesion.</string>
+
+    <string name="cumple_largo"> Entre 8 y 12 caracteres</string>
+    <string name="cumple_mayuscula"> Una mayuscula </string>
+    <string name="cumple_punto">Un punto o un guion</string>
 </resources>
