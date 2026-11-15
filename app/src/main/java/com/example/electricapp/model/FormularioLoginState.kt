@@ -9,6 +9,18 @@ data class FormularioLoginState(
     val rol : Rol = Rol.CLIENTE,
     val activo : Boolean = true,
 
+    // actualizacion en data class login para usarla para que el usuario cambie contraseña
+    // obligatoriamente despues del sms
+    val cambiarClave : Boolean = false,
+    val nuevaClave : String = "",
+    val confirmarClave : String = "",
+    val errorNuevaClave : String? = "",
+    val errorConfirmarClave : String? = "",
+
+    val cumpleLargoPassword : Boolean = false,
+    val cumpleMayusculaPassword : Boolean = false,
+    val cumpleSiboloPassword : Boolean = false,
+
     val errorCorreo : String? = null,
     val errorPassword : String? = null,
     val errorGeneral : String?  = null,
