@@ -32,10 +32,13 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
 
     // parte de cambiar clave
     fun onNuevaClave(valor : String){
-        _uiState.update {it.copy(nuevaClave = valor, errorNuevaClave = null, errorGeneral = null, logeadoExitoso = false)}
+        _uiState.update {it.copy(nuevaClave = valor, errorNuevaClave = null, errorGeneral = null, logeadoExitoso = false,
+            cumpleLargoPassword = valor.length in 8..12,
+            cumpleMayusculaPassword = valor.any{it.isUpperCase()},
+            cumpleSiboloPassword = valor.contains(".") || valor.contains("-"),)}
     }
     fun onConfirmarClave(valor: String){
-        _uiState.update {it.copy(confirmarClave = valor, errorNuevaClave = null, cumpleLargoPassword = false, cumpleSiboloPassword = false, cumpleMayusculaPassword = false, logeadoExitoso = false)}
+        _uiState.update {it.copy(confirmarClave = valor, errorNuevaClave = null, errorGeneral = null, logeadoExitoso = false)}
     }
 
     fun onGuardarClaveNueva() : Boolean{
