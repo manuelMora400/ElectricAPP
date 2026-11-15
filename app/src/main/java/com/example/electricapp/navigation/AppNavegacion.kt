@@ -18,6 +18,7 @@ import com.example.electricapp.ui.screens.VistaIngenieroContenido
 import com.example.electricapp.ui.screens.VistaJefeScreens
 import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
+import com.example.electricapp.ui.screens.screensCrearContrasena
 import com.example.electricapp.ui.screens.screensCrearProtocolos
 import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
@@ -47,21 +48,27 @@ fun AppNavegacion(){
         }
     }
 
+    fun navegacionRol(rol: Rol) : String{
+        return when(rol){
+            Rol.JEFE_TECNICO -> Rutas.VistaJefe.rutas
+            Rol.TECNICO -> Rutas.TecnicoTerreno.rutas
+            Rol.CLIENTE -> Rutas.MenuCliente.rutas
+            Rol.INGENIERO -> Rutas.VistaIngeniero.rutas
+            else -> Rutas.Login.rutas
+        }
+    }
+
     NavHost(navController = navController, startDestination = Rutas.Login.rutas){
 
         composable(Rutas.Login.rutas){
             ScreensLogin(
                 viewModel = loginViewModel,
                 onLogeado = { rol ->
-
-                   val destino = when(rol){
-
-                       Rol.JEFE_TECNICO -> Rutas.VistaJefe.rutas
-                       Rol.TECNICO -> Rutas.TecnicoTerreno.rutas
-                       Rol.CLIENTE -> Rutas.MenuCliente.rutas
-                       Rol.INGENIERO -> Rutas.VistaIngeniero.rutas
-                       else -> Rutas.Login.rutas
-                   }
+                    val destino = if(loginViewModel.uiState.value.cambiarClave){
+                        Rutas.CrearContrasema.rutas
+                    }else{
+                        navegacionRol(rol)
+                    }
                     navController.navigate(destino){
                         popUpTo(Rutas.Login.rutas){inclusive = true}
                     }
@@ -114,6 +121,20 @@ fun AppNavegacion(){
             screensRegistrarCuentas(
                 onRegistroExitoso = {},
                 onVolver = {navController.popBackStack()}
+            )
+        }
+
+        // Crear contraseña
+        composable(Rutas.CrearContrasema.rutas){
+            screensCrearContrasena(
+                 viewModel = loginViewModel,
+                onClaveGuardada = {
+                    val destino = navegacionRol(loginViewModel.uiState.value.rol)
+                    navController.navigate(destino){
+                        popUpTo(Rutas.CrearContrasema.rutas){inclusive = true}
+                    }
+
+                }
             )
         }
 

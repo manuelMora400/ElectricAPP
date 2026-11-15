@@ -17,7 +17,7 @@ class ElectricHelperDb(context : Context) :
 
     companion object{
         private const val NombreBD = "electric.bd"
-        private const val VERSION_BD = 2
+        private const val VERSION_BD = 3
 
         private const val TABLA_ROL  = "ROLES"
         private const val ID_ROL     = "id_rol"
@@ -32,6 +32,7 @@ class ElectricHelperDb(context : Context) :
         private const val PASSWORD       = "password"
         private const val GIRO           = "giro"
         private const val ACTIVO         = "activo"
+        private const val CAMBIO_CLAVE   =  "cambio_clave"
         private const val CONTACTO_CARGO = "cargo"
         private const val USER_ROL       = "id_rol"
 
@@ -85,6 +86,7 @@ class ElectricHelperDb(context : Context) :
                     "$GIRO TEXT, " +
                     "$ACTIVO INTEGER DEFAULT 1," +
                     "$CONTACTO_CARGO TEXT," +
+                    "$CAMBIO_CLAVE INTEGER DEFAULT 0," +
                     "$USER_ROL INTEGER NOT NULL REFERENCES $TABLA_ROL($ID_ROL))"
 
         private const val SQL_CREAR_INSTRUMENTOS =
@@ -173,7 +175,7 @@ class ElectricHelperDb(context : Context) :
                     "('TR-01','Planta Lampa','AT-T','5','9800','21560', 2),"+
                     "('TR-01','Planta Lampa','AT-T','5','6100','10980', 3),"+
                     "('TR-02','Planta Lampa','AT-T','5','15200','36480', 4)"
-        
+
         private const val SQL_SELECT_USUARIOS =
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
                     "FROM $TABLA_USUARIO u "+
@@ -235,6 +237,7 @@ class ElectricHelperDb(context : Context) :
         put(PASSWORD, usuario.password)
         put(GIRO , usuario.giro)
         put(ACTIVO, 1)
+        put(CAMBIO_CLAVE, 1)
         put(USER_ROL, usuario.rol.ordinal + 1)
         put(CONTACTO_CARGO,usuario.contactoCargo)
     }
@@ -347,12 +350,29 @@ class ElectricHelperDb(context : Context) :
                         idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO)),
                         nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
                         correo = correo,
+                        cambiarClave = cursor.getInt(cursor.getColumnIndexOrThrow(CAMBIO_CLAVE)) == 1,
                         passwordHash = password,
                         rol = Rol.valueOf(rolStr)
                     )
                 }else null
            }
         return null
+    }
+
+    // Actualizar clave temporanea
+    fun actualizarClave(idUsuario: Int, nuevaClave : String) : Boolean{
+
+        val valores = contentValuesOf().apply{
+            put(PASSWORD, nuevaClave)
+            put(CAMBIO_CLAVE, 0)
+        }
+        val filas = writableDatabase.update(
+            TABLA_USUARIO,
+            valores,
+            "$ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        )
+        return filas > 0
     }
 
     fun cambiarEstadoUsuario(correo: String, nuevoEstado: Boolean): Boolean {
@@ -461,5 +481,4 @@ class ElectricHelperDb(context : Context) :
     // Funciones para almacenar las cantidades en el panel de jefe
     fun cantidadCuentasActivas() : Int = contador("SELECT COUNT(*) FROM $TABLA_USUARIO WHERE $ACTIVO = 1")
     fun cantidadInstRegistrados() : Int = contador("SELECT COUNT(*) FROM $TABLA_INSTRUMENTOS")
-
 }
