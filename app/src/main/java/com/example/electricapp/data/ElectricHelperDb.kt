@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.content.contentValuesOf
+import com.example.electricapp.model.DetallesState
 import com.example.electricapp.model.Estado
 import com.example.electricapp.model.FormularioInstrumentosStates
 import com.example.electricapp.model.FormularioLoginState
@@ -481,4 +482,60 @@ class ElectricHelperDb(context : Context) :
     // Funciones para almacenar las cantidades en el panel de jefe
     fun cantidadCuentasActivas() : Int = contador("SELECT COUNT(*) FROM $TABLA_USUARIO WHERE $ACTIVO = 1")
     fun cantidadInstRegistrados() : Int = contador("SELECT COUNT(*) FROM $TABLA_INSTRUMENTOS")
+
+    fun obtenerDetalle(): List<DetallesState> {
+        val lista = mutableListOf<DetallesState>()
+
+        val consultaSql = """
+        SELECT 
+            a.$EQUIPO_TAG,
+            a.$INSTALACION,
+            a.$LECTURA_1MIN,
+            a.$LECTURA_10MIN,
+            a.$DEVANADO,
+            a.$TENSION_PRUEBA,
+            p.$RESULTADO,
+            p.$ESTADO_PROTOCOLO,
+            CASE 
+                WHEN r.$NOMBRE_ROL = 'INGENIERO' THEN u.$NOMBRE_USU 
+            END AS nombre_ingeniero,
+            p.$FECHA_HORA_PRUEBA
+        FROM $TABLA_AISLACION a
+        INNER JOIN $TABLA_PROTOCOLO p ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+        INNER JOIN $TABLA_USUARIO u ON p.$USU_ID = u.$ID_USUARIO
+        INNER JOIN $TABLA_ROL r ON u.$USER_ROL = r.$ID_ROL
+        ORDER BY p.$ID_PROTOCOLO DESC
+    """.trimIndent()
+
+        readableDatabase.rawQuery(consultaSql, null).use { cursor ->
+            val idxTag = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
+            val idxInstalacion = cursor.getColumnIndexOrThrow(INSTALACION)
+            val idxMin1 = cursor.getColumnIndexOrThrow(LECTURA_1MIN)
+            val idxMin10 = cursor.getColumnIndexOrThrow(LECTURA_10MIN)
+            val idxDevanado = cursor.getColumnIndexOrThrow(DEVANADO)
+            val idxTension = cursor.getColumnIndexOrThrow(TENSION_PRUEBA)
+            val idxResultado = cursor.getColumnIndexOrThrow(RESULTADO)
+            val idxEstado = cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO)
+            val idxIngeniero = cursor.getColumnIndexOrThrow("nombre_ingeniero")
+            val idxFecha = cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)
+
+            while (cursor.moveToNext()) {
+                lista.add(
+                    DetallesState(
+                        Tag = cursor.getString(idxTag),
+                        Instalacion = cursor.getString(idxInstalacion),
+                        medicion1Min = cursor.getString(idxMin1),
+                        medicion10Min = cursor.getString(idxMin10),
+                        devanado = cursor.getString(idxDevanado),
+                        tensionPrueba = cursor.getString(idxTension),
+                        resultado = cursor.getString(idxResultado),
+                        estado = cursor.getString(idxEstado),
+                        nombreIngeniero = cursor.getString(idxIngeniero),
+                        fechaPrueba = cursor.getString(idxFecha)
+                    )
+                )
+            }
+        }
+        return lista
+    }
 }
