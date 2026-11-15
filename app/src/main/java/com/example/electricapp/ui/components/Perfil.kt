@@ -11,29 +11,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
 // este componente lo usaremos dentro de la top bar, mas adelante se puede hacer que pueda poner foto
 // ya sea de su cara u de su galeria..... hay que reutilizar en cliente, jefe tecnico, tecncio y ingeniero
+
 @Composable
 fun LogoPerfil(
     iniciales : String,
     onClick : () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tamano : Dp = Dimens.tamanoLogoPerfil,
+    colorFondo : Color = MaterialTheme.colorScheme.background,
+    colorTexto : Color = MaterialTheme.colorScheme.primary
 ){
     Box(
-        modifier = modifier.size(Dimens.tamanoLogoPerfil)
+        modifier = modifier.size(tamano)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.background)
+            .background(colorFondo)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = iniciales,
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary
+            fontWeight = FontWeight.Bold,
+            color = colorTexto
         )
     }
 }

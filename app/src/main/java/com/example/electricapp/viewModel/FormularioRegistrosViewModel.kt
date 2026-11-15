@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
+import com.example.electricapp.generador.GeneradorClave
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.delay
@@ -151,7 +152,6 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
             errorNombre,
             errorTelefono,
             errorCorreo,
-            errorPassword,
             erroGiro,
             errorContacto).any{it != null}
 
@@ -171,13 +171,16 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
             return false
         }
 
+        //Generamo la clave
+        val claveGenerada = GeneradorClave.generarClave()
+
         val insertado = bd.insertarUsuario(
             FormularioRegistros(
                 rut = estado.rut,
                 nombre = estado.nombre,
                 telefono = estado.telefono,
                 correo = estado.correo,
-                password = estado.password,
+                password = claveGenerada,
                 giro = estado.giro,
                 contactoCargo = estado.contactoCargo,
                 rol = estado.rol,
@@ -185,7 +188,7 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
             )
         )
         if(insertado > 0){
-            _uiState.update { it.copy(registradoExito = true) }
+            _uiState.update { it.copy(registradoExito = true, claveTemporal = claveGenerada) }
 
             viewModelScope.launch {
                 delay(4000)

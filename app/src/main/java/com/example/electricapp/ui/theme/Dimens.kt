@@ -38,4 +38,16 @@ object Dimens {
 
     //formularios
     val formaCampo = 6.dp
+
+
+    // Dimensiones nuevas para mejorar lo visual en vista Jefe
+    val radioPanel = 12.dp
+    val bordePanel = 1.dp
+    val padTarjetaPanel = 14.dp
+    val espacioGrilla = 12.dp
+    val cajaIcono = 40.dp
+    val radioCajaIcono = 10.dp
+    val iconoPanel = 22.dp
+    val logoBarra = 36.dp
+    val padSeccionFormulario = 6.dp
 }

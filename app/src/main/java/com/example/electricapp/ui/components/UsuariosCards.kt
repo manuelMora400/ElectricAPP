@@ -88,14 +88,14 @@ fun UsuariosCards(
 
                     etiquetaRol(
                         texto = texto,
-                        colorFondo = MaterialTheme.colorScheme.secondaryContainer,
-                        colorTexto = MaterialTheme.colorScheme.onSecondaryContainer
+                        colorFondo = MaterialTheme.colorScheme.primary ,
+                        colorTexto = MaterialTheme.colorScheme.onPrimary
                     )
                     if(!usuario.activo){
                         etiquetaRol(
-                            texto = texto,
-                            colorFondo = MaterialTheme.colorScheme.errorContainer,
-                            colorTexto = MaterialTheme.colorScheme.onErrorContainer
+                            texto = stringResource(R.string.desactivar_cuenta),
+                            colorFondo = MaterialTheme.colorScheme.error,
+                            colorTexto = MaterialTheme.colorScheme.onError
                         )
                     }
                 }

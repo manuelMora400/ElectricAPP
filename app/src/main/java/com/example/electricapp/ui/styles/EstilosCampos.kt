@@ -15,6 +15,6 @@ object  EstilosCampos{
     @Composable
     fun colores() : TextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedTextColor = MaterialTheme.colorScheme.primary,
-        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
     )
 }

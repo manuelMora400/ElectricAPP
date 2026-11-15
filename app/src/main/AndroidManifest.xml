@@ -9,7 +9,7 @@
 
     <!--Permiso al usuario de SMS-->
     <uses-permission android:name="android.permission.SEND_SMS"/> <!--Este es para pedir enviar SMS al usuario-->
-    <uses-permission android:name="android.permission.READ_SMS"/> <!--Este es para que la aplicacion Lea el SMS -->
+
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission

@@ -75,15 +75,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
             password = estado.passwordHash
         )
 
-        if (cuentaEncontrada != null && cuentaEncontrada.rol == Rol.INGENIERO){
-            _uiState.update {
-                it.copy(
-                    errorPassword = "El perfil Ingeniero estara disponible en la proxima entrega",
-                    logeadoExitoso = false
-                )
-            }
-            return null
-        }
 
         if (cuentaEncontrada != null){
             _uiState.update {
