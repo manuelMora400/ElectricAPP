@@ -13,4 +13,7 @@ sealed class Rutas(val rutas: String){
     data object VistaIngeniero : Rutas("ingeniero_panel")
 
     data object RegistrarCuentas : Rutas("crear_cuenta")
+
+    data object Perfil : Rutas("perfil")
+
 }
