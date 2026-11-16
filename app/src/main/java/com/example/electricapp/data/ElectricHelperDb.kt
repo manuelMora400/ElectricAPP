@@ -12,6 +12,7 @@ import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
+import com.example.electricapp.model.PerfilUsuario
 
 class ElectricHelperDb(context : Context) :
     SQLiteOpenHelper(context, NombreBD, null, VERSION_BD){
@@ -538,4 +539,26 @@ class ElectricHelperDb(context : Context) :
         }
         return lista
     }
+
+    fun buscarPerfil(idUsuario : Int) : PerfilUsuario? {
+        readableDatabase.rawQuery(
+            "SELECT * FROM $TABLA_USUARIO WHERE $ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        ).use { cursor ->
+            if (cursor.moveToFirst()) {
+
+                return PerfilUsuario(
+                    idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO)),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
+                    correo = cursor.getString(cursor.getColumnIndexOrThrow(CORREO)),
+                    rut = cursor.getString(cursor.getColumnIndexOrThrow(RUT)),
+                    telefono = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO)),
+                    cargo = cursor.getString(cursor.getColumnIndexOrThrow(CONTACTO_CARGO)) ?: "",
+                    rol = rolDesdeId(cursor.getInt(cursor.getColumnIndexOrThrow(USER_ROL)))
+                )
+            }
+        }
+        return null
+    }
+
 }

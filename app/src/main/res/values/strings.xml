@@ -220,6 +220,12 @@
     <string name="permiso_sms_denegado">Sin permiso de SMS no se puede enviar la clave</string>
     <string name="sms_mensaje_clave">ElectricApp: su clave temporal es %1$s. Cambiela al iniciar sesion.</string>
 
+    <!-- Perfil (común para todos los roles) -->
+    <string name="perfil_titulo">Mi perfil</string>
+    <string name="perfil_seccion_datos">Datos de la cuenta</string>
+    <string name="btn_editar_datos">Editar datos</string>
+    <string name="btn_cambiar_clave">Cambiar contraseña</string>
+
     <string name="cumple_largo"> Entre 8 y 12 caracteres</string>
     <string name="cumple_mayuscula"> Una mayuscula </string>
     <string name="cumple_punto">Un punto o un guion</string>
