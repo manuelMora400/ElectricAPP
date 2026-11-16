@@ -1,5 +1,6 @@
 package com.example.electricapp.data
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -375,6 +376,35 @@ class ElectricHelperDb(context : Context) :
             arrayOf(idUsuario.toString())
         )
         return filas > 0
+    }
+
+    // Funcion para recuperar Contraseña
+    fun recuperarContrasena(identifcador: String, claveTemporal: String) : String?{
+
+        var idUsuario = -1
+        var telefono = ""
+
+        readableDatabase.rawQuery(
+            "SELECT $ID_USUARIO, $TELEFONO " +
+                    "FROM $TABLA_USUARIO WHERE $ACTIVO = 1 AND ($RUT = ? OR $CORREO = ?) ", arrayOf(identifcador.trim(), identifcador.trim())
+        ).use { cursor ->
+            if(!cursor.moveToFirst()){
+                return null
+            }
+            idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO))
+            telefono  = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO))
+        }
+        val evalua = ContentValues()
+        evalua.put(PASSWORD, claveTemporal)
+        evalua.put(CAMBIO_CLAVE, 1)
+
+        val filas = writableDatabase.update(
+            TABLA_USUARIO,
+            evalua,
+            "$ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        )
+       return if(filas > 0) telefono else null
     }
 
     fun cambiarEstadoUsuario(correo: String, nuevoEstado: Boolean): Boolean {
