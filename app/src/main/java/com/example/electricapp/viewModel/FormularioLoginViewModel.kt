@@ -2,7 +2,9 @@ package com.example.electricapp.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.data.ElectricHelperDb
+import com.example.electricapp.generador.GeneradorClave
 import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -95,6 +97,44 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                 errorGeneral = "Error al cambiar su contraseña"
             ) }
             return false
+        }
+    }
+
+    // recuperar Clave
+    fun onIdentificadiorClave( valor: String){
+        _uiState.update { it.copy(idRecuperacion = valor, errorRecuperacion = null) }
+    }
+
+    fun onEnviarClaveTemporal() {
+        val id = _uiState.value.idRecuperacion.trim()
+        if (id.isBlank()) {
+            _uiState.update { it.copy(errorRecuperacion = "Ingresa tu RUT o correo correspondiente") }
+            return
+        }
+
+        val claveGenerada = GeneradorClave.generarClave()
+        val nTelefono = db.recuperarContrasena(id, claveGenerada)
+
+        if (nTelefono == null) {
+            _uiState.update { it.copy(errorRecuperacion = "No existe una cuenta activa con ese RUT o correo") }
+            return
+        }
+        _uiState.update {
+            it.copy(
+                errorRecuperacion = null,
+                telefonoRecuperacion = nTelefono,
+                claveTemporal = claveGenerada
+            )
+        }
+    }
+    fun onLimpiarRecuperacion() {
+        _uiState.update {
+            it.copy(
+                idRecuperacion = "",
+                errorRecuperacion = null,
+                telefonoRecuperacion = null,
+                claveTemporal = null
+            )
         }
     }
 

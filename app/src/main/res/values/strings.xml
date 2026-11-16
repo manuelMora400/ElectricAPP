@@ -73,7 +73,7 @@
     <string name="titulo_crear_protocolos">Crear protocolos</string>
     <string name="subtitulo_crear_protocolos">Crear y registrar mediciones</string>
     <string name="titulo_desactivar_personal">Desactivar personal</string>
-    <string name="subtitulo_desactivar_personal">Deshabilitar el acceso del personal</string>
+    <string name="subtitulo_perfi_jefe_tecnico">Gestione su perfil</string>
 
 
     <string name="titulo_bienvenidos">Bienvenidos a Consulta de protocolos</string>
@@ -229,4 +229,11 @@
     <string name="cumple_largo"> Entre 8 y 12 caracteres</string>
     <string name="cumple_mayuscula"> Una mayuscula </string>
     <string name="cumple_punto">Un punto o un guion</string>
+
+    <!-- Mensajes Recuperar Contraseña -->
+    <string name="no_existe_datos"> Ingresa tu rut o correo registrado para generar una clave temporal</string>
+    <string name="recuperacion_exito"> "Cuenta existente. se envio tu clave temporal por SMS al número registrado %1$s"</string>
+    <string name="btn_continuar"> Continuar </string>
+    <string name="btn_cancelar"> Cancelar</string>
+    <string name="rut_o_correo">Rut/correo</string>
 </resources>

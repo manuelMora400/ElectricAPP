@@ -1,5 +1,6 @@
 package com.example.electricapp.ui.screens
 
+import android.graphics.drawable.Icon
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -11,8 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -23,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +41,7 @@ import com.example.electricapp.ui.theme.Dimens
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.components.Bienvenida
+import com.example.electricapp.ui.components.BotonEnviarSms
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.FormularioLoginViewModel
@@ -57,14 +63,15 @@ fun ScreensLogin(
         onCorreoCambia = viewModel::onCorreoCambia,
         onPasswordCambia = viewModel::onPasswordCambia,
         onIniciar = {
-
             val rol = viewModel.onIniciar()
             if (rol != null){
                 onLogeado(rol)
             }
         },
         onVisibilidad = viewModel::onVisibilidad,
-        onOlvido = {}
+        onLimpiar = viewModel::onLimpiarRecuperacion,
+        onGenerarClave = viewModel::onEnviarClaveTemporal,
+        onIdRecuperacioCambia = viewModel::onIdentificadiorClave
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,8 +82,11 @@ fun LoginScreens(
     onPasswordCambia : (String) -> Unit,
     onVisibilidad : () -> Unit,
     onIniciar : () -> Unit,
-    onOlvido : () -> Unit
-){
+    onIdRecuperacioCambia : (String) -> Unit,
+    onGenerarClave : () -> Unit,
+    onLimpiar : () -> Unit
+    ){
+    var mostrarRecuperacion by remember { mutableStateOf(false) }
 
     Scaffold (
         containerColor = MaterialTheme.colorScheme.background
@@ -141,7 +151,9 @@ fun LoginScreens(
                     modifier = Modifier.fillMaxWidth().height(60.dp)
                 )
             TextButton(
-                onClick = onOlvido,
+                onClick = {
+                    mostrarRecuperacion = true
+                },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text(
@@ -150,39 +162,92 @@ fun LoginScreens(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-        }
+            if (mostrarRecuperacion) {
+                AlertDialog(
+                    onDismissRequest = {
+                        mostrarRecuperacion = false
+                        onLimpiar()
+                    },
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_candado),
+                            contentDescription = null
+                        )
+                    },
+                    title = {
+                        Text(text = stringResource(R.string.btn_olvido_password))
+                    },
+                    text = {
+                        Column(verticalArrangement = Arrangement.spacedBy(Dimens.espacioChico)) {
+                            if (uiState.telefonoRecuperacion == null) {
+                                Text(text = stringResource(R.string.no_existe_datos))
+                                OutlinedTextField(
+                                    value = uiState.idRecuperacion,
+                                    onValueChange = onIdRecuperacioCambia,
+                                    label = { Text(text = stringResource(R.string.rut_o_correo)) },
+                                    isError = uiState.errorRecuperacion != null,
+                                    singleLine = true,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                if (uiState.errorRecuperacion != null) {
+                                    Text(
+                                        text = uiState.errorRecuperacion,
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = stringResource(R.string.recuperacion_exito)
+                                )
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        if (uiState.telefonoRecuperacion == null) {
+                            TextButton(onClick = onGenerarClave) {
+                                Text(text = stringResource(R.string.btn_continuar))
+                            }
+                        } else if (uiState.claveTemporal != null) {
+                            BotonEnviarSms(
+                                telefono = uiState.telefonoRecuperacion,
+                                clave = uiState.claveTemporal,
+                                onEnviado = {
+                                    mostrarRecuperacion = false
+                                    onLimpiar()
+                                }
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                mostrarRecuperacion = false
+                                onLimpiar()
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.btn_cancelar))
+                        }
+                    }
+                )
+            }
     }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreensView(){
-
-    ElectricAppTheme(false) {
-        LoginScreens (
-
-            uiState = FormularioLoginState(),
-            onCorreoCambia = {},
-            onPasswordCambia = {},
-            onVisibilidad = {},
-            onIniciar = {},
-            onOlvido = {}
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreensVie(){
-
+fun viewLoginScreens(){
     ElectricAppTheme(true) {
-        LoginScreens (
-            uiState = FormularioLoginState(),
-            onCorreoCambia = {},
+        LoginScreens(
+          uiState = FormularioLoginState(),
+            onCorreoCambia = {} ,
             onPasswordCambia = {},
             onVisibilidad = {},
-            onIniciar = {},
-            onOlvido = {}
+            onLimpiar = {},
+            onGenerarClave = {},
+            onIdRecuperacioCambia = {},
+            onIniciar = {}
         )
     }
 }
