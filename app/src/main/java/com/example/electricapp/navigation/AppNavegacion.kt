@@ -82,9 +82,6 @@ fun AppNavegacion(){
                 onGestionUsuarios = {
                     navController.navigate(Rutas.Registros.rutas)
                 },
-                onDesactivarCuentas = {
-                    navController.navigate(Rutas.Registros.rutas)
-                },
                 onInstrumentos = {
                     navController.navigate(Rutas.Instrumentos.rutas)
                 },
@@ -100,8 +97,8 @@ fun AppNavegacion(){
                 onAnularProtocolos = {
                     enDesarrollo()
                 },
-                onCerrarSesion = {
-                    cerrarSesion(Rutas.VistaJefe.rutas)
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
                 }
             )
         }
