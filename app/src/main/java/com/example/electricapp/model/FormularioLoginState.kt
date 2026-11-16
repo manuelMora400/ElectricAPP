@@ -3,7 +3,6 @@ data class FormularioLoginState(
 
     val idUsuario : Int = 0,
     val nombre : String = "",
-
     val correo : String = "",
     val passwordHash : String = "",
     val rol : Rol = Rol.CLIENTE,
@@ -16,6 +15,13 @@ data class FormularioLoginState(
     val confirmarClave : String = "",
     val errorNuevaClave : String? = "",
     val errorConfirmarClave : String? = "",
+
+    // Recupera contraseña
+    val idRecuperacion : String = "",
+    val errorRecuperacion : String? = null,
+    val mensajeRecuperacionExito : String? = null,
+    val telefonoRecuperacion : String? = null,
+    val claveTemporal : String? = null,
 
     val cumpleLargoPassword : Boolean = false,
     val cumpleMayusculaPassword : Boolean = false,
