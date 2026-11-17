@@ -50,8 +50,7 @@ fun VistaJefeScreens(
     onCrearProtocolos: () -> Unit,
     onGestionUsuarios: () -> Unit,
     onInstrumentos: () -> Unit,
-    onDesactivarCuentas: () -> Unit,
-    onCerrarSesion: () -> Unit
+    onPerfil: () -> Unit
 ) {
     val estado by viewModel.uistate.collectAsStateWithLifecycle()
 
@@ -65,8 +64,7 @@ fun VistaJefeScreens(
         onCrearProtocolos = onCrearProtocolos,
         onGestionUsuarios = onGestionUsuarios,
         onInstrumentos = onInstrumentos,
-        onDesactivarCuentas = onDesactivarCuentas,
-        onCerrarSesion = onCerrarSesion
+        onPerfil = onPerfil
     )
 }
 
@@ -80,8 +78,7 @@ fun VistaJefeContenido(
     onCrearProtocolos: () -> Unit,
     onGestionUsuarios: () -> Unit,
     onInstrumentos: () -> Unit,
-    onDesactivarCuentas: () -> Unit,
-    onCerrarSesion: () -> Unit
+    onPerfil : () -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -94,12 +91,9 @@ fun VistaJefeContenido(
                     )
                 },
                 actions = {
-
-                    // llamamos el componente perfilLogo -> por ahora onInstrumentos
-                    // aun no existe perfil Jefe tecnico
                     LogoPerfil(
                         iniciales = stringResource(R.string.logo_iniciales_jefe),
-                        onClick = onInstrumentos,
+                        onClick = onPerfil,
                         modifier = Modifier.padding(end = Dimens.rowEspacio),
                         tamano = Dimens.logoBarra,
                         colorFondo = PrimarioClaro,
@@ -162,10 +156,10 @@ fun VistaJefeContenido(
                         onClick = onInstrumentos
                     ),
                     OpcionPanel(
-                        titulo = stringResource(R.string.titulo_desactivar_personal),
-                        subtitulo = stringResource(R.string.subtitulo_desactivar_personal),
-                        icono = R.drawable.ic_desactivar_personal,
-                        onClick = onDesactivarCuentas
+                        titulo = stringResource(R.string.perfil_titulo),
+                        subtitulo = stringResource(R.string.subtitulo_perfi_jefe_tecnico),
+                        icono = R.drawable.ic_nombre,
+                        onClick = onPerfil
                     )
                 )
             )
@@ -255,8 +249,7 @@ fun VistaJefeView() {
             onCrearProtocolos = {},
             onGestionUsuarios = {},
             onInstrumentos = {},
-            onDesactivarCuentas = {},
-            onCerrarSesion = {}
+            onPerfil = {}
         )
     }
 }
@@ -273,8 +266,7 @@ fun VistaJefeView2() {
             onCrearProtocolos = {},
             onGestionUsuarios = {},
             onInstrumentos = {},
-            onDesactivarCuentas = {},
-            onCerrarSesion = {}
+            onPerfil = {}
         )
     }
 }

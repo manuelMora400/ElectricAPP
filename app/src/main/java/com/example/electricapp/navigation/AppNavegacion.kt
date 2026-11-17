@@ -13,6 +13,7 @@ import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.MenuClienteScreens
+import com.example.electricapp.ui.screens.PerfilScreens
 import com.example.electricapp.ui.screens.ScreensLogin
 import com.example.electricapp.ui.screens.VistaIngenieroContenido
 import com.example.electricapp.ui.screens.VistaJefeScreens
@@ -81,9 +82,6 @@ fun AppNavegacion(){
                 onGestionUsuarios = {
                     navController.navigate(Rutas.Registros.rutas)
                 },
-                onDesactivarCuentas = {
-                    navController.navigate(Rutas.Registros.rutas)
-                },
                 onInstrumentos = {
                     navController.navigate(Rutas.Instrumentos.rutas)
                 },
@@ -99,8 +97,8 @@ fun AppNavegacion(){
                 onAnularProtocolos = {
                     enDesarrollo()
                 },
-                onCerrarSesion = {
-                    cerrarSesion(Rutas.VistaJefe.rutas)
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
                 }
             )
         }
@@ -200,12 +198,48 @@ fun AppNavegacion(){
             VistaIngenieroContenido(
                 estado = ContadoresPanelIngeniero(),
                 nombreIngeniero = uiState.nombre.substringBefore(" "),
-                onRevisarProtocolos = { enDesarrollo() },
-                onHistorial = { navController.navigate(Rutas.Consulta.rutas) },
-                onInstrumentos = { enDesarrollo() },
-                onPerfil = { enDesarrollo() },
-                onFormalizados = { enDesarrollo() },
-                onCerrarSesion = { cerrarSesion(Rutas.VistaIngeniero.rutas) }
+                onRevisarProtocolos = {
+                    enDesarrollo()
+                },
+                onHistorial = {
+                    navController.navigate(Rutas.Consulta.rutas)
+                },
+                onInstrumentos = {
+                    enDesarrollo()
+                },
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
+                },
+                onFormalizados = {
+                    enDesarrollo()
+                },
+                onCerrarSesion = {
+                    cerrarSesion(Rutas.VistaIngeniero.rutas)
+                }
             )
         }
+
+        composable(Rutas.Perfil.rutas) {
+            PerfilScreens(
+                idUsuario = uiState.idUsuario,
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onEditarDatos = {
+                    enDesarrollo()
+                },
+                onCambiarClave = {
+                    enDesarrollo()
+                },
+                onCerrarSesion = {
+                    loginViewModel.onCerrarSesion()
+                    navController.navigate(Rutas.Login.rutas) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
 }}

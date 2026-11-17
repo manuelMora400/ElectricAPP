@@ -1,5 +1,6 @@
 package com.example.electricapp.data
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -12,6 +13,7 @@ import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
+import com.example.electricapp.model.PerfilUsuario
 
 class ElectricHelperDb(context : Context) :
     SQLiteOpenHelper(context, NombreBD, null, VERSION_BD){
@@ -376,6 +378,37 @@ class ElectricHelperDb(context : Context) :
         return filas > 0
     }
 
+
+    fun recuperarContrasena(identifcador: String) : String?{
+
+        var telefono : String? = null
+
+        readableDatabase.rawQuery(
+            "SELECT $TELEFONO " +
+                    "FROM $TABLA_USUARIO WHERE $ACTIVO = 1 AND ($RUT = ? OR $CORREO = ?) ", arrayOf(identifcador.trim(), identifcador.trim())
+        ).use { cursor ->
+            if(cursor.moveToFirst()){
+                telefono = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO))
+            }
+        }
+        return telefono
+    }
+
+    fun guardarClaveTemporal(identifcador: String, claveTemporal: String) : Boolean{
+
+        val evalua = ContentValues()
+        evalua.put(PASSWORD, claveTemporal)
+        evalua.put(CAMBIO_CLAVE, 1)
+
+        val filas = writableDatabase.update(
+            TABLA_USUARIO,
+            evalua,
+            "$ACTIVO = 1 AND ($RUT = ? OR $CORREO = ?)",
+            arrayOf(identifcador.trim(), identifcador.trim())
+        )
+        return filas > 0
+    }
+
     fun cambiarEstadoUsuario(correo: String, nuevoEstado: Boolean): Boolean {
         val valores = contentValuesOf().apply {
             put(ACTIVO, if (nuevoEstado) 1 else 0)
@@ -538,4 +571,26 @@ class ElectricHelperDb(context : Context) :
         }
         return lista
     }
+
+    fun buscarPerfil(idUsuario : Int) : PerfilUsuario? {
+        readableDatabase.rawQuery(
+            "SELECT * FROM $TABLA_USUARIO WHERE $ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        ).use { cursor ->
+            if (cursor.moveToFirst()) {
+
+                return PerfilUsuario(
+                    idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO)),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
+                    correo = cursor.getString(cursor.getColumnIndexOrThrow(CORREO)),
+                    rut = cursor.getString(cursor.getColumnIndexOrThrow(RUT)),
+                    telefono = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO)),
+                    cargo = cursor.getString(cursor.getColumnIndexOrThrow(CONTACTO_CARGO)) ?: "",
+                    rol = rolDesdeId(cursor.getInt(cursor.getColumnIndexOrThrow(USER_ROL)))
+                )
+            }
+        }
+        return null
+    }
+
 }
