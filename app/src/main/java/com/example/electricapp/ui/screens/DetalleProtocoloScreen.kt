@@ -35,6 +35,7 @@ import com.example.electricapp.R
 import com.example.electricapp.generador.GeneradorPdfProtocolo
 import com.example.electricapp.model.DetallesState
 import com.example.electricapp.ui.components.Bienvenida
+import com.example.electricapp.ui.components.BotonDescargar
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Blanco
@@ -223,26 +224,15 @@ fun DetallesContentScreen(
                 }
             }
             item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Dimens.espacioPantalla)
-                ) {
-                    BotonInicio(
-                        texto = "Descargar PDF",
-                        onClick = {
-                            GeneradorPdfProtocolo.generarYDescargarPdf(
-                                context = context,
-                                detalle = uiState,
-                                indicePolarizacion = indicePolarizacion
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                BotonDescargar(
+                    detalle = uiState,
+                    indicePolarizacion = indicePolarizacion,
+                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla)
+                )
             }
         }
     }
+
 }
 
 @Composable
