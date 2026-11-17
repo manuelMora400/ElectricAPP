@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +23,7 @@ import com.example.electricapp.ui.components.BotonCerrarSesion
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.components.TarjetaOpciones
+import com.example.electricapp.ui.styles.EstilosBarra
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
@@ -38,16 +38,13 @@ fun VistaTecnicoScrees(
     onCerrarSesion : () -> Unit
 ){
     Scaffold(
-        contentColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = {
                     Text(text = stringResource(id = R.string.banner_tecnico))
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                colors = EstilosBarra.colores(marino = true)
             )
         }
     ) { innerPadding ->
