@@ -30,8 +30,7 @@ import com.example.electricapp.ui.components.CampoPassword
 import com.example.electricapp.ui.styles.EstilosBarra
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
-import com.example.electricapp.ui.theme.ErrorOscuro
-import com.example.electricapp.ui.theme.ExitoFondo
+import com.example.electricapp.ui.theme.Exito
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -129,8 +128,9 @@ fun CrearContrasenaScreens(
 @Composable
 private fun ReglaContrasenas(cumplePassword : Boolean, texto : String){
 
+
     val colores by animateColorAsState(
-        targetValue = if(cumplePassword) ExitoFondo else ErrorOscuro,
+        targetValue = if(cumplePassword) Exito else MaterialTheme.colorScheme.error,
         label = "Regla contraseñas"
     )
     Row(
