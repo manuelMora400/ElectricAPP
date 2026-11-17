@@ -1,6 +1,5 @@
 package com.example.electricapp.ui.screens
 
-import android.graphics.drawable.Icon
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -71,7 +70,9 @@ fun ScreensLogin(
         onVisibilidad = viewModel::onVisibilidad,
         onLimpiar = viewModel::onLimpiarRecuperacion,
         onGenerarClave = viewModel::onEnviarClaveTemporal,
-        onIdRecuperacioCambia = viewModel::onIdentificadiorClave
+        onIdRecuperacioCambia = viewModel::onIdentificadiorClave,
+        // guarda la clave temporal en la BD solo cuando el SMS ya salio
+        onClaveEnviada = viewModel::onClaveTemporalEnviada
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,7 +85,8 @@ fun LoginScreens(
     onIniciar : () -> Unit,
     onIdRecuperacioCambia : (String) -> Unit,
     onGenerarClave : () -> Unit,
-    onLimpiar : () -> Unit
+    onLimpiar : () -> Unit,
+    onClaveEnviada : () -> Unit
     ){
     var mostrarRecuperacion by remember { mutableStateOf(false) }
 
@@ -144,12 +146,15 @@ fun LoginScreens(
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-            }
+
+                // el boton se movio DENTRO de este Column (antes estaba afuera)
+                // asi toma el mismo margen que los campos y no llega a los bordes de la pantalla
                 BotonInicio(
                     texto = stringResource(R.string.btn_iniciar_sesion),
                     onClick = onIniciar,
                     modifier = Modifier.fillMaxWidth().height(60.dp)
                 )
+            }
             TextButton(
                 onClick = {
                     mostrarRecuperacion = true
@@ -198,7 +203,7 @@ fun LoginScreens(
                                 }
                             } else {
                                 Text(
-                                    text = stringResource(R.string.recuperacion_exito)
+                                    text = stringResource(R.string.recuperacion_exito, uiState.telefonoRecuperacion)
                                 )
                             }
                         }
@@ -214,7 +219,7 @@ fun LoginScreens(
                                 clave = uiState.claveTemporal,
                                 onEnviado = {
                                     mostrarRecuperacion = false
-                                    onLimpiar()
+                                    onClaveEnviada()
                                 }
                             )
                         }
@@ -247,6 +252,7 @@ fun viewLoginScreens(){
             onLimpiar = {},
             onGenerarClave = {},
             onIdRecuperacioCambia = {},
+            onClaveEnviada = {},
             onIniciar = {}
         )
     }

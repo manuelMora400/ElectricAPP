@@ -232,7 +232,7 @@
 
     <!-- Mensajes Recuperar Contraseña -->
     <string name="no_existe_datos"> Ingresa tu rut o correo registrado para generar una clave temporal</string>
-    <string name="recuperacion_exito"> "Cuenta existente. se envio tu clave temporal por SMS al número registrado %1$s"</string>
+    <string name="recuperacion_exito">Cuenta encontrada. Se enviará una clave temporal por SMS al número registrado: %1$s</string>
     <string name="btn_continuar"> Continuar </string>
     <string name="btn_cancelar"> Cancelar</string>
     <string name="rut_o_correo">Rut/correo</string>

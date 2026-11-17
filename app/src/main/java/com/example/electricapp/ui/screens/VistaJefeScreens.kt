@@ -91,12 +91,9 @@ fun VistaJefeContenido(
                     )
                 },
                 actions = {
-
-                    // llamamos el componente perfilLogo -> por ahora onInstrumentos
-                    // aun no existe perfil Jefe tecnico
                     LogoPerfil(
                         iniciales = stringResource(R.string.logo_iniciales_jefe),
-                        onClick = onInstrumentos,
+                        onClick = onPerfil,
                         modifier = Modifier.padding(end = Dimens.rowEspacio),
                         tamano = Dimens.logoBarra,
                         colorFondo = PrimarioClaro,
