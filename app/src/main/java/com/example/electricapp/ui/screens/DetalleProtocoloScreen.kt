@@ -1,12 +1,10 @@
 package com.example.electricapp.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,18 +25,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
+import com.example.electricapp.generador.GeneradorPdfProtocolo
 import com.example.electricapp.model.DetallesState
 import com.example.electricapp.ui.components.Bienvenida
-import com.example.electricapp.ui.components.BotonCerrarSesion
+import com.example.electricapp.ui.components.BotonDescargar
+import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Blanco
-import com.example.electricapp.ui.theme.ColorCard
 import com.example.electricapp.ui.theme.CuadroAprobado
 import com.example.electricapp.ui.theme.CuadroObservacion
 import com.example.electricapp.ui.theme.CuadroRechazado
@@ -52,14 +52,14 @@ import com.example.electricapp.viewModel.DetalleViewModel
 @Composable
 fun DetallesScreen(
     viewModel: DetalleViewModel = viewModel(),
-    onVolver: () -> Unit,
+    onDescargar: () -> Unit,
     modifier: Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     DetallesContentScreen(
         uiState = uiState,
-        onVolver = onVolver
+        onDescargar = onDescargar
     )
 }
 
@@ -67,11 +67,12 @@ fun DetallesScreen(
 @Composable
 fun DetallesContentScreen(
     uiState: DetallesState,
-    onVolver: () -> Unit
+    onDescargar: () -> Unit
 ) {
     val lectura1 = uiState.medicion1Min.toDoubleOrNull() ?: 0.0
     val lectura10 = uiState.medicion10Min.toDoubleOrNull() ?: 0.0
     val indicePolarizacion = if (lectura1 > 0.0) lectura10 / lectura1 else 0.0
+    val context = LocalContext.current
     val textoIngeniero: String = if (!uiState.nombreIngeniero.isNullOrBlank()) {
         uiState.nombreIngeniero
     } else {
@@ -84,13 +85,14 @@ fun DetallesContentScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = if (uiState.Tag.isNotBlank()) "Detalle · ${uiState.Tag}" else "Detalle de Protocolo",
+                        text = if (uiState.Tag.isNotBlank()) "Detalle · ${uiState.Tag}"
+                        else "Detalle de Protocolo",
                         style = MaterialTheme.typography.titleLarge,
                         color = Blanco
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onVolver) {
+                    IconButton(onClick = onDescargar) {
                         Icon(
                             painter = painterResource(R.drawable.ic_volver),
                             contentDescription = "Volver",
@@ -151,6 +153,7 @@ fun DetallesContentScreen(
                         .fillMaxWidth()
                         .padding(horizontal = Dimens.espacioPantalla, vertical = Dimens.espacioMed),
                     colors = EstilosTarjetas.coloresSecundario(),
+                    border = EstilosTarjetas.bordeado(),
                     elevation = EstilosTarjetas.elevacion()
                 ) {
                     Bienvenida(
@@ -221,21 +224,15 @@ fun DetallesContentScreen(
                 }
             }
             item {
-                Spacer(modifier = Modifier.height(Dimens.espacioMed))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Dimens.espacioPantalla)
-                ) {
-                    BotonCerrarSesion(
-                        texto = "Volver",
-                        onClick = onVolver,
-                        icono = null
-                    )
-                }
+                BotonDescargar(
+                    detalle = uiState,
+                    indicePolarizacion = indicePolarizacion,
+                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla)
+                )
             }
         }
     }
+
 }
 
 @Composable
@@ -323,7 +320,7 @@ fun DetallesScreenPreview() {
                 nombreIngeniero = "Andrea Contreras",
                 fechaPrueba = "13/09/2025"
             ),
-            onVolver = {}
+            onDescargar = {}
         )
     }
 }
@@ -345,7 +342,7 @@ fun DetalleScreenPreview() {
                 nombreIngeniero = "Andrea Contreras",
                 fechaPrueba = "13/09/2025"
             ),
-            onVolver = {}
+            onDescargar = {}
         )
     }
 }
