@@ -378,22 +378,24 @@ class ElectricHelperDb(context : Context) :
         return filas > 0
     }
 
-    // Funcion para recuperar Contraseña
-    fun recuperarContrasena(identifcador: String, claveTemporal: String) : String?{
 
-        var idUsuario = -1
-        var telefono = ""
+    fun recuperarContrasena(identifcador: String) : String?{
+
+        var telefono : String? = null
 
         readableDatabase.rawQuery(
-            "SELECT $ID_USUARIO, $TELEFONO " +
+            "SELECT $TELEFONO " +
                     "FROM $TABLA_USUARIO WHERE $ACTIVO = 1 AND ($RUT = ? OR $CORREO = ?) ", arrayOf(identifcador.trim(), identifcador.trim())
         ).use { cursor ->
-            if(!cursor.moveToFirst()){
-                return null
+            if(cursor.moveToFirst()){
+                telefono = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO))
             }
-            idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO))
-            telefono  = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO))
         }
+        return telefono
+    }
+
+    fun guardarClaveTemporal(identifcador: String, claveTemporal: String) : Boolean{
+
         val evalua = ContentValues()
         evalua.put(PASSWORD, claveTemporal)
         evalua.put(CAMBIO_CLAVE, 1)
@@ -401,10 +403,10 @@ class ElectricHelperDb(context : Context) :
         val filas = writableDatabase.update(
             TABLA_USUARIO,
             evalua,
-            "$ID_USUARIO = ?",
-            arrayOf(idUsuario.toString())
+            "$ACTIVO = 1 AND ($RUT = ? OR $CORREO = ?)",
+            arrayOf(identifcador.trim(), identifcador.trim())
         )
-       return if(filas > 0) telefono else null
+        return filas > 0
     }
 
     fun cambiarEstadoUsuario(correo: String, nuevoEstado: Boolean): Boolean {
