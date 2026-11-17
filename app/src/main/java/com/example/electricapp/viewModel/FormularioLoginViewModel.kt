@@ -40,7 +40,8 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
             cumpleSiboloPassword = valor.contains(".") || valor.contains("-"),)}
     }
     fun onConfirmarClave(valor: String){
-        _uiState.update {it.copy(confirmarClave = valor, errorNuevaClave = null, errorGeneral = null, logeadoExitoso = false)}
+
+        _uiState.update {it.copy(confirmarClave = valor, errorConfirmarClave = null, errorGeneral = null, logeadoExitoso = false)}
     }
 
     fun onGuardarClaveNueva() : Boolean{
@@ -112,13 +113,15 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
             return
         }
 
-        val claveGenerada = GeneradorClave.generarClave()
-        val nTelefono = db.recuperarContrasena(id, claveGenerada)
+        val nTelefono = db.recuperarContrasena(id)
 
         if (nTelefono == null) {
             _uiState.update { it.copy(errorRecuperacion = "No existe una cuenta activa con ese RUT o correo") }
             return
         }
+
+        val claveGenerada = GeneradorClave.generarClave()
+
         _uiState.update {
             it.copy(
                 errorRecuperacion = null,
@@ -126,6 +129,14 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                 claveTemporal = claveGenerada
             )
         }
+    }
+
+    fun onClaveTemporalEnviada() {
+        val estado = _uiState.value
+        val clave = estado.claveTemporal ?: return
+
+        db.guardarClaveTemporal(estado.idRecuperacion, clave)
+        onLimpiarRecuperacion()
     }
     fun onLimpiarRecuperacion() {
         _uiState.update {
