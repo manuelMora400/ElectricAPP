@@ -60,6 +60,8 @@ class ElectricHelperDb(context : Context) :
         private const val USU_ID = "id_usuario"
         private const val RESULTADO = "resultado"
         private const val ESTADO_PROTOCOLO = "estado"
+        private const val LATITUD = "latitud"
+        private const val LONGITUD = "longitud"
         private const val INSTRU_ID = "id_instrumento"
 
         private const val TABLA_AISLACION = "AISLACION"
@@ -165,11 +167,11 @@ class ElectricHelperDb(context : Context) :
 
         private const val SQL_INSERTAR_PROTOCOLO =
             "INSERT INTO $TABLA_PROTOCOLO "+
-                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRU_ID, $RESULTADO, $ESTADO_PROTOCOLO, $USU_ID) VALUES "+
-                    "('14/09/2024 10:00','18','55',1,'APROBADO','FORMALIZADO',3),"+
-                    "('13/09/2025 10:00','21','48',1,'APROBADO','FORMALIZADO',3),"+
-                    "('26/09/2026 09:30','19','60',1,'OBSERVADO','REGISTRADO_TERRENO',3),"+
-                    "('26/09/2026 11:00','19','60',1,'APROBADO','REGISTRADO_TERRENO',3)"
+                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRU_ID, $RESULTADO, $ESTADO_PROTOCOLO, $LATITUD, $LONGITUD ,$USU_ID) VALUES "+
+                    "('14/09/2024 10:00','18','55',1,'APROBADO','FORMALIZADO', -33.2856, -70.8752 ,3),"+
+                    "('13/09/2025 10:00','21','48',1,'APROBADO','FORMALIZADO',-33.2856, -70.8752,3),"+
+                    "('26/09/2026 09:30','19','60',1,'OBSERVADO','REGISTRADO_TERRENO',-33.3912, -70.7285,3),"+
+                    "('26/09/2026 11:00','19','60',1,'APROBADO','REGISTRADO_TERRENO',NULL, NULL,3)"
 
         private const val SQL_INSERTAR_AISLACION =
             "INSERT INTO $TABLA_AISLACION " +
@@ -529,6 +531,8 @@ class ElectricHelperDb(context : Context) :
             a.$TENSION_PRUEBA,
             p.$RESULTADO,
             p.$ESTADO_PROTOCOLO,
+            p.$LATITUD,
+            p.$LONGITUD,
             CASE 
                 WHEN r.$NOMBRE_ROL = 'INGENIERO' THEN u.$NOMBRE_USU 
             END AS nombre_ingeniero,
@@ -551,6 +555,8 @@ class ElectricHelperDb(context : Context) :
             val idxEstado = cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO)
             val idxIngeniero = cursor.getColumnIndexOrThrow("nombre_ingeniero")
             val idxFecha = cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)
+            val idxLat = cursor.getColumnIndexOrThrow(LATITUD)
+            val idxLon = cursor.getColumnIndexOrThrow(LONGITUD)
 
             while (cursor.moveToNext()) {
                 lista.add(
@@ -564,7 +570,9 @@ class ElectricHelperDb(context : Context) :
                         resultado = cursor.getString(idxResultado),
                         estado = cursor.getString(idxEstado),
                         nombreIngeniero = cursor.getString(idxIngeniero),
-                        fechaPrueba = cursor.getString(idxFecha)
+                        fechaPrueba = cursor.getString(idxFecha),
+                        latitud = cursor.getDouble(idxLat),
+                        longitud = cursor.getDouble(idxLon)
                     )
                 )
             }
