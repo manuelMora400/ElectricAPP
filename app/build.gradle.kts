@@ -58,4 +58,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 
     implementation("androidx.navigation:navigation-compose:2.10.2")
+
+    //Para poder usar la locacion (nuevo)
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
 }
