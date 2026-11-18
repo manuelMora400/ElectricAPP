@@ -32,11 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
-import com.example.electricapp.generador.GeneradorPdfProtocolo
 import com.example.electricapp.model.DetallesState
 import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.BotonDescargar
-import com.example.electricapp.ui.components.BotonInicio
+import com.example.electricapp.ui.components.BotonVerUbicacion
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Blanco
 import com.example.electricapp.ui.theme.CuadroAprobado
@@ -224,6 +223,16 @@ fun DetallesContentScreen(
                 }
             }
             item {
+                BotonVerUbicacion(
+                    latitud = uiState.latitud,
+                    longitud = uiState.longitud,
+                    etiqueta = "${uiState.Tag} · ${uiState.Instalacion}",
+                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla),
+                    iconoUbicacion = R.drawable.ic_ubicacion
+                )
+            }
+
+            item {
                 BotonDescargar(
                     detalle = uiState,
                     indicePolarizacion = indicePolarizacion,
@@ -318,7 +327,9 @@ fun DetallesScreenPreview() {
                 resultado = "Aprobado",
                 estado = "Formalizado",
                 nombreIngeniero = "Andrea Contreras",
-                fechaPrueba = "13/09/2025"
+                fechaPrueba = "13/09/2025",
+                latitud = -33.2856,
+                longitud = -70.8752
             ),
             onDescargar = {}
         )
@@ -340,7 +351,9 @@ fun DetalleScreenPreview() {
                 resultado = "Aprobado",
                 estado = "Formalizado",
                 nombreIngeniero = "Andrea Contreras",
-                fechaPrueba = "13/09/2025"
+                fechaPrueba = "13/09/2025",
+                latitud = -33.2856,
+                longitud = -70.8752
             ),
             onDescargar = {}
         )
