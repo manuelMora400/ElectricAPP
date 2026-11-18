@@ -47,7 +47,6 @@ fun VistaTecnicoScrees(
     nombreTecnico : String,
     onCrearProtocolos : () -> Unit,
     onMisProtocolos   : () -> Unit,
-    onRegistrarEquipo : () -> Unit,
     onHistorialDeEquipo : () -> Unit,
     onPerfil : () -> Unit,
     onCerrarSesion : () -> Unit
@@ -153,8 +152,8 @@ fun VistaTecnicoScrees(
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 TarjetaOpciones(
-                    titulo = stringResource(R.string.tecnico_titulo_mis_protocolos),
-                    subtitulo = stringResource(R.string.tecnico_subtitulo_mis_protocolos),
+                    titulo = stringResource(R.string.instrumentos_tecnico),
+                    subtitulo = stringResource(R.string.subtitulo_tecnico_instrumento),
                     icono = R.drawable.ic_revisar_protocolos,
                     onClick = onMisProtocolos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
@@ -179,7 +178,6 @@ fun viewVistaTecnico(){
             nombreTecnico = "Manue Mora",
             onCrearProtocolos = {},
             onMisProtocolos = {},
-            onRegistrarEquipo = {},
             onHistorialDeEquipo = {},
             onPerfil = {},
             onCerrarSesion = {}
