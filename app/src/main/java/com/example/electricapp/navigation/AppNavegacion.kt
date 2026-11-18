@@ -189,9 +189,6 @@ fun AppNavegacion(){
                 onPerfil = {
                     navController.navigate(Rutas.Perfil.rutas)
                 },
-                onRegistrarEquipo = {
-                    enDesarrollo()
-                },
                 onHistorialDeEquipo = {
                     navController.navigate(Rutas.Consulta.rutas)
                 }
