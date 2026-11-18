@@ -11,5 +11,7 @@ data class DetallesState(
     val estado: String = "",
     val nombreIngeniero: String? = null,
     val fechaPrueba: String = "",
-    val listaDetalles: List<DetallesState> = emptyList()
+    val listaDetalles: List<DetallesState> = emptyList(),
+    val latitud: Double,
+    val longitud: Double
 )
