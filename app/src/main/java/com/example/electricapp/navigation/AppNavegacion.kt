@@ -79,7 +79,6 @@ fun AppNavegacion(){
         }
         composable(Rutas.VistaJefe.rutas) {
             VistaJefeScreens (
-
                 onGestionUsuarios = {
                     navController.navigate(Rutas.Registros.rutas)
                 },
@@ -91,9 +90,6 @@ fun AppNavegacion(){
                 },
                 onCrearProtocolos = {
                     navController.navigate(Rutas.CrearProtocolos.rutas)
-                },
-                onRevisarProtocolos = {
-                    enDesarrollo()
                 },
                 onAnularProtocolos = {
                     enDesarrollo()

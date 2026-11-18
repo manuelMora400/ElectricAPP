@@ -45,7 +45,6 @@ import com.example.electricapp.viewModel.JefeTecnicoViewModel
 fun VistaJefeScreens(
     viewModel: JefeTecnicoViewModel = viewModel(),
     onHistorial: () -> Unit,
-    onRevisarProtocolos: () -> Unit,
     onAnularProtocolos: () -> Unit,
     onCrearProtocolos: () -> Unit,
     onGestionUsuarios: () -> Unit,
@@ -59,7 +58,6 @@ fun VistaJefeScreens(
     VistaJefeContenido(
         estado = estado,
         onHistorial = onHistorial,
-        onRevisarProtocolos = onRevisarProtocolos,
         onAnularProtocolos = onAnularProtocolos,
         onCrearProtocolos = onCrearProtocolos,
         onGestionUsuarios = onGestionUsuarios,
@@ -73,7 +71,6 @@ fun VistaJefeScreens(
 fun VistaJefeContenido(
     estado: ContadoresPanelJefe,
     onHistorial: () -> Unit,
-    onRevisarProtocolos: () -> Unit,
     onAnularProtocolos: () -> Unit,
     onCrearProtocolos: () -> Unit,
     onGestionUsuarios: () -> Unit,
@@ -180,12 +177,6 @@ fun VistaJefeContenido(
                         onClick = onAnularProtocolos
                     ),
                     OpcionPanel(
-                        titulo = stringResource(R.string.titulo_revisar_protocolos),
-                        subtitulo = stringResource(R.string.subtitulo_revisar_protocolos),
-                        icono = R.drawable.ic_revisar_protocolos,
-                        onClick = onRevisarProtocolos
-                    ),
-                    OpcionPanel(
                         titulo = stringResource(R.string.titulo_crear_protocolos),
                         subtitulo = stringResource(R.string.subtitulo_crear_protocolos),
                         icono = R.drawable.ic_crear_protocolos,
@@ -244,7 +235,6 @@ fun VistaJefeView() {
         VistaJefeContenido(
             estado = ContadoresPanelJefe(cuentasActivas = 7, instrumentosRegistrados = 3),
             onHistorial = {},
-            onRevisarProtocolos = {},
             onAnularProtocolos = {},
             onCrearProtocolos = {},
             onGestionUsuarios = {},
@@ -261,7 +251,6 @@ fun VistaJefeView2() {
         VistaJefeContenido(
             estado = ContadoresPanelJefe(cuentasActivas = 7, instrumentosRegistrados = 3),
             onHistorial = {},
-            onRevisarProtocolos = {},
             onAnularProtocolos = {},
             onCrearProtocolos = {},
             onGestionUsuarios = {},
