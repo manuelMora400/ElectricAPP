@@ -236,7 +236,8 @@ fun DetallesContentScreen(
                 BotonDescargar(
                     detalle = uiState,
                     indicePolarizacion = indicePolarizacion,
-                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla)
+                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla),
+                    iconodescargar = R.drawable.ic_descargar
                 )
             }
         }
