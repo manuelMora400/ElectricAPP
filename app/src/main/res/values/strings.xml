@@ -241,4 +241,10 @@
 
     <!-- Panel tecnico -->
     <string name="btn_crear_protocolo"> Crear Protocolo</string>
+    <string name="instrumentos_tecnico"> Instrumentos </string>
+    <string name="subtitulo_tecnico_instrumento"> Ver vigencias </string>
+    <string name="nuevo_protocolo"> Nuevo protocolo </string>
+    <string name="foto_evidencia_terreno"> Evidencia en terreno </string>
+    <string name="capturar_foto"> Capture una foto del equipo probado </string>
+
 </resources>
