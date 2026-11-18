@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresPanelIngeniero
+import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
@@ -78,7 +79,6 @@ fun AppNavegacion(){
         }
         composable(Rutas.VistaJefe.rutas) {
             VistaJefeScreens (
-
                 onGestionUsuarios = {
                     navController.navigate(Rutas.Registros.rutas)
                 },
@@ -90,9 +90,6 @@ fun AppNavegacion(){
                 },
                 onCrearProtocolos = {
                     navController.navigate(Rutas.CrearProtocolos.rutas)
-                },
-                onRevisarProtocolos = {
-                    enDesarrollo()
                 },
                 onAnularProtocolos = {
                     enDesarrollo()
@@ -176,6 +173,10 @@ fun AppNavegacion(){
 
         composable(Rutas.TecnicoTerreno.rutas) {
             VistaTecnicoScrees(
+
+                estado = ContadoresVistaTecnico(),
+                nombreTecnico = uiState.nombre.substringBefore(" "),
+
                 onCrearProtocolos = {
                     navController.navigate(Rutas.CrearProtocolos.rutas)
                 },
@@ -185,8 +186,8 @@ fun AppNavegacion(){
                 onMisProtocolos = {
                     enDesarrollo()
                 },
-                onRegistrarEquipo = {
-                    enDesarrollo()
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
                 },
                 onHistorialDeEquipo = {
                     navController.navigate(Rutas.Consulta.rutas)

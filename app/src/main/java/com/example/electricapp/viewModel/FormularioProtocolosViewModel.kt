@@ -1,6 +1,7 @@
 package com.example.electricapp.viewModel
 
 import android.app.Application
+import android.graphics.Bitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
@@ -45,6 +46,10 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
 
     fun onEquipoCambia(valor : String){
         _uiState.update { it.copy(equipo = valor, errorEquipo = null, mensajeExito = false) }
+    }
+
+    fun onEvidenciaFoto(bitmap: Bitmap){
+        _uiState.update { it.copy(fotoEvidencia = bitmap)}
     }
 
     fun onTemperaturaCambia(valor : String){
@@ -299,6 +304,7 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
     }
 
     fun onLimpiar(){
+        _uiState.update { it.copy(fotoEvidencia = null)}
         _uiState.value = estadoInicial()
     }
 

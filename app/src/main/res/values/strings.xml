@@ -22,6 +22,7 @@
     <string name="titulo_Empresa">INDUZTEK</string>
     <string name="subtitulo_empresa">Dedicada a la ingeniería eléctrica</string>
     <string name="titulo_rol">Bienvenido, Jefe Técnico</string>
+    <string name="titlo_Tecnico">Bienvenido/a %1$s</string>
     <string name="topbar_jefe">Induztek · Panel</string>
 
     <!-- Panel del jefe -->
@@ -37,6 +38,7 @@
 
     <!-- Iniciales para logo -->
     <string name="logo_iniciales_jefe"> "JF" </string>
+    <string name="logo_iniciales_tecnico">TT</string>
 
     <!-- administracion Cuenta-->
     <string name="agregar_cuenta"> Agregar nueva cuenta </string>
@@ -142,10 +144,10 @@
 
 
     <string name="banner_tecnico">Panel Técnico Terreno</string>
-    <string name="tecnico_crear_protoclo">Crear protocolo</string>
-    <string name="tecnico_subtitlo_crear_protocolo">Presione para crear protocolos</string>
+    <string name="tecnico_mis_protocolos">Mis protocolos </string>
+    <string name="tecnico_ver_estados">Ver estados</string>
     <string name="tecnico_registrar_equipo">Registrar equipo</string>
-    <string name="tecnico_subtitulo_registrar_equipo">Presione para registrar equipo</string>
+    <string name="subtitulo_perfil">Datos y clave</string>
     <string name="tecnico_titulo_historial_equipo">Historial de equipos</string>
     <string name="tecnico_subtitulo_historial_equipo">Consulte el historial de los equipos</string>
     <string name="tecnico_titulo_mis_protocolos">Revisar protocolos</string>
@@ -236,4 +238,13 @@
     <string name="btn_continuar"> Continuar </string>
     <string name="btn_cancelar"> Cancelar</string>
     <string name="rut_o_correo">Rut/correo</string>
+
+    <!-- Panel tecnico -->
+    <string name="btn_crear_protocolo"> Crear Protocolo</string>
+    <string name="instrumentos_tecnico"> Instrumentos </string>
+    <string name="subtitulo_tecnico_instrumento"> Ver vigencias </string>
+    <string name="nuevo_protocolo"> Nuevo protocolo </string>
+    <string name="foto_evidencia_terreno"> Evidencia en terreno </string>
+    <string name="capturar_foto"> Capture una foto del equipo probado </string>
+
 </resources>
