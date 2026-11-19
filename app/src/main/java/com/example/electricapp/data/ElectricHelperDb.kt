@@ -118,6 +118,8 @@ class ElectricHelperDb(context : Context) :
                     "$INSTRU_ID INTEGER NOT NULL REFERENCES $TABLA_INSTRUMENTOS($ID_INSTRUMENTO)," +
                     "$RESULTADO TEXT NOT NULL," +
                     "$ESTADO_PROTOCOLO TEXT NOT NULL DEFAULT 'REGISTRADO_TERRENO'," +
+                    "$LATITUD REAL," +
+                    "$LONGITUD REAL," +
                     "$USU_ID INTEGER NOT NULL REFERENCES $TABLA_USUARIO($ID_USUARIO))"
 
         private const val SQL_CREAR_AISLACION =
