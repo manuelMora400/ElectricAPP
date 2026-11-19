@@ -94,7 +94,7 @@ fun HistorialScreen(
                     navigationIcon = {
                         IconButton(onClick = onVolver) {
                             Icon(
-                                painter = painterResource(R.drawable.ic_volver), // Cambia si tu ícono de atrás tiene otro nombre
+                                painter = painterResource(R.drawable.ic_volver),
                                 contentDescription = "Volver",
                                 tint = Color.White
                             )
