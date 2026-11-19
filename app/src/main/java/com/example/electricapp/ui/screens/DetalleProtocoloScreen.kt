@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.DetallesState
@@ -52,26 +50,22 @@ import com.example.electricapp.viewModel.DetalleViewModel
 fun DetallesScreen(
     viewModel: DetalleViewModel = viewModel(),
     onDescargar: () -> Unit,
-    modifier: Modifier
+    onVolver: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    DetallesContentScreen(
-        uiState = uiState,
-        onDescargar = onDescargar
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetallesContentScreen(
     uiState: DetallesState,
-    onDescargar: () -> Unit
+    onDescargar: () -> Unit,
+    onVolver: () -> Unit
 ) {
     val lectura1 = uiState.medicion1Min.toDoubleOrNull() ?: 0.0
     val lectura10 = uiState.medicion10Min.toDoubleOrNull() ?: 0.0
     val indicePolarizacion = if (lectura1 > 0.0) lectura10 / lectura1 else 0.0
     val context = LocalContext.current
+
     val textoIngeniero: String = if (!uiState.nombreIngeniero.isNullOrBlank()) {
         uiState.nombreIngeniero
     } else {
@@ -91,7 +85,7 @@ fun DetallesContentScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onDescargar) {
+                    IconButton(onClick = onVolver) {
                         Icon(
                             painter = painterResource(R.drawable.ic_volver),
                             contentDescription = "Volver",
@@ -332,7 +326,8 @@ fun DetallesScreenPreview() {
                 latitud = -33.2856,
                 longitud = -70.8752
             ),
-            onDescargar = {}
+            onDescargar = {},
+            onVolver = {}
         )
     }
 }
@@ -356,7 +351,8 @@ fun DetalleScreenPreview() {
                 latitud = -33.2856,
                 longitud = -70.8752
             ),
-            onDescargar = {}
+            onDescargar = {},
+            onVolver = {}
         )
     }
 }
