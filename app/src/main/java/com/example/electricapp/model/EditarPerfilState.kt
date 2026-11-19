@@ -9,8 +9,10 @@ data class EditarPerfilState(
     val correo : String = "",
     val rut : String = "",
     val rol : Rol = Rol.CLIENTE,
+    val puedeEditarCorreo : Boolean = false,
 
     val errorNombre : String? = null,
+    val errorCorreo : String? = null,
     val errorTelefono : String? = null,
     val errorCargo : String? = null,
     val errorGeneral : String? = null
