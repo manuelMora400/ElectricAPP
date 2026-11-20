@@ -1,23 +1,29 @@
 package com.example.electricapp.ui.components
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import com.example.electricapp.R
 import com.example.electricapp.generador.GeneradorPdfProtocolo
 import com.example.electricapp.model.DetallesState
-import com.example.electricapp.permiso.permiso
+import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
 @Composable
@@ -25,7 +31,8 @@ fun BotonDescargar(
     detalle: DetallesState,
     indicePolarizacion: Double,
     onDescargado: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    iconodescargar: Any
 ) {
     val contexto = LocalContext.current
 
@@ -73,9 +80,16 @@ fun BotonDescargar(
             }
         }
     ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_descargar),
+            contentDescription = "Descargar PDF",
+            modifier = Modifier.size(Dimens.tamanoIcono)
+        )
+        Spacer(modifier = Modifier.width(Dimens.espacioChico))
         Text(text = "Descargar PDF")
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun BotonDescargarPdfView() {
@@ -91,9 +105,10 @@ fun BotonDescargarPdfView() {
                 resultado = "Aprobado",
                 estado = "Formalizado",
                 nombreIngeniero = "Andrea Contreras",
-                fechaPrueba = "13/09/2025"
+                fechaPrueba = "13/09/2025",
             ),
-            indicePolarizacion = 2.20
+            indicePolarizacion = 2.20,
+            iconodescargar = R.drawable.ic_descargar
         )
     }
 }
