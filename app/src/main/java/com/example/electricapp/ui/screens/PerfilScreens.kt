@@ -34,6 +34,7 @@ import com.example.electricapp.ui.components.BotonSecundario
 import com.example.electricapp.ui.components.LogoPerfil
 import com.example.electricapp.ui.components.TituloSeccion
 import com.example.electricapp.ui.components.etiquetaRol
+import com.example.electricapp.ui.styles.EstilosBarra
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.viewModel.PerfilViewModel
@@ -83,7 +84,8 @@ fun PerfilContenido(
                             contentDescription = stringResource(R.string.volver)
                         )
                     }
-                }
+                },
+                colors = EstilosBarra.colores()
             )
         }
     ) { innerPadding ->
