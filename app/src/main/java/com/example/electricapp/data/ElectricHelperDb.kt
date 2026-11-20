@@ -620,4 +620,14 @@ class ElectricHelperDb(context : Context) :
         }
     }
 
+    fun claveCorrecta(idUsuario : Int, clave : String) : Boolean{
+
+        readableDatabase.rawQuery(
+            "SELECT $ID_USUARIO FROM $TABLA_USUARIO WHERE $ID_USUARIO = ? AND $PASSWORD = ?",
+            arrayOf(idUsuario.toString(), clave)
+        ).use { cursor ->
+            return cursor.moveToFirst()
+        }
+    }
+
 }
