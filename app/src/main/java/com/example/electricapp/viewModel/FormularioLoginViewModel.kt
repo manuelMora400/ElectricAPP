@@ -220,6 +220,10 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
     }
 
 
+    fun onNombreActualizado(nombre : String){
+        _uiState.update { it.copy(nombre = nombre) }
+    }
+
     fun onCerrarSesion(){
         _uiState.value = FormularioLoginState()
     }
