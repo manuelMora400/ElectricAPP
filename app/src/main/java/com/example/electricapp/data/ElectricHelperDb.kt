@@ -603,4 +603,41 @@ class ElectricHelperDb(context : Context) :
         return null
     }
 
+    fun actualizarPerfil(idUsuario : Int, nombre : String, correo : String, telefono : String, cargo : String) : Boolean{
+
+        val valores = contentValuesOf().apply{
+            put(NOMBRE_USU, nombre)
+            put(CORREO, correo)
+            put(TELEFONO, telefono)
+            put(CONTACTO_CARGO, cargo)
+        }
+        val filas = writableDatabase.update(
+            TABLA_USUARIO,
+            valores,
+            "$ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        )
+        return filas > 0
+    }
+
+    fun correoEnUso(correo : String, idUsuario : Int) : Boolean{
+
+        readableDatabase.rawQuery(
+            "SELECT $ID_USUARIO FROM $TABLA_USUARIO WHERE $CORREO = ? AND $ID_USUARIO != ?",
+            arrayOf(correo.trim(), idUsuario.toString())
+        ).use { cursor ->
+            return cursor.moveToFirst()
+        }
+    }
+
+    fun claveCorrecta(idUsuario : Int, clave : String) : Boolean{
+
+        readableDatabase.rawQuery(
+            "SELECT $ID_USUARIO FROM $TABLA_USUARIO WHERE $ID_USUARIO = ? AND $PASSWORD = ?",
+            arrayOf(idUsuario.toString(), clave)
+        ).use { cursor ->
+            return cursor.moveToFirst()
+        }
+    }
+
 }
