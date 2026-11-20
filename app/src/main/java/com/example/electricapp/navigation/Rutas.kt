@@ -17,6 +17,9 @@ sealed class Rutas(val rutas: String){
     data object EditarPerfil : Rutas("editar_perfil/{idUsuario}") {
         fun crear(idUsuario : Int) = "editar_perfil/$idUsuario"
     }
+    data object CambiarClave : Rutas("cambiar_clave/{idUsuario}") {
+        fun crear(idUsuario : Int) = "cambiar_clave/$idUsuario"
+    }
     data object CrearContrasema : Rutas("crear_contrasena")
 
 }
