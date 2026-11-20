@@ -15,6 +15,7 @@ import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
+import com.example.electricapp.ui.screens.CambiarClaveScreens
 import com.example.electricapp.ui.screens.EditarPerfilScreens
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
@@ -168,6 +169,9 @@ fun AppNavegacion(){
                 onClick = {
                     navController.navigate(Rutas.Consulta.rutas)
                 },
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
+                },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.MenuCliente.rutas)
                 }
@@ -233,7 +237,7 @@ fun AppNavegacion(){
                     navController.navigate(Rutas.EditarPerfil.crear(uiState.idUsuario))
                 },
                 onCambiarClave = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.CambiarClave.crear(uiState.idUsuario))
                 },
                 onCerrarSesion = {
                     loginViewModel.onCerrarSesion()
@@ -262,6 +266,22 @@ fun AppNavegacion(){
                         loginViewModel.onNombreActualizado(nombre)
                     }
                     Toast.makeText(contexto, contexto.getString(R.string.perfil_datos_actualizados), Toast.LENGTH_SHORT).show()
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.CambiarClave.rutas,
+            arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+        ) { entrada ->
+            CambiarClaveScreens(
+                idUsuario = entrada.arguments?.getInt("idUsuario") ?: 0,
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onClaveGuardada = {
+                    Toast.makeText(contexto, contexto.getString(R.string.perfil_clave_actualizada), Toast.LENGTH_SHORT).show()
                     navController.navigateUp()
                 }
             )

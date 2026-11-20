@@ -25,6 +25,7 @@ import com.example.electricapp.ui.theme.ElectricAppTheme
 @Composable
 fun MenuClienteScreens(
     onClick : () -> Unit,
+    onPerfil : () -> Unit,
     onCerrarSesion : () -> Unit
 ) {
     Scaffold(
@@ -60,6 +61,13 @@ fun MenuClienteScreens(
                         modifier = Modifier.padding(),
                         onClick = onClick
                     )
+                    TarjetaOpciones(
+                        titulo = stringResource(R.string.perfil_titulo),
+                        subtitulo = stringResource(R.string.subtitulo_perfil),
+                        icono = R.drawable.ic_gestion_usuarios,
+                        modifier = Modifier.padding(),
+                        onClick = onPerfil
+                    )
                     Row(horizontalArrangement = Arrangement.Center) {
                         BotonCerrarSesion(
                             texto = stringResource(R.string.btn_cerrar_sesion),
@@ -78,6 +86,7 @@ fun MenuClienteView(){
     ElectricAppTheme(true) {
         MenuClienteScreens (
             onClick = {},
+            onPerfil = {},
             onCerrarSesion = {}
         )
     }
@@ -88,6 +97,7 @@ fun MenuClienteView2(){
     ElectricAppTheme(false) {
         MenuClienteScreens (
             onClick = {},
+            onPerfil = {},
             onCerrarSesion = {}
         )
     }
