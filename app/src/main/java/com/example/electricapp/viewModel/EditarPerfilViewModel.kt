@@ -30,7 +30,6 @@ class EditarPerfilViewModel(application : Application) : AndroidViewModel(applic
                         nombre = perfil.nombre,
                         correo = perfil.correo,
                         telefono = perfil.telefono,
-                        cargo = perfil.cargo,
                         rut = perfil.rut,
                         rol = perfil.rol,
                         puedeEditarCorreo = rolSesion == Rol.JEFE_TECNICO
@@ -50,10 +49,6 @@ class EditarPerfilViewModel(application : Application) : AndroidViewModel(applic
 
     fun onTelefonoCambia(valor : String){
         _uiState.update { it.copy(telefono = valor, errorTelefono = null, errorGeneral = null) }
-    }
-
-    fun onCargoCambia(valor : String){
-        _uiState.update { it.copy(cargo = valor, errorCargo = null, errorGeneral = null) }
     }
 
     fun onGuardar() : Boolean{
@@ -93,20 +88,13 @@ class EditarPerfilViewModel(application : Application) : AndroidViewModel(applic
             }else
                 null
 
-        val errorCargo =
-            if(estado.rol == Rol.CLIENTE && estado.cargo.isBlank()){
-                "El cargo es obligatorio"
-            }else
-                null
-
-        val hayErrores = listOf(errorNombre, errorCorreo, errorTelefono, errorCargo).any{it != null}
+        val hayErrores = listOf(errorNombre, errorCorreo, errorTelefono).any{it != null}
 
         if(hayErrores){
             _uiState.update { it.copy(
                 errorNombre = errorNombre,
                 errorCorreo = errorCorreo,
-                errorTelefono = errorTelefono,
-                errorCargo = errorCargo
+                errorTelefono = errorTelefono
             ) }
             return false
         }
@@ -115,8 +103,7 @@ class EditarPerfilViewModel(application : Application) : AndroidViewModel(applic
             idUsuario = estado.idUsuario,
             nombre = estado.nombre.trim(),
             correo = estado.correo.trim(),
-            telefono = estado.telefono.trim(),
-            cargo = estado.cargo.trim()
+            telefono = estado.telefono.trim()
         )
 
         if(!guardadoExito){

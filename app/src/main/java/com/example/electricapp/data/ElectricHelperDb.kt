@@ -593,13 +593,12 @@ class ElectricHelperDb(context : Context) :
         return null
     }
 
-    fun actualizarPerfil(idUsuario : Int, nombre : String, correo : String, telefono : String, cargo : String) : Boolean{
+    fun actualizarPerfil(idUsuario : Int, nombre : String, correo : String, telefono : String) : Boolean{
 
         val valores = contentValuesOf().apply{
             put(NOMBRE_USU, nombre)
             put(CORREO, correo)
             put(TELEFONO, telefono)
-            put(CONTACTO_CARGO, cargo)
         }
         val filas = writableDatabase.update(
             TABLA_USUARIO,
