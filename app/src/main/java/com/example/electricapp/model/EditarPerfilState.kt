@@ -5,7 +5,6 @@ data class EditarPerfilState(
     val idUsuario : Int = 0,
     val nombre : String = "",
     val telefono : String = "",
-    val cargo : String = "",
     val correo : String = "",
     val rut : String = "",
     val rol : Rol = Rol.CLIENTE,
@@ -14,7 +13,6 @@ data class EditarPerfilState(
     val errorNombre : String? = null,
     val errorCorreo : String? = null,
     val errorTelefono : String? = null,
-    val errorCargo : String? = null,
     val errorGeneral : String? = null
 
 )
