@@ -34,6 +34,9 @@ class UsuarioRepository(
     suspend fun recuperarClave(identificador: String) : UsuarioResponse = llamar{
         usuarioApi.recuperarClave(RecuperarClaveRequest(identificador))
     }
+    suspend fun listarUsuarios(): List<UsuarioResponse> = llamar {
+        usuarioApi.listarUsuarios()
+    }
 
     private suspend fun <T> llamar(peticion: suspend () -> T) : T = try{
         peticion()
