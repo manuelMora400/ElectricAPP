@@ -154,7 +154,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
        }
     }
 
-    // recuperar Clave
     fun onIdentificadiorClave( valor: String){
         _uiState.update { it.copy(idRecuperacion = valor, errorRecuperacion = null) }
     }
@@ -179,7 +178,7 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
             )
             _uiState.update { it.copy(
                 errorRecuperacion = null,
-                telefonoRecuperacion = respuestaServidor.telofono,
+                telefonoRecuperacion = respuestaServidor.telefono,
                 claveTemporal = respuestaServidor.claveTemporal
             ) }
         }
