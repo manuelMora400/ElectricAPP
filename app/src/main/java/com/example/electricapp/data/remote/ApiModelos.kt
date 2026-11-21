@@ -17,23 +17,23 @@ data class CambiarClaveRequest (
     val confirmarClave    : String)
 
 data class UsuarioResponse(
-    val id : Long,
+    val id: Long,
     val nombre: String,
-    val correo : String,
-    val rut : String,
-    val telofono : String?,
-    val rol : String,
-    val activo  : Boolean,
-    val claveTemporal : String? )
-
+    val correo: String,
+    val rut: String,
+    val telefono: String,
+    val rol: String,
+    val activo: Boolean,
+    val claveTemporal: String?
+)
 data class CrearUsuariosRequest(
     val rut : String,
     val nombre : String,
     val telefono : String,
     val correo : String,
     val rol : String,
-    val giro : String,
-    val contactoCargo : String
+    val giro : String?,
+    val contactoCargo : String?
 )
 
 data class RecuperarClaveRequest(
