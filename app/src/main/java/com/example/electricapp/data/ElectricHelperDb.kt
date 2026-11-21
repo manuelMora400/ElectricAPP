@@ -315,7 +315,7 @@ class ElectricHelperDb(context : Context) :
         return instrumentos
     }
 
-    private fun valoresProtocolos(protocolos : FormularioProtocolosState,idUsuario : Int,idInstrumento : Int) = contentValuesOf().apply {
+    private fun valoresProtocolos(protocolos : FormularioProtocolosState,idUsuario : Long,idInstrumento : Int) = contentValuesOf().apply {
         put(FECHA_HORA_PRUEBA, protocolos.fechaHora)
         put(TEMPERATURA, protocolos.temperatura)
         put(HUMEDAD, protocolos.humedad)
@@ -325,7 +325,7 @@ class ElectricHelperDb(context : Context) :
         put(INSTRU_ID, idInstrumento)
     }
 
-    fun insertarProtocolos(protocolos: FormularioProtocolosState, idUsuario : Int,idInstrumento : Int) : Long =
+    fun insertarProtocolos(protocolos: FormularioProtocolosState, idUsuario : Long,idInstrumento : Int) : Long =
         writableDatabase.insert(TABLA_PROTOCOLO, null, valoresProtocolos(protocolos, idUsuario, idInstrumento))
 
     private fun valoresAislacion(protocolos : FormularioProtocolosState, tag : String, instalacion : String, idProtocolo : Int) = contentValuesOf().apply {
@@ -341,6 +341,7 @@ class ElectricHelperDb(context : Context) :
     fun insertarAislacion(protocolos : FormularioProtocolosState, tag : String, instalacion : String, idProtocolo : Int) : Long =
         writableDatabase.insert(TABLA_AISLACION, null, valoresAislacion(protocolos, tag, instalacion, idProtocolo))
 
+    /*
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
 
         val consultaSql =
@@ -365,6 +366,8 @@ class ElectricHelperDb(context : Context) :
            }
         return null
     }
+     */
+
 
     // Actualizar clave temporanea
     fun actualizarClave(idUsuario: Int, nuevaClave : String) : Boolean{
@@ -582,7 +585,7 @@ class ElectricHelperDb(context : Context) :
         return lista
     }
 
-    fun buscarPerfil(idUsuario : Int) : PerfilUsuario? {
+    fun buscarPerfil(idUsuario : Long) : PerfilUsuario? {
         readableDatabase.rawQuery(
             "SELECT * FROM $TABLA_USUARIO WHERE $ID_USUARIO = ?",
             arrayOf(idUsuario.toString())
@@ -590,7 +593,7 @@ class ElectricHelperDb(context : Context) :
             if (cursor.moveToFirst()) {
 
                 return PerfilUsuario(
-                    idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO)),
+                    idUsuario = cursor.getLong(cursor.getColumnIndexOrThrow(ID_USUARIO)),
                     nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
                     correo = cursor.getString(cursor.getColumnIndexOrThrow(CORREO)),
                     rut = cursor.getString(cursor.getColumnIndexOrThrow(RUT)),
@@ -603,7 +606,7 @@ class ElectricHelperDb(context : Context) :
         return null
     }
 
-    fun actualizarPerfil(idUsuario : Int, nombre : String, correo : String, telefono : String, cargo : String) : Boolean{
+    fun actualizarPerfil(idUsuario : Long, nombre : String, correo : String, telefono : String, cargo : String) : Boolean{
 
         val valores = contentValuesOf().apply{
             put(NOMBRE_USU, nombre)
@@ -620,7 +623,7 @@ class ElectricHelperDb(context : Context) :
         return filas > 0
     }
 
-    fun correoEnUso(correo : String, idUsuario : Int) : Boolean{
+    fun correoEnUso(correo : String, idUsuario : Long) : Boolean{
 
         readableDatabase.rawQuery(
             "SELECT $ID_USUARIO FROM $TABLA_USUARIO WHERE $CORREO = ? AND $ID_USUARIO != ?",
