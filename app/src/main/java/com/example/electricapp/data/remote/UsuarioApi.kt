@@ -17,6 +17,9 @@ interface UsuarioApi {
     @GET("api/usuarios/obtenerPerfil/{id}")
     suspend fun obtenerPefil(@Path("id") id : Long) : UsuarioResponse
 
+    @GET("api/usuarios/listar")
+    suspend fun listarUsuarios() : List<UsuarioResponse>
+
     @POST("api/usuarios/cambiarEstado/{id}")
     suspend fun cambiaEstado(@Path("id") id : Long): UsuarioResponse
 
