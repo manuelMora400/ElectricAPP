@@ -19,7 +19,7 @@ class PerfilViewModel(application: Application) : AndroidViewModel(application) 
     private val _uiState = MutableStateFlow(PerfilUsuario())
     val uiState : StateFlow<PerfilUsuario> = _uiState.asStateFlow()
 
-    fun cargar(idUsuario : Int){
+    fun cargar(idUsuario : Long){
 
         viewModelScope.launch(Dispatchers.IO) {
             val perfil = db.buscarPerfil(idUsuario)

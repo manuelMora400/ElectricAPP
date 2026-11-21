@@ -20,7 +20,7 @@ class EditarPerfilViewModel(application : Application) : AndroidViewModel(applic
     private val _uiState = MutableStateFlow(EditarPerfilState())
     val uiState : StateFlow<EditarPerfilState> = _uiState.asStateFlow()
 
-    fun cargar(idUsuario : Int, rolSesion : Rol){
+    fun cargar(idUsuario : Long, rolSesion : Rol){
         viewModelScope.launch(Dispatchers.IO) {
             val perfil = db.buscarPerfil(idUsuario)
             if (perfil != null){
