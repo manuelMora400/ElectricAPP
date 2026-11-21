@@ -52,7 +52,7 @@ fun screensRegistro(
     RegistrosScreens (
         uiState = uiState,
         cuentas = cuentas,
-        onEstadoCambia = viewModel::onEstadoCambia,
+        onEstadoCambia = { id, _ -> viewModel.onEstadoCambia(id)},
         onAgregarCuenta = onAgregarCuenta,
         onVolver = onVolver
     )
@@ -64,7 +64,7 @@ fun RegistrosScreens(
 
     uiState : FormularioRegistros,
     cuentas : List<FormularioRegistros>,
-    onEstadoCambia :(String, Boolean) -> Unit,
+    onEstadoCambia :(Long, Boolean) -> Unit,
     onAgregarCuenta : () -> Unit,
     onVolver : () -> Unit
 
@@ -112,11 +112,11 @@ fun RegistrosScreens(
                 descripcion = stringResource(R.string.subtitulo_administrar_cuentas),
             )
             }
-                items(cuentas, key = {it.correo}){
+                items(cuentas, key = {it.id}){
                         usuarios ->
                     UsuariosCards(
                         usuario = usuarios,
-                        onEstadoCambia = { nuevoEstado -> onEstadoCambia(usuarios.correo, nuevoEstado)})
+                        onEstadoCambia = { nuevoEstado -> onEstadoCambia(usuarios.id, nuevoEstado)})
                 }
             }
 

@@ -250,7 +250,7 @@ fun AppNavegacion(){
             route = Rutas.EditarPerfil.rutas,
             arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
         ) { entrada ->
-            val idUsuario = entrada.arguments?.getInt("idUsuario") ?: 0
+            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0
             EditarPerfilScreens(
                 idUsuario = idUsuario,
                 rolSesion = uiState.rol,
