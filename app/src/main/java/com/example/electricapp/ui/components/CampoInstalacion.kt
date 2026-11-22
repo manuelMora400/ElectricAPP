@@ -32,7 +32,7 @@ fun CampoInstalacion(
         value = valor,
         onValueChange = onInstalacion,
         modifier = Modifier.fillMaxSize(),
-        label = { Text(etiquetaInstalacion) },
+        placeholder = { Text(etiquetaInstalacion) },
         leadingIcon ={
             Icon(
                 painter = painterResource(id = iconoInst),

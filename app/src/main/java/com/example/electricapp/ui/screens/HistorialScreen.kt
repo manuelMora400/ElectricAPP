@@ -3,13 +3,21 @@ package com.example.electricapp.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,13 +39,15 @@ import com.example.electricapp.viewModel.HistorialViewModel
 fun buscarProtocolo(
     viewModel: HistorialViewModel = viewModel(),
     rol: Rol,
-    Buscado: () -> Unit
+    zonaCliente: String = "",
+    Buscado: () -> Unit,
+    onVolver: () -> Unit = {},
+    onProtocoloClick: (HistorialState) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-
-    LaunchedEffect(rol) {
-        viewModel.onRol(rol)
+    LaunchedEffect(rol, zonaCliente) {
+        viewModel.onRol(rol, zonaCliente)
     }
 
     HistorialScreen(
@@ -48,19 +58,54 @@ fun buscarProtocolo(
             if (viewModel.Busqueda()) {
                 Buscado()
             }
-        }
+        },
+        onVolver = onVolver,
+        onProtocoloClick = onProtocoloClick
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistorialScreen(
     uiState: HistorialState,
     onTagBuscar: (String) -> Unit,
     onInstalacion: (String) -> Unit,
-    realizarBusqueda: () -> Unit
+    realizarBusqueda: () -> Unit,
+    onVolver: () -> Unit = {},
+    onProtocoloClick: (HistorialState) -> Unit = {}
 ) {
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            if (uiState.Cliente) {
+                TopAppBar(
+                    title = {
+                        val tituloBarra = if (uiState.tagBuscar.isNotBlank() && uiState.zonaCliente.isNotBlank()) {
+                            "${uiState.tagBuscar} · ${uiState.zonaCliente}"
+                        } else {
+                            uiState.zonaCliente.ifBlank { stringResource(R.string.titulo_historial) }
+                        }
+                        Text(
+                            text = tituloBarra,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color.White
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onVolver) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_volver),
+                                contentDescription = "Volver",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFF283593)
+                    )
+                )
+            }
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -68,11 +113,13 @@ fun HistorialScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            EncabezadoVistaJefe(
-                titulo = stringResource(R.string.titulo_historial),
-                subTitulo = stringResource(R.string.titulo_bienvenidos),
-                icono = R.drawable.logo_inicio_sesion
-            )
+            if (!uiState.Cliente) {
+                EncabezadoVistaJefe(
+                    titulo = stringResource(R.string.titulo_historial),
+                    subTitulo = stringResource(R.string.titulo_bienvenidos),
+                    icono = R.drawable.logo_inicio_sesion
+                )
+            }
 
             Column(
                 modifier = Modifier.padding(Dimens.espacioPantalla),
@@ -86,15 +133,18 @@ fun HistorialScreen(
                     error = uiState.tagError
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                // Solo se muestra el campo de instalación si NO es Cliente
+                if (!uiState.Cliente) {
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                CampoInstalacion(
-                    valor = uiState.instalacion,
-                    onInstalacion = onInstalacion,
-                    etiquetaInstalacion = stringResource(R.string.campo_Instalacion),
-                    iconoInst = R.drawable.ic_busqueda,
-                    error = uiState.intalacionError
-                )
+                    CampoInstalacion(
+                        valor = uiState.instalacion,
+                        onInstalacion = onInstalacion,
+                        etiquetaInstalacion = stringResource(R.string.campo_Instalacion),
+                        iconoInst = R.drawable.ic_busqueda,
+                        error = uiState.intalacionError
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -104,14 +154,18 @@ fun HistorialScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-
-                uiState.listaProtocolo.forEach { protocoloItem ->
-                    ProtocoloCards(
-                        protocolo = protocoloItem,
-                        esCliente = uiState.Cliente
-                    )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    uiState.listaProtocolo.forEach { protocoloItem ->
+                        ProtocoloCards(
+                            protocolo = protocoloItem,
+                            esCliente = uiState.Cliente,
+                            onClick = { onProtocoloClick(protocoloItem) }
+                        )
+                    }
                 }
             }
         }
@@ -126,8 +180,7 @@ fun ProtocoloView() {
             uiState = HistorialState(),
             onTagBuscar = {},
             onInstalacion = {},
-            realizarBusqueda={},
+            realizarBusqueda = {}
         )
-
     }
 }

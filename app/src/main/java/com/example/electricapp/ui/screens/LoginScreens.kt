@@ -1,28 +1,31 @@
 package com.example.electricapp.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,17 +38,19 @@ import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.CampoCorreo
 import com.example.electricapp.ui.components.CampoPassword
-import com.example.electricapp.ui.components.ImagenEncabezadoLogin
 import com.example.electricapp.ui.theme.Dimens
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.components.Bienvenida
+import com.example.electricapp.ui.components.BotonEnviarSms
 import com.example.electricapp.ui.components.EncabezadoVistaJefe
-import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.ElectricAppTheme
-import com.example.electricapp.ui.theme.Exito
-import com.example.electricapp.ui.theme.ExitoFondo
 import com.example.electricapp.viewModel.FormularioLoginViewModel
+
+
+// Se elimino la card que mantenia los campos formularios
+//  y se actualizo el componente vista jefe  para adaptarse
+// por ultimo se agrega una animacion que "Hunde el boton"
 
 @Composable
 fun ScreensLogin(
@@ -53,19 +58,24 @@ fun ScreensLogin(
     onLogeado : (Rol) -> Unit
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val cargando by viewModel.cargando.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.logeadoExitoso) {
+        if(uiState.logeadoExitoso){
+            onLogeado(uiState.rol)
+        }
+    }
 
     LoginScreens(
         uiState = uiState,
         onCorreoCambia = viewModel::onCorreoCambia,
         onPasswordCambia = viewModel::onPasswordCambia,
-        onIniciar = {
-
-            val rol = viewModel.onIniciar()
-            if (rol != null){
-                onLogeado(rol)
-            }
-        },
-        onVisibilidad = viewModel::onVisibilidad
+        onIniciar = { viewModel.onIniciar(onLogeado)},
+        onVisibilidad = viewModel::onVisibilidad,
+        onLimpiar = viewModel::onLimpiarRecuperacion,
+        onGenerarClave = viewModel::onEnviarClaveTemporal,
+        onIdRecuperacioCambia = viewModel::onIdentificadiorClave,
+        onClaveEnviada = viewModel::onClaveTemporalEnviada
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,8 +85,15 @@ fun LoginScreens(
     onCorreoCambia : (String) -> Unit,
     onPasswordCambia : (String) -> Unit,
     onVisibilidad : () -> Unit,
-    onIniciar : () -> Unit
-){
+    onIniciar : () -> Unit,
+    onIdRecuperacioCambia : (String) -> Unit,
+    onGenerarClave : () -> Unit,
+    onLimpiar : () -> Unit,
+    onClaveEnviada : () -> Unit,
+    cargando : Boolean = false
+    ){
+    var mostrarRecuperacion by remember { mutableStateOf(false) }
+
     Scaffold (
         containerColor = MaterialTheme.colorScheme.background
     ){ innerPadding ->
@@ -90,111 +107,156 @@ fun LoginScreens(
                 subTitulo = stringResource(R.string.subtitulo_empresa),
                 icono = R.drawable.logo_inicio_sesion
             )
-            Spacer(modifier = Modifier.height(32.dp))
 
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                             .padding(Dimens.espacioPantalla),
-                    elevation = EstilosTarjetas.elevacion(),
-                    shape = EstilosTarjetas.forma,
-                    border = EstilosTarjetas.bordeado()
-                ) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(Dimens.espacioPantalla),
+                verticalArrangement = Arrangement.spacedBy(Dimens.espacioMed)
+            ) {
+                Bienvenida(
+                    texto = stringResource(R.string.titulo_sesion),
+                    descripcion = stringResource(R.string.bienvenida_inicio)
+                )
+                CampoCorreo(
+                    valor = uiState.correo,
+                    onValorCambia = onCorreoCambia,
+                    etiquetaCorreo = stringResource(R.string.campo_correo),
+                    iconoCorreo = R.drawable.ic_correo,
+                    error = uiState.errorCorreo
+                )
+                CampoPassword(
+                    valor = uiState.passwordHash,
+                    onContrasenaCambia = onPasswordCambia,
+                    etiquetaContrasena = stringResource(R.string.campo_password),
+                    visible = uiState.passwordVisible,
+                    onVisibilidad ,
+                    error = uiState.errorPassword
+                )
 
-                    Row(
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Bienvenida(
-                            texto = stringResource(R.string.titulo_sesion),
-                            descripcion = stringResource(R.string.bienvenida_inicio)
-                        )
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed)){
 
-                        CampoCorreo(
-                            valor = uiState.correo,
-                            onValorCambia = onCorreoCambia,
-                            etiquetaCorreo = stringResource(R.string.campo_correo),
-                            iconoCorreo = R.drawable.ic_correo,
-                            error = uiState.errorCorreo
-                        )
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed)){
-                        CampoPassword(
-                            valor = uiState.passwordHash,
-                            onContrasenaCambia = onPasswordCambia,
-                            etiquetaContrasena = stringResource(R.string.campo_password),
-                            visible = uiState.passwordVisible,
-                            onVisibilidad ,
-                            error = uiState.errorPassword
-                        )
-                    }
+                var errorCredenciales by remember {mutableStateOf("")}
+
+                if(uiState.errorGeneral != null){
+                    errorCredenciales = uiState.errorGeneral
                 }
 
-                Row(horizontalArrangement = Arrangement.spacedBy(Dimens.espacioMed)) {
-                    BotonInicio(
-                        texto = stringResource(R.string.btn_iniciar_sesion),
-                        onClick = onIniciar,
-                        modifier = Modifier.fillMaxSize()
+                AnimatedVisibility(
+                    visible = uiState.errorGeneral != null,
+                    enter = expandVertically()  + fadeIn(),
+                    exit = shrinkVertically  () + fadeOut()
+                ) {
+                    Text(
+                        text = errorCredenciales,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
-                if(uiState.logeadoExitoso){
-                    logeadoExito(uiState.mensajeExitoso)
+                if(cargando){
+                    LinearProgressIndicator( modifier = Modifier.fillMaxWidth())
                 }
+                BotonInicio(
+                    texto = stringResource(R.string.btn_iniciar_sesion),
+                    onClick = onIniciar,
+                    modifier = Modifier.fillMaxWidth().height(60.dp)
+                )
             }
-        }
+            TextButton(
+                onClick = {
+                    mostrarRecuperacion = true
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = stringResource(R.string.btn_olvido_password),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            if (mostrarRecuperacion) {
+                AlertDialog(
+                    onDismissRequest = {
+                        mostrarRecuperacion = false
+                        onLimpiar()
+                    },
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_candado),
+                            contentDescription = null
+                        )
+                    },
+                    title = {
+                        Text(text = stringResource(R.string.btn_olvido_password))
+                    },
+                    text = {
+                        Column(verticalArrangement = Arrangement.spacedBy(Dimens.espacioChico)) {
+                            if (uiState.telefonoRecuperacion == null) {
+                                Text(text = stringResource(R.string.no_existe_datos))
+                                OutlinedTextField(
+                                    value = uiState.idRecuperacion,
+                                    onValueChange = onIdRecuperacioCambia,
+                                    label = { Text(text = stringResource(R.string.rut_o_correo)) },
+                                    isError = uiState.errorRecuperacion != null,
+                                    singleLine = true,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                if (uiState.errorRecuperacion != null) {
+                                    Text(
+                                        text = uiState.errorRecuperacion,
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = stringResource(R.string.recuperacion_exito, uiState.telefonoRecuperacion)
+                                )
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        if (uiState.telefonoRecuperacion == null) {
+                            TextButton(onClick = onGenerarClave) {
+                                Text(text = stringResource(R.string.btn_continuar))
+                            }
+                        } else if (uiState.claveTemporal != null) {
+                            BotonEnviarSms(
+                                telefono = uiState.telefonoRecuperacion,
+                                clave = uiState.claveTemporal,
+                                onEnviado = {
+                                    mostrarRecuperacion = false
+                                    onClaveEnviada()
+                                }
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                mostrarRecuperacion = false
+                                onLimpiar()
+                            }
+                        ) {
+                            Text(text = stringResource(R.string.btn_cancelar))
+                        }
+                    }
+                )
+            }
     }
-
-
-@Composable
- fun logeadoExito(nombre : String){
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = EstilosTarjetas.elevacion(),
-        border = EstilosTarjetas.bordeado(),
-        shape = EstilosTarjetas.forma,
-        colors = CardDefaults.cardColors(containerColor = ExitoFondo, contentColor = Exito)
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_exito),
-            contentDescription = null,
-            tint = Exito,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Text(
-            text = stringResource(R.string.logeado_exito),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(Dimens.espacioPantalla)
-        )
-    }
- }
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreensView(){
-
-    ElectricAppTheme(false) {
-        LoginScreens (
-
-            uiState = FormularioLoginState(),
-            onCorreoCambia = {},
-            onPasswordCambia = {},
-            onVisibilidad = {},
-            onIniciar = {}
-        )
-    }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreensVie(){
-
+fun viewLoginScreens(){
     ElectricAppTheme(true) {
-        LoginScreens (
-            uiState = FormularioLoginState(),
-            onCorreoCambia = {},
+        LoginScreens(
+          uiState = FormularioLoginState(),
+            onCorreoCambia = {} ,
             onPasswordCambia = {},
             onVisibilidad = {},
+            onLimpiar = {},
+            onGenerarClave = {},
+            onIdRecuperacioCambia = {},
+            onClaveEnviada = {},
             onIniciar = {}
         )
     }

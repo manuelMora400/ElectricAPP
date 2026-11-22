@@ -1,5 +1,7 @@
 package com.example.electricapp.model
 
+import android.graphics.Bitmap
+
 data class FormularioProtocolosState(
 
     val equipo : String = "",
@@ -29,5 +31,6 @@ data class FormularioProtocolosState(
     val errorGeneral : String? = null,
 
     val mensajeExitoso : String = "",
-    val mensajeExito : Boolean = false
+    val mensajeExito : Boolean = false,
+    val fotoEvidencia : Bitmap? = null
 )

@@ -10,19 +10,36 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
+// configuramos todos los colores necesarios , ya que los que faltaba Material 3 lo hacian x nosotros
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimarioClaro,
+    primary = PrimarioNoche,
     onPrimary = PrimarioOscuro,
     primaryContainer = PrimarioOscuro,
     onPrimaryContainer = PrimarioClaro,
-    secondary = Secundario,
-    onSecondary = Blanco,
+    secondary = SecundarioOscuro,
+    onSecondary = TextoSobreSecundarioOscuro,
+    secondaryContainer = VarianteOscura,
+    onSecondaryContainer = TextoClaro,
     tertiary = Acento,
     onTertiary = Blanco,
     background = FondoOscuro,
     onBackground = TextoClaro,
     surface = SuperficieOscura,
-    onSurface = TextoClaro
+    onSurface = TextoClaro,
+    surfaceVariant = VarianteOscura,
+    onSurfaceVariant = TextoSecundarioOscuro,
+    outline = BordeCampoClaro,
+    outlineVariant = BordeOscuro,
+    error = ErrorOscuro,
+    onError = TextoSobreErrorOscuro,
+    errorContainer = ErrorFondoOscuro,
+    onErrorContainer = ErrorFondoClaro,
+    // para menu desplegables
+    surfaceContainerLowest = FondoOscuro,
+    surfaceContainerLow = SuperficieOscura,
+    surfaceContainer = SuperficieOscura,
+    surfaceContainerHigh = VarianteOscura,
+    surfaceContainerHighest = VarianteOscura
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -30,20 +47,34 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Blanco,
     primaryContainer = PrimarioClaro,
     onPrimaryContainer = PrimarioOscuro,
-    secondary = Secundario,
+    secondary = SecundarioClaro,
     onSecondary = Blanco,
+    secondaryContainer = VarianteClara,
+    onSecondaryContainer = TextoOscuro,
     tertiary = Acento,
     onTertiary = Blanco,
     background = FondoClaro,
     onBackground = TextoOscuro,
     surface = SuperficieClara,
-    onSurface = TextoOscuro
+    onSurface = TextoOscuro,
+    surfaceVariant = VarianteClara,
+    onSurfaceVariant = TextoSecundarioClaro,
+    outline = BordeCampoClaro,
+    outlineVariant = BordeClaro,
+    error = ErrorClaro,
+    onError = Blanco,
+    errorContainer = ErrorFondoClaro,
+    onErrorContainer = ErrorClaro,
+    surfaceContainerLowest = SuperficieClara,
+    surfaceContainerLow = SuperficieClara,
+    surfaceContainer = SuperficieClara,
+    surfaceContainerHigh = FondoClaro,
+    surfaceContainerHighest = VarianteClara
 )
 
 @Composable
 fun ElectricAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

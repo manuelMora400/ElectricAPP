@@ -1,9 +1,11 @@
 package com.example.electricapp.data
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.content.contentValuesOf
+import com.example.electricapp.model.DetallesState
 import com.example.electricapp.model.Estado
 import com.example.electricapp.model.FormularioInstrumentosStates
 import com.example.electricapp.model.FormularioLoginState
@@ -11,13 +13,14 @@ import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
+import com.example.electricapp.model.PerfilUsuario
 
 class ElectricHelperDb(context : Context) :
     SQLiteOpenHelper(context, NombreBD, null, VERSION_BD){
 
     companion object{
         private const val NombreBD = "electric.bd"
-        private const val VERSION_BD = 2
+        private const val VERSION_BD = 3
 
         private const val TABLA_ROL  = "ROLES"
         private const val ID_ROL     = "id_rol"
@@ -32,6 +35,7 @@ class ElectricHelperDb(context : Context) :
         private const val PASSWORD       = "password"
         private const val GIRO           = "giro"
         private const val ACTIVO         = "activo"
+        private const val CAMBIO_CLAVE   =  "cambio_clave"
         private const val CONTACTO_CARGO = "cargo"
         private const val USER_ROL       = "id_rol"
 
@@ -56,6 +60,8 @@ class ElectricHelperDb(context : Context) :
         private const val USU_ID = "id_usuario"
         private const val RESULTADO = "resultado"
         private const val ESTADO_PROTOCOLO = "estado"
+        private const val LATITUD = "latitud"
+        private const val LONGITUD = "longitud"
         private const val INSTRU_ID = "id_instrumento"
 
         private const val TABLA_AISLACION = "AISLACION"
@@ -85,6 +91,7 @@ class ElectricHelperDb(context : Context) :
                     "$GIRO TEXT, " +
                     "$ACTIVO INTEGER DEFAULT 1," +
                     "$CONTACTO_CARGO TEXT," +
+                    "$CAMBIO_CLAVE INTEGER DEFAULT 0," +
                     "$USER_ROL INTEGER NOT NULL REFERENCES $TABLA_ROL($ID_ROL))"
 
         private const val SQL_CREAR_INSTRUMENTOS =
@@ -111,6 +118,8 @@ class ElectricHelperDb(context : Context) :
                     "$INSTRU_ID INTEGER NOT NULL REFERENCES $TABLA_INSTRUMENTOS($ID_INSTRUMENTO)," +
                     "$RESULTADO TEXT NOT NULL," +
                     "$ESTADO_PROTOCOLO TEXT NOT NULL DEFAULT 'REGISTRADO_TERRENO'," +
+                    "$LATITUD REAL," +
+                    "$LONGITUD REAL," +
                     "$USU_ID INTEGER NOT NULL REFERENCES $TABLA_USUARIO($ID_USUARIO))"
 
         private const val SQL_CREAR_AISLACION =
@@ -160,11 +169,11 @@ class ElectricHelperDb(context : Context) :
 
         private const val SQL_INSERTAR_PROTOCOLO =
             "INSERT INTO $TABLA_PROTOCOLO "+
-                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRU_ID, $RESULTADO, $ESTADO_PROTOCOLO, $USU_ID) VALUES "+
-                    "('14/09/2024 10:00','18','55',1,'APROBADO','FORMALIZADO',3),"+
-                    "('13/09/2025 10:00','21','48',1,'APROBADO','FORMALIZADO',3),"+
-                    "('26/09/2026 09:30','19','60',1,'OBSERVADO','REGISTRADO_TERRENO',3),"+
-                    "('26/09/2026 11:00','19','60',1,'APROBADO','REGISTRADO_TERRENO',3)"
+                    "($FECHA_HORA_PRUEBA, $TEMPERATURA, $HUMEDAD, $INSTRU_ID, $RESULTADO, $ESTADO_PROTOCOLO, $LATITUD, $LONGITUD ,$USU_ID) VALUES "+
+                    "('14/09/2024 10:00','18','55',1,'APROBADO','FORMALIZADO', -33.2856, -70.8752 ,3),"+
+                    "('13/09/2025 10:00','21','48',1,'APROBADO','FORMALIZADO',-33.2856, -70.8752,3),"+
+                    "('26/09/2026 09:30','19','60',1,'OBSERVADO','REGISTRADO_TERRENO',-33.3912, -70.7285,3),"+
+                    "('26/09/2026 11:00','19','60',1,'APROBADO','REGISTRADO_TERRENO',NULL, NULL,3)"
 
         private const val SQL_INSERTAR_AISLACION =
             "INSERT INTO $TABLA_AISLACION " +
@@ -173,7 +182,7 @@ class ElectricHelperDb(context : Context) :
                     "('TR-01','Planta Lampa','AT-T','5','9800','21560', 2),"+
                     "('TR-01','Planta Lampa','AT-T','5','6100','10980', 3),"+
                     "('TR-02','Planta Lampa','AT-T','5','15200','36480', 4)"
-        
+
         private const val SQL_SELECT_USUARIOS =
             "SELECT u.*, r.$NOMBRE_ROL AS $NOMBRE_ROL "+
                     "FROM $TABLA_USUARIO u "+
@@ -235,6 +244,7 @@ class ElectricHelperDb(context : Context) :
         put(PASSWORD, usuario.password)
         put(GIRO , usuario.giro)
         put(ACTIVO, 1)
+        put(CAMBIO_CLAVE, 1)
         put(USER_ROL, usuario.rol.ordinal + 1)
         put(CONTACTO_CARGO,usuario.contactoCargo)
     }
@@ -305,7 +315,7 @@ class ElectricHelperDb(context : Context) :
         return instrumentos
     }
 
-    private fun valoresProtocolos(protocolos : FormularioProtocolosState,idUsuario : Int,idInstrumento : Int) = contentValuesOf().apply {
+    private fun valoresProtocolos(protocolos : FormularioProtocolosState,idUsuario : Long,idInstrumento : Int) = contentValuesOf().apply {
         put(FECHA_HORA_PRUEBA, protocolos.fechaHora)
         put(TEMPERATURA, protocolos.temperatura)
         put(HUMEDAD, protocolos.humedad)
@@ -315,7 +325,7 @@ class ElectricHelperDb(context : Context) :
         put(INSTRU_ID, idInstrumento)
     }
 
-    fun insertarProtocolos(protocolos: FormularioProtocolosState, idUsuario : Int,idInstrumento : Int) : Long =
+    fun insertarProtocolos(protocolos: FormularioProtocolosState, idUsuario : Long,idInstrumento : Int) : Long =
         writableDatabase.insert(TABLA_PROTOCOLO, null, valoresProtocolos(protocolos, idUsuario, idInstrumento))
 
     private fun valoresAislacion(protocolos : FormularioProtocolosState, tag : String, instalacion : String, idProtocolo : Int) = contentValuesOf().apply {
@@ -331,6 +341,7 @@ class ElectricHelperDb(context : Context) :
     fun insertarAislacion(protocolos : FormularioProtocolosState, tag : String, instalacion : String, idProtocolo : Int) : Long =
         writableDatabase.insert(TABLA_AISLACION, null, valoresAislacion(protocolos, tag, instalacion, idProtocolo))
 
+    /*
     fun buscarCuentasLogin(correo : String, password : String) : FormularioLoginState? {
 
         val consultaSql =
@@ -347,12 +358,62 @@ class ElectricHelperDb(context : Context) :
                         idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(ID_USUARIO)),
                         nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
                         correo = correo,
+                        cambiarClave = cursor.getInt(cursor.getColumnIndexOrThrow(CAMBIO_CLAVE)) == 1,
                         passwordHash = password,
                         rol = Rol.valueOf(rolStr)
                     )
                 }else null
            }
         return null
+    }
+     */
+
+
+    // Actualizar clave temporanea
+    fun actualizarClave(idUsuario: Int, nuevaClave : String) : Boolean{
+
+        val valores = contentValuesOf().apply{
+            put(PASSWORD, nuevaClave)
+            put(CAMBIO_CLAVE, 0)
+        }
+        val filas = writableDatabase.update(
+            TABLA_USUARIO,
+            valores,
+            "$ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        )
+        return filas > 0
+    }
+
+
+    fun recuperarContrasena(identifcador: String) : String?{
+
+        var telefono : String? = null
+
+        readableDatabase.rawQuery(
+            "SELECT $TELEFONO " +
+                    "FROM $TABLA_USUARIO WHERE $ACTIVO = 1 AND ($RUT = ? OR $CORREO = ?) ", arrayOf(identifcador.trim(), identifcador.trim())
+        ).use { cursor ->
+            if(cursor.moveToFirst()){
+                telefono = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO))
+            }
+        }
+        return telefono
+    }
+
+    fun guardarClaveTemporal(identifcador: String, claveTemporal: String) : Boolean{
+
+        val evalua = ContentValues()
+        evalua.put(PASSWORD, claveTemporal)
+        evalua.put(CAMBIO_CLAVE, 1)
+
+        val filas = writableDatabase.update(
+            TABLA_USUARIO,
+            evalua,
+            "$ACTIVO = 1 AND ($RUT = ? OR $CORREO = ?)",
+            arrayOf(identifcador.trim(), identifcador.trim())
+        )
+        return filas > 0
     }
 
     fun cambiarEstadoUsuario(correo: String, nuevoEstado: Boolean): Boolean {
@@ -370,22 +431,39 @@ class ElectricHelperDb(context : Context) :
         return filasAfectadas > 0
     }
 
+    // esta funcion permitara almancenar el nombre por el id
+    private fun rolDesdeId(id: Int): Rol = when (id) {
+        1 -> Rol.JEFE_TECNICO
+        2 -> Rol.INGENIERO
+        3 -> Rol.TECNICO
+        4 -> Rol.CLIENTE
+        else -> Rol.CLIENTE
+    }
 
-    fun filtrarCuentasCreadas() : List<FormularioRegistros>{
+    // Se modifica la query ahora nos trae el nombre del rol para ponerlo en una etiquetita en components
+    fun filtrarCuentasCreadas(): List<FormularioRegistros> {
 
         val cuentas = mutableListOf<FormularioRegistros>()
+
         readableDatabase.rawQuery(
-            "SELECT $NOMBRE_USU, $CORREO, $ACTIVO " +
-            " FROM $TABLA_USUARIO", null
+            "SELECT $NOMBRE_USU, $CORREO, $RUT, $ACTIVO, $USER_ROL " +
+                    "FROM $TABLA_USUARIO", null
         ).use { cursor ->
 
-            while (cursor.moveToNext()){
-                val estadoIndex = cursor.getColumnIndexOrThrow(ACTIVO)
+            val indiceNombre = cursor.getColumnIndexOrThrow(NOMBRE_USU)
+            val indiceCorreo = cursor.getColumnIndexOrThrow(CORREO)
+            val indiceRut = cursor.getColumnIndexOrThrow(RUT)
+            val indiceActivo = cursor.getColumnIndexOrThrow(ACTIVO)
+            val indiceRol = cursor.getColumnIndexOrThrow(USER_ROL)
+
+            while (cursor.moveToNext()) {
                 cuentas.add(
                     FormularioRegistros(
-                        nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
-                        correo = cursor.getString(cursor.getColumnIndexOrThrow(CORREO)),
-                        activo = cursor.getInt(estadoIndex) == 1
+                        nombre = cursor.getString(indiceNombre),
+                        correo = cursor.getString(indiceCorreo),
+                        rut = cursor.getString(indiceRut),
+                        activo = cursor.getInt(indiceActivo) == 1,
+                        rol = rolDesdeId(cursor.getInt(indiceRol))
                     )
                 )
             }
@@ -433,4 +511,136 @@ class ElectricHelperDb(context : Context) :
         }
         return protocolo
     }
+
+    // Contenedor para almacenar los contadores de la card del panel
+    private fun contador(sql: String, listar : Array<String>? = null) : Int{
+        return readableDatabase.rawQuery(sql, listar).use { cursor ->
+            if(cursor.moveToFirst()) cursor.getInt(0) else 0
+        }
+    }
+
+    // Funciones para almacenar las cantidades en el panel de jefe
+    fun cantidadCuentasActivas() : Int = contador("SELECT COUNT(*) FROM $TABLA_USUARIO WHERE $ACTIVO = 1")
+    fun cantidadInstRegistrados() : Int = contador("SELECT COUNT(*) FROM $TABLA_INSTRUMENTOS")
+
+    fun obtenerDetalle(): List<DetallesState> {
+        val lista = mutableListOf<DetallesState>()
+
+        val consultaSql = """
+        SELECT 
+            a.$EQUIPO_TAG,
+            a.$INSTALACION,
+            a.$LECTURA_1MIN,
+            a.$LECTURA_10MIN,
+            a.$DEVANADO,
+            a.$TENSION_PRUEBA,
+            p.$RESULTADO,
+            p.$ESTADO_PROTOCOLO,
+            p.$LATITUD,
+            p.$LONGITUD,
+            CASE 
+                WHEN r.$NOMBRE_ROL = 'INGENIERO' THEN u.$NOMBRE_USU 
+            END AS nombre_ingeniero,
+            p.$FECHA_HORA_PRUEBA
+        FROM $TABLA_AISLACION a
+        INNER JOIN $TABLA_PROTOCOLO p ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+        INNER JOIN $TABLA_USUARIO u ON p.$USU_ID = u.$ID_USUARIO
+        INNER JOIN $TABLA_ROL r ON u.$USER_ROL = r.$ID_ROL
+        ORDER BY p.$ID_PROTOCOLO DESC
+    """.trimIndent()
+
+        readableDatabase.rawQuery(consultaSql, null).use { cursor ->
+            val idxTag = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
+            val idxInstalacion = cursor.getColumnIndexOrThrow(INSTALACION)
+            val idxMin1 = cursor.getColumnIndexOrThrow(LECTURA_1MIN)
+            val idxMin10 = cursor.getColumnIndexOrThrow(LECTURA_10MIN)
+            val idxDevanado = cursor.getColumnIndexOrThrow(DEVANADO)
+            val idxTension = cursor.getColumnIndexOrThrow(TENSION_PRUEBA)
+            val idxResultado = cursor.getColumnIndexOrThrow(RESULTADO)
+            val idxEstado = cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO)
+            val idxIngeniero = cursor.getColumnIndexOrThrow("nombre_ingeniero")
+            val idxFecha = cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)
+            val idxLat = cursor.getColumnIndexOrThrow(LATITUD)
+            val idxLon = cursor.getColumnIndexOrThrow(LONGITUD)
+
+            while (cursor.moveToNext()) {
+                lista.add(
+                    DetallesState(
+                        Tag = cursor.getString(idxTag),
+                        Instalacion = cursor.getString(idxInstalacion),
+                        medicion1Min = cursor.getString(idxMin1),
+                        medicion10Min = cursor.getString(idxMin10),
+                        devanado = cursor.getString(idxDevanado),
+                        tensionPrueba = cursor.getString(idxTension),
+                        resultado = cursor.getString(idxResultado),
+                        estado = cursor.getString(idxEstado),
+                        nombreIngeniero = cursor.getString(idxIngeniero),
+                        fechaPrueba = cursor.getString(idxFecha),
+                        latitud = cursor.getDouble(idxLat),
+                        longitud = cursor.getDouble(idxLon)
+                    )
+                )
+            }
+        }
+        return lista
+    }
+
+    fun buscarPerfil(idUsuario : Long) : PerfilUsuario? {
+        readableDatabase.rawQuery(
+            "SELECT * FROM $TABLA_USUARIO WHERE $ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        ).use { cursor ->
+            if (cursor.moveToFirst()) {
+
+                return PerfilUsuario(
+                    idUsuario = cursor.getLong(cursor.getColumnIndexOrThrow(ID_USUARIO)),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow(NOMBRE_USU)),
+                    correo = cursor.getString(cursor.getColumnIndexOrThrow(CORREO)),
+                    rut = cursor.getString(cursor.getColumnIndexOrThrow(RUT)),
+                    telefono = cursor.getString(cursor.getColumnIndexOrThrow(TELEFONO)),
+                    cargo = cursor.getString(cursor.getColumnIndexOrThrow(CONTACTO_CARGO)) ?: "",
+                    rol = rolDesdeId(cursor.getInt(cursor.getColumnIndexOrThrow(USER_ROL)))
+                )
+            }
+        }
+        return null
+    }
+
+    fun actualizarPerfil(idUsuario : Long, nombre : String, correo : String, telefono : String, cargo : String) : Boolean{
+
+        val valores = contentValuesOf().apply{
+            put(NOMBRE_USU, nombre)
+            put(CORREO, correo)
+            put(TELEFONO, telefono)
+            put(CONTACTO_CARGO, cargo)
+        }
+        val filas = writableDatabase.update(
+            TABLA_USUARIO,
+            valores,
+            "$ID_USUARIO = ?",
+            arrayOf(idUsuario.toString())
+        )
+        return filas > 0
+    }
+
+    fun correoEnUso(correo : String, idUsuario : Long) : Boolean{
+
+        readableDatabase.rawQuery(
+            "SELECT $ID_USUARIO FROM $TABLA_USUARIO WHERE $CORREO = ? AND $ID_USUARIO != ?",
+            arrayOf(correo.trim(), idUsuario.toString())
+        ).use { cursor ->
+            return cursor.moveToFirst()
+        }
+    }
+
+    fun claveCorrecta(idUsuario : Int, clave : String) : Boolean{
+
+        readableDatabase.rawQuery(
+            "SELECT $ID_USUARIO FROM $TABLA_USUARIO WHERE $ID_USUARIO = ? AND $PASSWORD = ?",
+            arrayOf(idUsuario.toString(), clave)
+        ).use { cursor ->
+            return cursor.moveToFirst()
+        }
+    }
+
 }

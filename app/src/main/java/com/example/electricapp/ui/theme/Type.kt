@@ -25,22 +25,26 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 10.sp,
+        fontSize = 15.sp,
         lineHeight = 25.sp,
         letterSpacing = 0.5.sp
     ),
+
+    // Texto para etiqueta lo usamo en texto o botones
     labelLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
-        fontSize = 10.sp,
-        lineHeight = 15.sp,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
         letterSpacing = 0.5.sp
     ),
+
+    // Texto para etiuetas y para que no sea grande
     bodyMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
-        lineHeight = 10.sp,
+        lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
 )

@@ -1,6 +1,7 @@
 package com.example.electricapp.viewModel
 
 import android.app.Application
+import android.graphics.Bitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
@@ -37,7 +38,7 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
     val nombresInstrumentos = instrumentos.map { textoInstrumento(it) }
 
 
-    private var idTecnico = 0
+    private var  idTecnico = 0L
     private var tecnicoSesion = ""
 
     private val _uiState = MutableStateFlow(estadoInicial())
@@ -45,6 +46,10 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
 
     fun onEquipoCambia(valor : String){
         _uiState.update { it.copy(equipo = valor, errorEquipo = null, mensajeExito = false) }
+    }
+
+    fun onEvidenciaFoto(bitmap: Bitmap){
+        _uiState.update { it.copy(fotoEvidencia = bitmap)}
     }
 
     fun onTemperaturaCambia(valor : String){
@@ -78,7 +83,7 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
         _uiState.update { it.copy(instrumento = valor, errorInstrumento = errorCalibracion(valor), mensajeExito = false) }
     }
 
-    fun onTecnicoSesion(id : Int, nombre : String){
+    fun onTecnicoSesion(id : Long, nombre : String){
         idTecnico = id
         tecnicoSesion = nombre
         _uiState.update { it.copy(tecnico = nombre) }
@@ -270,7 +275,7 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
         val estado = _uiState.value
         val instrumento = instrumentos.find { textoInstrumento(it) == estado.instrumento }
 
-        if(instrumento == null || idTecnico == 0){
+        if(instrumento == null || idTecnico == 0L){
             _uiState.update { it.copy(errorGeneral = "No se pudo registrar, vuelva a iniciar sesion") }
             return false
         }
@@ -299,6 +304,7 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
     }
 
     fun onLimpiar(){
+        _uiState.update { it.copy(fotoEvidencia = null)}
         _uiState.value = estadoInicial()
     }
 

@@ -3,41 +3,88 @@ package com.example.electricapp.viewModel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.electricapp.data.ElectricHelperDb
+import com.example.electricapp.data.UsuarioRepository
+import com.example.electricapp.data.remote.CrearUsuariosRequest
+import com.example.electricapp.generador.GeneradorClave
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(application){
 
 
-    private val bd = ElectricHelperDb(application)
+    private val repositorio = UsuarioRepository()
+
     private val _cuentasBD = MutableStateFlow<List<FormularioRegistros>>(emptyList())
     val cuentasBD: StateFlow<List<FormularioRegistros>> = _cuentasBD.asStateFlow()
+
+    private val _uiState = MutableStateFlow(FormularioRegistros())
+    val uiState : StateFlow<FormularioRegistros> = _uiState.asStateFlow()
+
+    private val _cargando = MutableStateFlow(false)
+    val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
 
     init {
         cargarCuentas()
     }
-    fun cargarCuentas(){
-        _cuentasBD.value = bd.filtrarCuentasCreadas()
-    }
 
-    fun onEstadoCambia(correo : String, estadoNuevo : Boolean){
-        val actualizarEstado = bd.cambiarEstadoUsuario(correo, estadoNuevo)
-         if(actualizarEstado){
-             cargarCuentas()
+    fun cargarCuentas(){
+        ejecutar(
+            onError = { mensaje ->
+                _uiState.update { it.copy(errorGeneral = mensaje) }
+            }
+        ){
+            val listaRemota = repositorio.listarUsuarios()
+            _cuentasBD.value = listaRemota.map { usu ->
+                FormularioRegistros(
+                    id = usu.id,
+                    rut = usu.rut,
+                    nombre = usu.nombre,
+                    telefono = usu.telefono,
+                    correo = usu.correo,
+                    activo = usu.activo,
+                    rol = Rol.entries.find { it.name.equals(usu.rol, ignoreCase = true) } ?: Rol.CLIENTE
+                )
+            }
         }
     }
 
+    private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
+        viewModelScope.launch {
+            _cargando.value = true
+            try {
+                accion()
+            } catch (e: Exception) {
+                onError(e.message ?: "Ocurrió un error inesperado")
+            } finally {
+                _cargando.value = false
+            }
+        }
+    }
 
-
-    private val _uiState = MutableStateFlow(FormularioRegistros())
-    val uiState : StateFlow<FormularioRegistros> = _uiState.asStateFlow()
+    fun onEstadoCambia(idUsuario : Long){
+        ejecutar(
+            onError = { mensaje ->
+                _uiState.update { it.copy(errorGeneral = mensaje)}
+            }
+        ){
+            val estadoActualizado = repositorio.cambiarEstado(idUsuario)
+            _cuentasBD.update { lista ->
+                lista.map { cuenta ->
+                    if(cuenta.id == idUsuario){
+                        cuenta.copy(activo = estadoActualizado.activo)
+                    }else{
+                        cuenta
+                    }
+                }
+            }
+        }
+    }
 
     fun onRutCambia (valor : String){
         _uiState.update { it.copy( rut = valor, errorRut = null, registradoExito = false)}
@@ -65,7 +112,7 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
         _uiState.update { it.copy(contactoCargo = valor,  registradoExito = false)}
     }
 
-    fun onRegistrar() : Boolean{
+    fun onRegistrar(onExito : () -> Unit){
 
         val formatoCorreo = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
         val estado = _uiState.value
@@ -151,7 +198,6 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
             errorNombre,
             errorTelefono,
             errorCorreo,
-            errorPassword,
             erroGiro,
             errorContacto).any{it != null}
 
@@ -168,37 +214,44 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
                     registradoExito = false
                 )
             }
-            return false
+            return
         }
 
-        val insertado = bd.insertarUsuario(
-            FormularioRegistros(
-                rut = estado.rut,
-                nombre = estado.nombre,
-                telefono = estado.telefono,
-                correo = estado.correo,
-                password = estado.password,
-                giro = estado.giro,
-                contactoCargo = estado.contactoCargo,
-                rol = estado.rol,
-                activo = estado.activo
-            )
-        )
-        if(insertado > 0){
-            _uiState.update { it.copy(registradoExito = true) }
+        //Generamo la clave
+        val claveGenerada = GeneradorClave.generarClave()
 
+
+
+        ejecutar(
+            onError = { mensaje ->
+                _uiState.update { it.copy(
+                    errorGeneral = mensaje,
+                    registradoExito = false
+                ) }
+            }
+        ){
+            val request = CrearUsuariosRequest(
+                rut = estado.rut.trim(),
+                nombre = estado.nombre.trim(),
+                telefono = estado.telefono.trim(),
+                correo = estado.correo.trim(),
+                giro = if (estado.rol == Rol.CLIENTE) estado.giro.trim() else null,
+                contactoCargo = if (estado.rol == Rol.CLIENTE) estado.contactoCargo.trim() else null,
+                rol = estado.rol.name
+            )
+            val respuestaServidor = repositorio.crearUsuario(request)
+            _uiState.update { it.copy(
+                registradoExito = true,
+                claveTemporal = respuestaServidor.claveTemporal ?: claveGenerada,
+                errorGeneral = null
+            ) }
+        }
+            _uiState.update { it.copy(registradoExito = true, claveTemporal = claveGenerada) }
             viewModelScope.launch {
                 delay(4000)
                 _uiState.update { it.copy(registradoExito = false) }
             }
-            return true
-
-        }else{
-            _uiState.update { it.copy(errorGeneral = "El correo o rut ya se encuentra registrado")}
-            return false
-        }
-
-
+        onExito()
     }
 
     fun onLimpiar(){
