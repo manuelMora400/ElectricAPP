@@ -13,6 +13,7 @@ import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
+import com.example.electricapp.ui.screens.DetallesScreen
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
 import com.example.electricapp.ui.screens.ScreensLogin
@@ -145,6 +146,9 @@ fun AppNavegacion(){
 
         composable(Rutas.Consulta.rutas){
             buscarProtocolo(
+                onVolver = {
+                    navController.popBackStack()
+                },
                 rol = uiState.rol,
                 Buscado = {
                 }
@@ -167,6 +171,9 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.MenuCliente.rutas)
+                },
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
                 }
             )
         }
