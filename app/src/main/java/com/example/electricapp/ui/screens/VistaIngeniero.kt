@@ -137,9 +137,9 @@ fun VistaIngenieroContenido(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 TarjetaOpciones(
-                    titulo = stringResource(R.string.ing_perfil),
-                    subtitulo = stringResource(R.string.ing_perfil_sub),
-                    icono = R.drawable.ic_nombre,
+                    titulo = stringResource(R.string.perfil_titulo),
+                    subtitulo = stringResource(R.string.subtitulo_perfil),
+                    icono = R.drawable.ic_gestion_usuarios,
                     onClick = onPerfil,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )

@@ -154,7 +154,7 @@ fun VistaJefeContenido(
                     ),
                     OpcionPanel(
                         titulo = stringResource(R.string.perfil_titulo),
-                        subtitulo = stringResource(R.string.subtitulo_perfi_jefe_tecnico),
+                        subtitulo = stringResource(R.string.subtitulo_perfil),
                         icono = R.drawable.ic_nombre,
                         onClick = onPerfil
                     )

@@ -77,6 +77,38 @@ fun MenuClienteScreens(
                 subtitulo = stringResource(R.string.subtitulo),
                 rol = empresaCliente
             )
+            Column(
+                modifier = Modifier.padding(Dimens.espacioPantalla),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Bienvenida(
+                    texto = stringResource(R.string.titulo_cliente),
+                    descripcion = stringResource(R.string.subtitulo)
+                )
+                Column(
+                    modifier = Modifier.padding(Dimens.espacioPantalla),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.espacioTitulo)
+                ) {
+                    TarjetaOpciones(
+                        titulo = stringResource(R.string.titulo_historial_equipos),
+                        subtitulo = stringResource(R.string.subtitulo_historial_equipos),
+                        icono = R.drawable.ic_historial_equipo,
+                        modifier = Modifier.padding(),
+                        onClick = onClick
+                    )
+                    TarjetaOpciones(
+                        titulo = stringResource(R.string.perfil_titulo),
+                        subtitulo = stringResource(R.string.subtitulo_perfil),
+                        icono = R.drawable.ic_gestion_usuarios,
+                        modifier = Modifier.padding(),
+                        onClick = onPerfil
+                    )
+                    Row(horizontalArrangement = Arrangement.Center) {
+                        BotonCerrarSesion(
+                            texto = stringResource(R.string.btn_cerrar_sesion),
+                            onClick = onCerrarSesion
+                        )
+                    }
 
             TituloSeccion(stringResource(R.string.seccion_operacion))
 
