@@ -43,7 +43,7 @@ fun screensCrearContrasena(
         uistate = uistate,
         onNuevaClave = viewModel::onNuevaClave,
         onConfirmarClave = viewModel::onConfirmarClave,
-        onGuardarClave = { if(viewModel.onGuardarClaveNueva()) onClaveGuardada()} ,
+        onGuardarClave = {viewModel.onGuardarClaveNueva(onClaveGuardada)} ,
         onVisibilidad = viewModel::onVisibilidad
     )
 }

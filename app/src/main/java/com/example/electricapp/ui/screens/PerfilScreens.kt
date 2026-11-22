@@ -41,7 +41,7 @@ import com.example.electricapp.viewModel.PerfilViewModel
 @Composable
 fun PerfilScreens(
     viewModel: PerfilViewModel = viewModel(),
-    idUsuario: Int,
+    idUsuario: Long,
     onVolver: () -> Unit,
     onEditarDatos: () -> Unit,
     onCambiarClave: () -> Unit,

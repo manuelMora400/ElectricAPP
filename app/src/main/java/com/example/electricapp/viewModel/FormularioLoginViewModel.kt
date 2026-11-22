@@ -2,25 +2,36 @@ package com.example.electricapp.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.electricapp.data.ElectricHelperDb
-import com.example.electricapp.generador.GeneradorClave
+import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.SesionPreferencias
+import com.example.electricapp.data.UsuarioRepository
+import com.example.electricapp.data.remote.CambiarClaveRequest
 import com.example.electricapp.model.FormularioLoginState
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-
+import kotlinx.coroutines.launch
 
 
 class FormularioLoginViewModel(application : Application): AndroidViewModel(application){
 
-
-    private val db = ElectricHelperDb(application)
+    private  val repositorio = UsuarioRepository()
+    private val sesion = SesionPreferencias(application)
 
     private val _uiState = MutableStateFlow(FormularioLoginState())
     val uiState : StateFlow<FormularioLoginState> = _uiState.asStateFlow()
+
+
+
+    private val _cargando = MutableStateFlow(false)
+    val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
+
+
+    init {
+        restaurarSesion()
+    }
 
     fun onCorreoCambia (valor : String){
         _uiState.update{it.copy(correo = valor, errorCorreo = null, errorGeneral = null, logeadoExitoso = false)}
@@ -30,6 +41,42 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
     }
     fun onVisibilidad (){
         _uiState.update {it.copy(passwordVisible = !it.passwordVisible)}
+    }
+
+
+
+
+
+    private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
+        viewModelScope.launch {
+            _cargando.value = true
+            try {
+                accion()
+            } catch (e: Exception) {
+                onError(e.message ?: "Ocurrió un error inesperado")
+            } finally {
+                _cargando.value = false
+            }
+        }
+    }
+
+
+    private fun restaurarSesion() {
+        val id = sesion.leer()
+        if (id == -1L) return
+        ejecutar(onError = {sesion.borrar()}){
+            val perfil = repositorio.obtenerPefil(id)
+            val rol = Rol.valueOf(perfil.rol.uppercase())
+            _uiState.update {
+                it.copy(
+                    idUsuario = perfil.id,
+                    nombre = perfil.nombre,
+                    logeadoExitoso = true,
+                    cambiarClave = perfil.claveTemporal !=null ,
+                    rol = rol
+                )
+            }
+        }
     }
 
     // parte de cambiar clave
@@ -44,7 +91,7 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         _uiState.update {it.copy(confirmarClave = valor, errorConfirmarClave = null, errorGeneral = null, logeadoExitoso = false)}
     }
 
-    fun onGuardarClaveNueva() : Boolean{
+    fun onGuardarClaveNueva(onExito: () -> Unit){
 
         val estado = _uiState.value
         val nuevaClave = estado.nuevaClave
@@ -77,31 +124,36 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
               errorNuevaClave = errorNuevaPassword,
               errorConfirmarClave = errorConfirmarClave
           ) }
-          return false
+          return
         }
 
-        val confirmadoExito = db.actualizarClave(estado.idUsuario, estado.nuevaClave)
-
-        if(confirmadoExito){
+       ejecutar(
+           onError = { mensaje ->
+               _uiState.update { it.copy(
+                   errorGeneral = mensaje,
+                   logeadoExitoso = false
+               ) }
+           }
+       ){
+           val datos = CambiarClaveRequest(
+               claveActual = estado.passwordHash,
+               claveNueva = nuevaClave,
+               confirmarClave = estado.confirmarClave
+           )
+           repositorio.cambiarClave(
+               id = estado.idUsuario,
+               datos  = datos
+           )
            _uiState.update { it.copy(
                cambiarClave = false,
                passwordHash = nuevaClave,
                nuevaClave = "",
-               confirmarClave = "",
-               errorNuevaClave = null,
-               errorConfirmarClave = null
+               confirmarClave = ""
            ) }
-            return true
-
-        }else{
-            _uiState.update { it.copy(
-                errorGeneral = "Error al cambiar su contraseña"
-            ) }
-            return false
-        }
+           onExito()
+       }
     }
 
-    // recuperar Clave
     fun onIdentificadiorClave( valor: String){
         _uiState.update { it.copy(idRecuperacion = valor, errorRecuperacion = null) }
     }
@@ -112,32 +164,30 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
             _uiState.update { it.copy(errorRecuperacion = "Ingresa tu RUT o correo correspondiente") }
             return
         }
+        ejecutar(
 
-        val nTelefono = db.recuperarContrasena(id)
-
-        if (nTelefono == null) {
-            _uiState.update { it.copy(errorRecuperacion = "No existe una cuenta activa con ese RUT o correo") }
-            return
-        }
-
-        val claveGenerada = GeneradorClave.generarClave()
-
-        _uiState.update {
-            it.copy(
-                errorRecuperacion = null,
-                telefonoRecuperacion = nTelefono,
-                claveTemporal = claveGenerada
+            onError = { mensaje ->
+                _uiState.update { it.copy(
+                    errorRecuperacion = mensaje,
+                    logeadoExitoso = false
+                ) }
+            }
+        ){
+            val respuestaServidor = repositorio.recuperarClave(
+                    identificador = id
             )
+            _uiState.update { it.copy(
+                errorRecuperacion = null,
+                telefonoRecuperacion = respuestaServidor.telefono,
+                claveTemporal = respuestaServidor.claveTemporal
+            ) }
         }
     }
 
     fun onClaveTemporalEnviada() {
-        val estado = _uiState.value
-        val clave = estado.claveTemporal ?: return
-
-        db.guardarClaveTemporal(estado.idRecuperacion, clave)
         onLimpiarRecuperacion()
     }
+
     fun onLimpiarRecuperacion() {
         _uiState.update {
             it.copy(
@@ -149,7 +199,7 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         }
     }
 
-    fun onIniciar() : Rol?{
+    fun onIniciar(onExito : (Rol) -> Unit){
 
         val formatoCorreo = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
         val estado = _uiState.value
@@ -186,46 +236,44 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                 errorPassword = errorPassword,
                 logeadoExitoso = false
             ) }
-          return null
+          return
         }
 
-        val cuentaEncontrada = db.buscarCuentasLogin(
-            correo = estado.correo,
-            password = estado.passwordHash
-        )
+       ejecutar(
+           onError = { mensaje ->
+               _uiState.update { it.copy(
+                   errorGeneral = mensaje,
+                   logeadoExitoso = false
+               ) }
+           }
+       ){
+           val respuestaServidor = repositorio.login(
+               correo = estado.correo.trim(),
+               password = estado.passwordHash
+           )
+           val rolEmum = Rol.valueOf(respuestaServidor.rol.uppercase())
 
-
-        if (cuentaEncontrada != null){
-            _uiState.update {
-                it.copy(
-                    idUsuario = cuentaEncontrada.idUsuario,
-                    nombre = cuentaEncontrada.nombre,
-                    errorCorreo = null,
-                    errorPassword = null,
-                    logeadoExitoso = true,
-                    cambiarClave = cuentaEncontrada.cambiarClave,
-                    rol = cuentaEncontrada.rol
-                )
-            }
-        }else{
-            _uiState.update {
-                it.copy(
-                    errorGeneral = "Credenciales incorrectas",
-                    logeadoExitoso = false
-                )
-            }
-            return null
-        }
-        return cuentaEncontrada.rol
+           _uiState.update { it.copy(
+               idUsuario = respuestaServidor.idUsuario,
+               nombre = respuestaServidor.nombre,
+               errorCorreo = null,
+               errorPassword = null,
+               errorGeneral = null,
+               logeadoExitoso = true,
+               cambiarClave = respuestaServidor.debeCambiarClave,
+               rol = rolEmum
+           ) }
+           sesion.guardar(respuestaServidor.idUsuario)
+           onExito(rolEmum)
+       }
     }
 
+    fun onNombreActualizado(nombre : String){
+        _uiState.update { it.copy(nombre = nombre) }
+    }
 
     fun onCerrarSesion(){
-        _uiState.value = FormularioLoginState()
-    }
-
-    override fun onCleared() {
-        db.close()
-        super.onCleared()
+        sesion.borrar()
+        _uiState.update { FormularioLoginState() }
     }
 }

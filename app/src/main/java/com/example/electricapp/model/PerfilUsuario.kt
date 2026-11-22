@@ -2,7 +2,7 @@ package com.example.electricapp.model
 
 data class PerfilUsuario(
 
-    val idUsuario : Int = 0,
+    val idUsuario : Long = 0,
     val nombre : String = "",
     val correo : String = "",
     val rut : String = "",
