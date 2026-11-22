@@ -247,4 +247,15 @@
     <string name="foto_evidencia_terreno"> Evidencia en terreno </string>
     <string name="capturar_foto"> Capture una foto del equipo probado </string>
 
+    <!-- Editar datos y cambiar contraseña -->
+    <string name="perfil_campo_bloqueado">Solo el jefe técnico puede cambiarlo</string>
+    <string name="perfil_btn_guardar">Guardar cambios</string>
+    <string name="perfil_datos_actualizados">Datos actualizados</string>
+    <string name="perfil_clave_actual">Contraseña actual</string>
+    <string name="perfil_clave_nueva">Nueva contraseña</string>
+    <string name="perfil_btn_actualizar_clave">Actualizar contraseña</string>
+    <string name="perfil_clave_actualizada">Contraseña actualizada</string>
+
+
+
 </resources>

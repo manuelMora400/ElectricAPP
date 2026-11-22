@@ -62,7 +62,7 @@ import com.example.electricapp.viewModel.FormularioProtocolosViewModel
 @Composable
 fun screensCrearProtocolos(
     viewModel: FormularioProtocolosViewModel = viewModel(),
-    idTecnico: Int,
+    idTecnico: Long,
     nombreTecnico: String,
     onVolver: () -> Unit = {},
     onRegistrado: () -> Unit

@@ -1,7 +1,7 @@
 package com.example.electricapp.model
 data class FormularioLoginState(
 
-    val idUsuario : Int = 0,
+    val idUsuario : Long = 0,
     val nombre : String = "",
     val correo : String = "",
     val passwordHash : String = "",

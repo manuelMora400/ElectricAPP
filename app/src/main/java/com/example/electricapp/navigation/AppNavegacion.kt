@@ -6,14 +6,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
-import com.example.electricapp.ui.screens.DetallesScreen
+import com.example.electricapp.ui.screens.EditarPerfilScreens
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
 import com.example.electricapp.ui.screens.ScreensLogin
@@ -146,9 +148,6 @@ fun AppNavegacion(){
 
         composable(Rutas.Consulta.rutas){
             buscarProtocolo(
-                onVolver = {
-                    navController.popBackStack()
-                },
                 rol = uiState.rol,
                 Buscado = {
                 }
@@ -171,9 +170,6 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.MenuCliente.rutas)
-                },
-                onPerfil = {
-                    navController.navigate(Rutas.Perfil.rutas)
                 }
             )
         }
@@ -234,7 +230,7 @@ fun AppNavegacion(){
                     navController.navigateUp()
                 },
                 onEditarDatos = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.EditarPerfil.crear(uiState.idUsuario))
                 },
                 onCambiarClave = {
                     enDesarrollo()
@@ -246,6 +242,27 @@ fun AppNavegacion(){
                             inclusive = true
                         }
                     }
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.EditarPerfil.rutas,
+            arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+        ) { entrada ->
+            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0
+            EditarPerfilScreens(
+                idUsuario = idUsuario,
+                rolSesion = uiState.rol,
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onGuardado = { nombre ->
+                    if (idUsuario == uiState.idUsuario) {
+                        loginViewModel.onNombreActualizado(nombre)
+                    }
+                    Toast.makeText(contexto, contexto.getString(R.string.perfil_datos_actualizados), Toast.LENGTH_SHORT).show()
+                    navController.navigateUp()
                 }
             )
         }

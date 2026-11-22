@@ -58,7 +58,6 @@ fun screensRegistrarCuentas(
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-
     RegistrarCuentaScreens(
         uiState = uiState,
         onRutCambia = viewModel::onRutCambia,
@@ -69,12 +68,7 @@ fun screensRegistrarCuentas(
         onGiroCambia = viewModel::onGiroCambia,
         onContactoCambia = viewModel::onContactoCambia,
         onLimpiar = viewModel::onLimpiar,
-        onRegistrar = {
-            val registradoExito = viewModel.onRegistrar()
-            if(registradoExito){
-                onRegistroExitoso()
-            }
-        },
+        onRegistrar = {viewModel.onRegistrar(onRegistroExitoso)},
         onCerrar = {
             viewModel.onLimpiar()
             onVolver()
@@ -82,8 +76,6 @@ fun screensRegistrarCuentas(
         onVolver = onVolver
     )
 }
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrarCuentaScreens(
