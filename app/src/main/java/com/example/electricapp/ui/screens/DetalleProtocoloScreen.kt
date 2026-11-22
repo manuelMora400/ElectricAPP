@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,14 +28,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
-import com.example.electricapp.generador.GeneradorPdfProtocolo
 import com.example.electricapp.model.DetallesState
 import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.BotonDescargar
-import com.example.electricapp.ui.components.BotonInicio
+import com.example.electricapp.ui.components.BotonVerUbicacion
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Blanco
 import com.example.electricapp.ui.theme.CuadroAprobado
@@ -53,26 +50,22 @@ import com.example.electricapp.viewModel.DetalleViewModel
 fun DetallesScreen(
     viewModel: DetalleViewModel = viewModel(),
     onDescargar: () -> Unit,
-    modifier: Modifier
+    onVolver: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    DetallesContentScreen(
-        uiState = uiState,
-        onDescargar = onDescargar
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetallesContentScreen(
     uiState: DetallesState,
-    onDescargar: () -> Unit
+    onDescargar: () -> Unit,
+    onVolver: () -> Unit
 ) {
     val lectura1 = uiState.medicion1Min.toDoubleOrNull() ?: 0.0
     val lectura10 = uiState.medicion10Min.toDoubleOrNull() ?: 0.0
     val indicePolarizacion = if (lectura1 > 0.0) lectura10 / lectura1 else 0.0
     val context = LocalContext.current
+
     val textoIngeniero: String = if (!uiState.nombreIngeniero.isNullOrBlank()) {
         uiState.nombreIngeniero
     } else {
@@ -92,7 +85,7 @@ fun DetallesContentScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onDescargar) {
+                    IconButton(onClick = onVolver) {
                         Icon(
                             painter = painterResource(R.drawable.ic_volver),
                             contentDescription = "Volver",
@@ -224,10 +217,21 @@ fun DetallesContentScreen(
                 }
             }
             item {
+                BotonVerUbicacion(
+                    latitud = uiState.latitud,
+                    longitud = uiState.longitud,
+                    etiqueta = "${uiState.Tag} · ${uiState.Instalacion}",
+                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla),
+                    iconoUbicacion = R.drawable.ic_ubicacion
+                )
+            }
+
+            item {
                 BotonDescargar(
                     detalle = uiState,
                     indicePolarizacion = indicePolarizacion,
-                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla)
+                    modifier = Modifier.padding(horizontal = Dimens.espacioPantalla),
+                    iconodescargar = R.drawable.ic_descargar
                 )
             }
         }
@@ -318,9 +322,12 @@ fun DetallesScreenPreview() {
                 resultado = "Aprobado",
                 estado = "Formalizado",
                 nombreIngeniero = "Andrea Contreras",
-                fechaPrueba = "13/09/2025"
+                fechaPrueba = "13/09/2025",
+                latitud = -33.2856,
+                longitud = -70.8752
             ),
-            onDescargar = {}
+            onDescargar = {},
+            onVolver = {}
         )
     }
 }
@@ -340,9 +347,12 @@ fun DetalleScreenPreview() {
                 resultado = "Aprobado",
                 estado = "Formalizado",
                 nombreIngeniero = "Andrea Contreras",
-                fechaPrueba = "13/09/2025"
+                fechaPrueba = "13/09/2025",
+                latitud = -33.2856,
+                longitud = -70.8752
             ),
-            onDescargar = {}
+            onDescargar = {},
+            onVolver = {}
         )
     }
 }

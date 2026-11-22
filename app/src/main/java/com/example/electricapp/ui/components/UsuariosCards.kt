@@ -115,7 +115,7 @@ fun UsuariosCardsView(){
         UsuariosCards(
             usuario = FormularioRegistros(
 
-                "Manuel Mora",
+                1,
                 "Manuel@gmail.com",
                 rol = Rol.CLIENTE
             ),

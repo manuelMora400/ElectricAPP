@@ -55,7 +55,7 @@ val Exito = Color(0xFF1B8A4B)
 val ExitoFondo = Color(0xFF38FC17)
 
 
-val CuadroAprobado = Color(0xFF38FC17)
+val CuadroAprobado = Color(0xFF65BD45)
 val CuadroRechazado = Color(0xFFC40000)
 val CuadroObservacion = Color(0xFFFF8D00)
 val CuadroActualizado = Color(0xFF1F1D27)

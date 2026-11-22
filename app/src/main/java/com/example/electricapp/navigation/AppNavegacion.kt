@@ -16,6 +16,7 @@ import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.CambiarClaveScreens
+import com.example.electricapp.ui.screens.DetallesScreen
 import com.example.electricapp.ui.screens.EditarPerfilScreens
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
@@ -149,6 +150,9 @@ fun AppNavegacion(){
 
         composable(Rutas.Consulta.rutas){
             buscarProtocolo(
+                onVolver = {
+                    navController.popBackStack()
+                },
                 rol = uiState.rol,
                 Buscado = {
                 }
@@ -174,6 +178,9 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.MenuCliente.rutas)
+                },
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
                 }
             )
         }
@@ -254,7 +261,7 @@ fun AppNavegacion(){
             route = Rutas.EditarPerfil.rutas,
             arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
         ) { entrada ->
-            val idUsuario = entrada.arguments?.getInt("idUsuario") ?: 0
+            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0
             EditarPerfilScreens(
                 idUsuario = idUsuario,
                 rolSesion = uiState.rol,

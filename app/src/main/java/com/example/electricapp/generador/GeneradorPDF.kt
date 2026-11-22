@@ -74,15 +74,23 @@ object GeneradorPdfProtocolo {
         y += 95f
 
         // 4.- Tarjetas de datos (De Validacion / Nombre de la que se encargo)
-        val ingeniero = detalle.nombreIngeniero?.ifBlank { "Pendiente de validación" }
-            ?: "Pendiente de validación"
+        val ingeniero: String = if (detalle.nombreIngeniero.isNullOrBlank()) {
+            "Pendiente de validación"
+        } else {
+            detalle.nombreIngeniero
+        }
 
-        val tarjetas = listOf(
+        val ubicacionGps: String = if (detalle.latitud != null && detalle.longitud != null) {
+            "Latitud: ${detalle.latitud} · Longitud: ${detalle.longitud}"
+        } else {
+            "Sin coordenadas GPS registradas"
+        }
+
+        val tarjetas: List<Pair<String, String>> = listOf(
             "${detalle.Tag} · ${detalle.Instalacion}" to "Prueba del ${detalle.fechaPrueba} (${detalle.estado})",
             "Medición ${detalle.devanado} · ${detalle.tensionPrueba} kV" to "1 min ${detalle.medicion1Min} MΩ · 10 min ${detalle.medicion10Min} MΩ",
-            "Formalizado por" to ingeniero
-
-
+            "Formalizado por" to ingeniero,
+            "Ubicación GPS de la prueba" to ubicacionGps
         )
 
         //_____ Diseno y Arquitectura del PDF _____

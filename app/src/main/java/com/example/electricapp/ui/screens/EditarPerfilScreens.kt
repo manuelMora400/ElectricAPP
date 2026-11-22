@@ -45,7 +45,7 @@ import com.example.electricapp.viewModel.EditarPerfilViewModel
 @Composable
 fun EditarPerfilScreens(
     viewModel: EditarPerfilViewModel = viewModel(),
-    idUsuario: Int,
+    idUsuario: Long,
     rolSesion: Rol,
     onVolver: () -> Unit,
     onGuardado: (String) -> Unit
