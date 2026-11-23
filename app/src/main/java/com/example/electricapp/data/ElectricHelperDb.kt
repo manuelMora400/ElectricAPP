@@ -516,6 +516,10 @@ class ElectricHelperDb(context : Context) :
     fun cantidadCuentasActivas() : Int = contador("SELECT COUNT(*) FROM $TABLA_USUARIO WHERE $ACTIVO = 1")
     fun cantidadInstRegistrados() : Int = contador("SELECT COUNT(*) FROM $TABLA_INSTRUMENTOS")
 
+    fun cantidadPorRevisar() : Int = contador("SELECT COUNT(*) FROM $TABLA_PROTOCOLO WHERE $ESTADO_PROTOCOLO = ?", arrayOf("REGISTRADO_TERRENO"))
+    fun cantidadEnObservacion() : Int = contador("SELECT COUNT(*) FROM $TABLA_PROTOCOLO WHERE $ESTADO_PROTOCOLO = ?", arrayOf("EN_OBSERVACION"))
+    fun cantidadFormalizados() : Int = contador("SELECT COUNT(*) FROM $TABLA_PROTOCOLO WHERE $ESTADO_PROTOCOLO = ?", arrayOf("FORMALIZADO"))
+
     fun obtenerDetalle(): List<DetallesState> {
         val lista = mutableListOf<DetallesState>()
 
