@@ -27,6 +27,8 @@ import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
 import com.example.electricapp.ui.screens.screensCrearContrasena
 import com.example.electricapp.ui.screens.screensCrearProtocolos
+import com.example.electricapp.ui.screens.screensEquipos
+import com.example.electricapp.ui.screens.screensRegistrarEquipo
 import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
@@ -101,7 +103,27 @@ fun AppNavegacion(){
                 },
                 onPerfil = {
                     navController.navigate(Rutas.Perfil.rutas)
+                },
+                // lista para equipos de cliente
+                onEquipos = {
+                    navController.navigate(Rutas.Equipos.rutas)
                 }
+            )
+        }
+
+        // para ir a Equipos
+        composable(Rutas.Equipos.rutas) {
+            screensEquipos(
+                onAgregarEquipo = {
+                    navController.navigate(Rutas.RegistrarEquipo.rutas)
+                },
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(Rutas.RegistrarEquipo.rutas) {
+            screensRegistrarEquipo(
+                onVolver = { navController.popBackStack() }
             )
         }
 
@@ -178,9 +200,6 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.MenuCliente.rutas)
-                },
-                onPerfil = {
-                    navController.navigate(Rutas.Perfil.rutas)
                 }
             )
         }
