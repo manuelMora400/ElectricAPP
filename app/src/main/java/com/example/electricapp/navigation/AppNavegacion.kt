@@ -28,6 +28,7 @@ import com.example.electricapp.ui.screens.screensCrearProtocolos
 import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
+import com.example.electricapp.ui.screens.PorRevisarScreens
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -205,7 +206,7 @@ fun AppNavegacion(){
             VistaIngenieroScreens(
                 nombreIngeniero = uiState.nombre.substringBefore(" "),
                 onRevisarProtocolos = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.PorRevisar.rutas)
                 },
                 onHistorial = {
                     navController.navigate(Rutas.Consulta.rutas)
@@ -221,6 +222,17 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.VistaIngeniero.rutas)
+                }
+            )
+        }
+
+        composable(Rutas.PorRevisar.rutas) {
+            PorRevisarScreens(
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onRevisar = {
+                    enDesarrollo()
                 }
             )
         }
