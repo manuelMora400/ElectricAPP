@@ -731,4 +731,18 @@ class ElectricHelperDb(context : Context) :
         return null
     }
 
+    fun formalizarProtocolo(idProtocolo : Int) : Boolean{
+
+        val valores = contentValuesOf().apply{
+            put(ESTADO_PROTOCOLO, "FORMALIZADO")
+        }
+        val filas = writableDatabase.update(
+            TABLA_PROTOCOLO,
+            valores,
+            "$ID_PROTOCOLO = ? AND $ESTADO_PROTOCOLO = ?",
+            arrayOf(idProtocolo.toString(), "REGISTRADO_TERRENO")
+        )
+        return filas > 0
+    }
+
 }
