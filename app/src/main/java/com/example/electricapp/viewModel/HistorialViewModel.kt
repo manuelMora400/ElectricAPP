@@ -2,7 +2,6 @@ package com.example.electricapp.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
@@ -18,8 +17,18 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
     private val _uiState = MutableStateFlow(HistorialState())
     val uiState: StateFlow<HistorialState> = _uiState.asStateFlow()
 
-    fun onRol(rol: Rol) {
-        _uiState.update { currentState -> currentState.copy(rolUsuario = rol) }
+    fun onRol(rol: Rol, zonaCliente: String = "") {
+        _uiState.update { currentState ->
+            currentState.copy(
+                rolUsuario = rol,
+                zonaCliente = zonaCliente,
+                instalacion = if (rol == Rol.CLIENTE && zonaCliente.isNotBlank()) {
+                    zonaCliente
+                } else {
+                    currentState.instalacion
+                }
+            )
+        }
     }
 
     fun onTagBuscar(valor: String) {
@@ -55,12 +64,23 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
             else -> null
         }
 
-        val errorLugar = when {
-            estado.instalacion.isBlank() ->
-                "Instalación no puede estar vacía"
-            estado.instalacion.length !in 5..30 ->
-                "Este campo no acepta menos de 5 y más de 30 caracteres"
-            else -> null
+        // Si es Cliente, usa su zona asignada; si es Técnico/Jefe, valida el campo escrito
+        val instalacionAFiltrar = if (estado.Cliente) {
+            estado.zonaCliente.trim()
+        } else {
+            estado.instalacion.trim()
+        }
+
+        val errorLugar = if (estado.Cliente) {
+            null
+        } else {
+            when {
+                estado.instalacion.isBlank() ->
+                    "Instalación no puede estar vacía"
+                estado.instalacion.length !in 5..30 ->
+                    "Este campo no acepta menos de 5 y más de 30 caracteres"
+                else -> null
+            }
         }
 
         val hayErrores = listOf(errorSerie, errorLugar).any { it != null }
@@ -78,7 +98,7 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
 
         val protocolosEncontrados = db.filtrarProtocolo(
             tag = estado.tagBuscar.trim(),
-            instalacion = estado.instalacion.trim()
+            instalacion = instalacionAFiltrar
         )
 
         return if (protocolosEncontrados.isNotEmpty()) {
@@ -92,9 +112,15 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
             }
             true
         } else {
+            val mensajeError = if (estado.Cliente) {
+                "No hay protocolos para ese TAG en tu zona (${estado.zonaCliente})"
+            } else {
+                "No hay protocolos para ese TAG en esa instalación"
+            }
             _uiState.update {
                 it.copy(
-                    intalacionError = "No hay protocolos para ese TAG en esa instalación",
+                    tagError = if (estado.Cliente) mensajeError else null,
+                    intalacionError = if (!estado.Cliente) mensajeError else null,
                     busquedaExitosa = false,
                     listaProtocolo = emptyList()
                 )
@@ -102,6 +128,7 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
             false
         }
     }
+
     override fun onCleared() {
         db.close()
         super.onCleared()

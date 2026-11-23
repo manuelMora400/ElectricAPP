@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class DetalleViewModel(application: Application) : AndroidViewModel(application){
+class DetalleViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = ElectricHelperDb(context = application)
 
@@ -20,13 +20,19 @@ class DetalleViewModel(application: Application) : AndroidViewModel(application)
         cargarDetalles()
     }
 
-    fun cargarDetalles() {
+    fun cargarDetalles(tagSeleccionado: String? = null) {
         val detallesEncontrados = db.obtenerDetalle()
 
         _uiState.update { currentState ->
-            val detalles = detallesEncontrados.firstOrNull()
-            if (detalles != null) {
-                detalles.copy(listaDetalles = detallesEncontrados)
+            // Si llega un Tag desde la pantalla anterior lo busca; si no, toma el primero
+            val detalleActual = if (!tagSeleccionado.isNullOrBlank()) {
+                detallesEncontrados.find { it.Tag == tagSeleccionado } ?: detallesEncontrados.firstOrNull()
+            } else {
+                detallesEncontrados.firstOrNull()
+            }
+
+            if (detalleActual != null) {
+                detalleActual.copy(listaDetalles = detallesEncontrados)
             } else {
                 currentState.copy(listaDetalles = emptyList())
             }

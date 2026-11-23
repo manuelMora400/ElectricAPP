@@ -2,7 +2,7 @@ package com.example.electricapp.model
 
 data class EditarPerfilState(
 
-    val idUsuario : Int = 0,
+    val idUsuario : Long = 0,
     val nombre : String = "",
     val telefono : String = "",
     val correo : String = "",

@@ -1,7 +1,7 @@
 package com.example.electricapp.model
 
 data class FormularioRegistros(
-
+    val id : Long = 0L,
     val rut : String = "",
     val nombre : String = "",
     val telefono : String = "",

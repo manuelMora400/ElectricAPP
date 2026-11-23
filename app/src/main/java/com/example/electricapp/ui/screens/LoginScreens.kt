@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,22 +58,23 @@ fun ScreensLogin(
     onLogeado : (Rol) -> Unit
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val cargando by viewModel.cargando.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.logeadoExitoso) {
+        if(uiState.logeadoExitoso){
+            onLogeado(uiState.rol)
+        }
+    }
 
     LoginScreens(
         uiState = uiState,
         onCorreoCambia = viewModel::onCorreoCambia,
         onPasswordCambia = viewModel::onPasswordCambia,
-        onIniciar = {
-            val rol = viewModel.onIniciar()
-            if (rol != null){
-                onLogeado(rol)
-            }
-        },
+        onIniciar = { viewModel.onIniciar(onLogeado)},
         onVisibilidad = viewModel::onVisibilidad,
         onLimpiar = viewModel::onLimpiarRecuperacion,
         onGenerarClave = viewModel::onEnviarClaveTemporal,
         onIdRecuperacioCambia = viewModel::onIdentificadiorClave,
-        // guarda la clave temporal en la BD solo cuando el SMS ya salio
         onClaveEnviada = viewModel::onClaveTemporalEnviada
     )
 }
@@ -86,7 +89,8 @@ fun LoginScreens(
     onIdRecuperacioCambia : (String) -> Unit,
     onGenerarClave : () -> Unit,
     onLimpiar : () -> Unit,
-    onClaveEnviada : () -> Unit
+    onClaveEnviada : () -> Unit,
+    cargando : Boolean = false
     ){
     var mostrarRecuperacion by remember { mutableStateOf(false) }
 
@@ -128,7 +132,7 @@ fun LoginScreens(
                     error = uiState.errorPassword
                 )
 
-                //Esto nos permite hacer un mensaje error Credemciales "Como efecto"
+
                 var errorCredenciales by remember {mutableStateOf("")}
 
                 if(uiState.errorGeneral != null){
@@ -146,9 +150,9 @@ fun LoginScreens(
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-
-                // el boton se movio DENTRO de este Column (antes estaba afuera)
-                // asi toma el mismo margen que los campos y no llega a los bordes de la pantalla
+                if(cargando){
+                    LinearProgressIndicator( modifier = Modifier.fillMaxWidth())
+                }
                 BotonInicio(
                     texto = stringResource(R.string.btn_iniciar_sesion),
                     onClick = onIniciar,
