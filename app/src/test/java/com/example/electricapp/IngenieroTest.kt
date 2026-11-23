@@ -1,8 +1,11 @@
 package com.example.electricapp
 
+import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ProtocoloRevision
 import com.example.electricapp.model.RevisarProtocoloState
+import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Test
 
 class IngenieroTest {
 
@@ -19,5 +22,14 @@ class IngenieroTest {
             resultado = "APROBADO",
             estado = "REGISTRADO_TERRENO"
         )
+    }
+
+    @Test
+    fun contadoresPanel_inicianEnCero() {
+        val contadores = ContadoresPanelIngeniero()
+
+        assertEquals(0, contadores.porRevisar)
+        assertEquals(0, contadores.enObservacion)
+        assertEquals(0, contadores.formalizados)
     }
 }
