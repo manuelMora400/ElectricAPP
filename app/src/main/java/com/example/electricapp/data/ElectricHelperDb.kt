@@ -14,6 +14,7 @@ import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
 import com.example.electricapp.model.PerfilUsuario
+import com.example.electricapp.model.ProtocoloRevision
 
 class ElectricHelperDb(context : Context) :
     SQLiteOpenHelper(context, NombreBD, null, VERSION_BD){
@@ -631,6 +632,63 @@ class ElectricHelperDb(context : Context) :
         ).use { cursor ->
             return cursor.moveToFirst()
         }
+    }
+
+    fun protocolosPorRevisar(): List<ProtocoloRevision> {
+        val lista = mutableListOf<ProtocoloRevision>()
+
+        val consultaSql = """
+        SELECT
+            p.$ID_PROTOCOLO,
+            a.$EQUIPO_TAG,
+            a.$INSTALACION,
+            p.$FECHA_HORA_PRUEBA,
+            u.$NOMBRE_USU AS nombre_tecnico,
+            a.$DEVANADO,
+            a.$TENSION_PRUEBA,
+            a.$LECTURA_1MIN,
+            a.$LECTURA_10MIN,
+            p.$RESULTADO,
+            p.$ESTADO_PROTOCOLO
+        FROM $TABLA_PROTOCOLO p
+        INNER JOIN $TABLA_AISLACION a ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+        INNER JOIN $TABLA_USUARIO u ON p.$USU_ID = u.$ID_USUARIO
+        WHERE p.$ESTADO_PROTOCOLO = ?
+        ORDER BY p.$ID_PROTOCOLO ASC
+    """.trimIndent()
+
+        readableDatabase.rawQuery(consultaSql, arrayOf("REGISTRADO_TERRENO")).use { cursor ->
+            val idxId = cursor.getColumnIndexOrThrow(ID_PROTOCOLO)
+            val idxTag = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
+            val idxInstalacion = cursor.getColumnIndexOrThrow(INSTALACION)
+            val idxFecha = cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)
+            val idxTecnico = cursor.getColumnIndexOrThrow("nombre_tecnico")
+            val idxDevanado = cursor.getColumnIndexOrThrow(DEVANADO)
+            val idxTension = cursor.getColumnIndexOrThrow(TENSION_PRUEBA)
+            val idxMin1 = cursor.getColumnIndexOrThrow(LECTURA_1MIN)
+            val idxMin10 = cursor.getColumnIndexOrThrow(LECTURA_10MIN)
+            val idxResultado = cursor.getColumnIndexOrThrow(RESULTADO)
+            val idxEstado = cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO)
+
+            while (cursor.moveToNext()) {
+                lista.add(
+                    ProtocoloRevision(
+                        idProtocolo = cursor.getInt(idxId),
+                        tag = cursor.getString(idxTag),
+                        instalacion = cursor.getString(idxInstalacion),
+                        fechaPrueba = cursor.getString(idxFecha),
+                        tecnico = cursor.getString(idxTecnico),
+                        devanado = cursor.getString(idxDevanado),
+                        tensionPrueba = cursor.getString(idxTension),
+                        medicion1Min = cursor.getString(idxMin1),
+                        medicion10Min = cursor.getString(idxMin10),
+                        resultado = cursor.getString(idxResultado),
+                        estado = cursor.getString(idxEstado)
+                    )
+                )
+            }
+        }
+        return lista
     }
 
 }
