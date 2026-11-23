@@ -12,7 +12,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.R
-import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.CambiarClaveScreens
@@ -20,7 +19,7 @@ import com.example.electricapp.ui.screens.EditarPerfilScreens
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
 import com.example.electricapp.ui.screens.ScreensLogin
-import com.example.electricapp.ui.screens.VistaIngenieroContenido
+import com.example.electricapp.ui.screens.VistaIngenieroScreens
 import com.example.electricapp.ui.screens.VistaJefeScreens
 import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
@@ -203,8 +202,7 @@ fun AppNavegacion(){
     }
 
         composable(Rutas.VistaIngeniero.rutas) {
-            VistaIngenieroContenido(
-                estado = ContadoresPanelIngeniero(),
+            VistaIngenieroScreens(
                 nombreIngeniero = uiState.nombre.substringBefore(" "),
                 onRevisarProtocolos = {
                     enDesarrollo()
