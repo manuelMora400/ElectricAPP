@@ -29,6 +29,7 @@ import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
 import com.example.electricapp.ui.screens.PorRevisarScreens
+import com.example.electricapp.ui.screens.RevisarProtocoloScreens
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -231,8 +232,27 @@ fun AppNavegacion(){
                 onVolver = {
                     navController.navigateUp()
                 },
-                onRevisar = {
+                onRevisar = { idProtocolo ->
+                    navController.navigate(Rutas.RevisarProtocolo.crear(idProtocolo))
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.RevisarProtocolo.rutas,
+            arguments = listOf(navArgument("idProtocolo") { type = NavType.IntType })
+        ) { entrada ->
+            RevisarProtocoloScreens(
+                idProtocolo = entrada.arguments?.getInt("idProtocolo") ?: 0,
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onObservar = {
                     enDesarrollo()
+                },
+                onFormalizado = {
+                    Toast.makeText(contexto, contexto.getString(R.string.ing_protocolo_formalizado), Toast.LENGTH_SHORT).show()
+                    navController.navigateUp()
                 }
             )
         }
