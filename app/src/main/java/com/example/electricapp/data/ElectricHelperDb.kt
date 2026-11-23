@@ -691,4 +691,44 @@ class ElectricHelperDb(context : Context) :
         return lista
     }
 
+    fun buscarProtocoloRevision(idProtocolo: Int): ProtocoloRevision? {
+        val consultaSql = """
+        SELECT
+            p.$ID_PROTOCOLO,
+            a.$EQUIPO_TAG,
+            a.$INSTALACION,
+            p.$FECHA_HORA_PRUEBA,
+            u.$NOMBRE_USU AS nombre_tecnico,
+            a.$DEVANADO,
+            a.$TENSION_PRUEBA,
+            a.$LECTURA_1MIN,
+            a.$LECTURA_10MIN,
+            p.$RESULTADO,
+            p.$ESTADO_PROTOCOLO
+        FROM $TABLA_PROTOCOLO p
+        INNER JOIN $TABLA_AISLACION a ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+        INNER JOIN $TABLA_USUARIO u ON p.$USU_ID = u.$ID_USUARIO
+        WHERE p.$ID_PROTOCOLO = ?
+    """.trimIndent()
+
+        readableDatabase.rawQuery(consultaSql, arrayOf(idProtocolo.toString())).use { cursor ->
+            if (cursor.moveToFirst()) {
+                return ProtocoloRevision(
+                    idProtocolo = cursor.getInt(cursor.getColumnIndexOrThrow(ID_PROTOCOLO)),
+                    tag = cursor.getString(cursor.getColumnIndexOrThrow(EQUIPO_TAG)),
+                    instalacion = cursor.getString(cursor.getColumnIndexOrThrow(INSTALACION)),
+                    fechaPrueba = cursor.getString(cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)),
+                    tecnico = cursor.getString(cursor.getColumnIndexOrThrow("nombre_tecnico")),
+                    devanado = cursor.getString(cursor.getColumnIndexOrThrow(DEVANADO)),
+                    tensionPrueba = cursor.getString(cursor.getColumnIndexOrThrow(TENSION_PRUEBA)),
+                    medicion1Min = cursor.getString(cursor.getColumnIndexOrThrow(LECTURA_1MIN)),
+                    medicion10Min = cursor.getString(cursor.getColumnIndexOrThrow(LECTURA_10MIN)),
+                    resultado = cursor.getString(cursor.getColumnIndexOrThrow(RESULTADO)),
+                    estado = cursor.getString(cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO))
+                )
+            }
+        }
+        return null
+    }
+
 }
