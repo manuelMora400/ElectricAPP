@@ -14,6 +14,10 @@ sealed class Rutas(val rutas: String){
 
     data object MenuCliente : Rutas("menu_cliente")
     data object VistaIngeniero : Rutas("ingeniero_panel")
+    data object PorRevisar : Rutas("ingeniero_por_revisar")
+    data object RevisarProtocolo : Rutas("ingeniero_revisar/{idProtocolo}") {
+        fun crear(idProtocolo : Int) = "ingeniero_revisar/$idProtocolo"
+    }
     data object RegistrarCuentas : Rutas("crear_cuenta")
 
     data object Perfil : Rutas("perfil")

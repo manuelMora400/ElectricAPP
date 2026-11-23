@@ -203,6 +203,16 @@
     <string name="ing_seccion_accesos">Accesos</string>
     <string name="ing_instrumentos_sub">Ver vigencia</string>
     <string name="ing_formalizados_sub">Protocolos cerrados</string>
+    <string name="ing_titulo_por_revisar">Protocolos por revisar</string>
+    <string name="ing_orden_por_revisar">Ordenados del más antiguo al más nuevo</string>
+    <string name="ing_sin_protocolos">No hay protocolos por revisar</string>
+    <string name="ing_tecnico_fecha">%1$s · %2$s</string>
+    <string name="ing_titulo_revisar">Revisar protocolo</string>
+    <string name="ing_btn_formalizar">Formalizar</string>
+    <string name="ing_btn_observar">Observar</string>
+    <string name="ing_confirmar_titulo">¿Formalizar protocolo?</string>
+    <string name="ing_confirmar_texto">%1$s quedará formalizado. Esta acción no se puede deshacer.</string>
+    <string name="ing_protocolo_formalizado">Protocolo formalizado</string>
 
 
     <!-- AlertDialog cuenta creada-->

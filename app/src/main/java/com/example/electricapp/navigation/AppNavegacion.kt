@@ -12,7 +12,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.R
-import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.CambiarClaveScreens
@@ -21,7 +20,7 @@ import com.example.electricapp.ui.screens.EditarPerfilScreens
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
 import com.example.electricapp.ui.screens.ScreensLogin
-import com.example.electricapp.ui.screens.VistaIngenieroContenido
+import com.example.electricapp.ui.screens.VistaIngenieroScreens
 import com.example.electricapp.ui.screens.VistaJefeScreens
 import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
@@ -30,6 +29,8 @@ import com.example.electricapp.ui.screens.screensCrearProtocolos
 import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
+import com.example.electricapp.ui.screens.PorRevisarScreens
+import com.example.electricapp.ui.screens.RevisarProtocoloScreens
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -210,11 +211,10 @@ fun AppNavegacion(){
     }
 
         composable(Rutas.VistaIngeniero.rutas) {
-            VistaIngenieroContenido(
-                estado = ContadoresPanelIngeniero(),
+            VistaIngenieroScreens(
                 nombreIngeniero = uiState.nombre.substringBefore(" "),
                 onRevisarProtocolos = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.PorRevisar.rutas)
                 },
                 onHistorial = {
                     navController.navigate(Rutas.Consulta.rutas)
@@ -230,6 +230,36 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.VistaIngeniero.rutas)
+                }
+            )
+        }
+
+        composable(Rutas.PorRevisar.rutas) {
+            PorRevisarScreens(
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onRevisar = { idProtocolo ->
+                    navController.navigate(Rutas.RevisarProtocolo.crear(idProtocolo))
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.RevisarProtocolo.rutas,
+            arguments = listOf(navArgument("idProtocolo") { type = NavType.IntType })
+        ) { entrada ->
+            RevisarProtocoloScreens(
+                idProtocolo = entrada.arguments?.getInt("idProtocolo") ?: 0,
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onObservar = {
+                    enDesarrollo()
+                },
+                onFormalizado = {
+                    Toast.makeText(contexto, contexto.getString(R.string.ing_protocolo_formalizado), Toast.LENGTH_SHORT).show()
+                    navController.navigateUp()
                 }
             )
         }
