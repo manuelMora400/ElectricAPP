@@ -4,6 +4,7 @@ import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ProtocoloRevision
 import com.example.electricapp.model.RevisarProtocoloState
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -40,5 +41,10 @@ class IngenieroTest {
         assertEquals(2, contadores.porRevisar)
         assertEquals(1, contadores.enObservacion)
         assertEquals(3, contadores.formalizados)
+    }
+
+    @Test
+    fun revisar_iniciaSinProtocolo() {
+        assertNull(estado.protocolo)
     }
 }
