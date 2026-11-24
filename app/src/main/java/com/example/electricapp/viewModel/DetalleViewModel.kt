@@ -1,52 +1,44 @@
 package com.example.electricapp.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.example.electricapp.data.ElectricHelperDb
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.ProtocoloRepository
 import com.example.electricapp.model.DetallesState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class DetalleViewModel(application: Application) : AndroidViewModel(application) {
+class DetalleViewModel(
+    private val repositorio: ProtocoloRepository = ProtocoloRepository()
+) : ViewModel() {
 
-    private val db = ElectricHelperDb(context = application)
-
-    private val _uiState = MutableStateFlow(value = DetallesState())
+    private val _uiState = MutableStateFlow(DetallesState(cargando = true))
     val uiState: StateFlow<DetallesState> = _uiState.asStateFlow()
 
-    init {
-        cargarDetalles()
-    }
+    private var idCargado: Long? = null
 
-    fun cargarDetalles(tagSeleccionado: String? = null) {
-        val detallesEncontrados = db.obtenerDetalle()
+    fun cargarDetalle(idProtocolo: Long, forzar: Boolean = false) {
+        if (!forzar && idCargado == idProtocolo) return
+        idCargado = idProtocolo
 
-        _uiState.update { currentState ->
-            // Si llega un Tag desde la pantalla anterior lo busca; si no, toma el primero
-            val detalleActual = if (!tagSeleccionado.isNullOrBlank()) {
-                detallesEncontrados.find { it.Tag == tagSeleccionado } ?: detallesEncontrados.firstOrNull()
-            } else {
-                detallesEncontrados.firstOrNull()
-            }
+        _uiState.update { DetallesState(idProtocolo = idProtocolo, cargando = true) }
 
-            if (detalleActual != null) {
-                detalleActual.copy(listaDetalles = detallesEncontrados)
-            } else {
-                currentState.copy(listaDetalles = emptyList())
+        viewModelScope.launch {
+            try {
+                val detalle = repositorio.obtenerDetalle(idProtocolo)
+                _uiState.update { detalle }
+            } catch (e: Exception) {
+                idCargado = null   // permite reintentar
+                _uiState.update {
+                    DetallesState(idProtocolo = idProtocolo, error = e.message ?: "Error inesperado")
+                }
             }
         }
     }
 
     fun seleccionarDetalle(detalle: DetallesState) {
-        _uiState.update { currentState ->
-            detalle.copy(listaDetalles = currentState.listaDetalles)
-        }
-    }
-
-    override fun onCleared() {
-        db.close()
-        super.onCleared()
+        _uiState.update { actual -> detalle.copy(listaDetalles = actual.listaDetalles) }
     }
 }

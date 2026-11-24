@@ -1,6 +1,7 @@
 package com.example.electricapp.data
 
 import com.example.electricapp.data.remote.AislacionResponse
+import com.example.electricapp.data.remote.CambiarEstadoProtocoloRequest
 import com.example.electricapp.data.remote.ProtocoloApi
 import com.example.electricapp.data.remote.ProtocoloResponse
 import com.example.electricapp.data.remote.RetrofitClient
@@ -81,6 +82,7 @@ class ProtocoloRepository(
             resultado = when (p.estadoProtocolo) {
                 "APROBADO" -> "Aprobado"
                 "RECHAZADO" -> "Rechazado"
+                "OBSERVACION" -> "Observacion"
                 else -> ""
             },
             estado = if (formalizado) "Formalizado" else "Pendiente de formalización",
@@ -92,7 +94,7 @@ class ProtocoloRepository(
     }
 
     private fun esFormalizado(estadoServidor: String?) =
-        estadoServidor == "APROBADO" || estadoServidor == "RECHAZADO"
+        estadoServidor == "FORMALIZADO"
 
     private fun formatearFecha(iso: String?): String {
         if (iso.isNullOrBlank()) return ""
@@ -119,10 +121,16 @@ class ProtocoloRepository(
         if (e.code() == 404) return "No se encontró el protocolo solicitado"
         val cuerpo = e.response()?.errorBody()?.string()
         val mensaje = try {
-            JSONObject(cuerpo ?: "").optString("message")
+            JSONObject(cuerpo ?: "").optString("error")
         } catch (ex: Exception) {
             ""
         }
         return mensaje.ifBlank { "Error del servidor (${e.code()})" }
     }
+
+    suspend fun formalizar(idProtocolo: Long, estado: String = "APROBADO"): Boolean = llamar {
+        api.cambiarEstado(idProtocolo, CambiarEstadoProtocoloRequest(estado))
+        true
+    }
+
 }
