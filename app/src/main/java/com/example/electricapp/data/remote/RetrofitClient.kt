@@ -7,6 +7,8 @@ object RetrofitClient {
 
     private const val URL_USUARIOS = "https://lc71zsll-8080.brs.devtunnels.ms/"
 
+    private const val URL_PROTOCOLOS = "https://lc71zsll-8081.brs.devtunnels.ms/"
+
     private fun crear(urlBase : String) : Retrofit =
         Retrofit.Builder()
             .baseUrl(urlBase)
@@ -14,4 +16,6 @@ object RetrofitClient {
             .build()
 
     val usuarioApi: UsuarioApi  by lazy { crear(URL_USUARIOS).create(UsuarioApi::class.java)}
+
+    val protocoloApi: ProtocoloApi by lazy { crear(URL_PROTOCOLOS).create(ProtocoloApi::class.java) }
 }
