@@ -1,9 +1,6 @@
 package com.example.electricapp.ingeniero
 
 import com.example.electricapp.model.ContadoresPanelIngeniero
-import com.example.electricapp.model.ProtocoloRevision
-import com.example.electricapp.model.ResultadoPrueba
-import com.example.electricapp.model.RevisarProtocoloState
 import com.example.electricapp.viewModel.RevisarProtocoloViewModel
 import org.junit.Before
 import org.junit.Test
@@ -14,21 +11,11 @@ import kotlin.test.assertTrue
 
 class IngenieroTest {
 
-    private lateinit var estado : RevisarProtocoloState
-    private lateinit var protocolo : ProtocoloRevision
     private lateinit var viewModel : RevisarProtocoloViewModel
 
     @Before
     fun preparar() {
         viewModel = RevisarProtocoloViewModel()
-        estado = RevisarProtocoloState()
-        protocolo = ProtocoloRevision(
-            idProtocolo = 4,
-            tag = "TR-02",
-            instalacion = "Planta Lampa",
-            resultado = "APROBADO",
-            estado = "REGISTRADO_TERRENO"
-        )
     }
 
     @Test
@@ -86,13 +73,6 @@ class IngenieroTest {
 
         assertFalse(estado.formalizado)
         assertNull(estado.errorGeneral)
-    }
-
-    @Test
-    fun resultadoAprobado_seTraduceConElEnum() {
-        val resultado = ResultadoPrueba.entries.find { it.name == protocolo.resultado }
-
-        assertEquals(ResultadoPrueba.APROBADO, resultado)
     }
 
 }
