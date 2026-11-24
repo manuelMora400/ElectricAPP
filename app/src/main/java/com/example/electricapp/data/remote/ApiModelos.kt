@@ -103,3 +103,23 @@ data class RenovarCalibracionRequest(
 
 
 
+data class ProtocoloResponse(
+    val idProtocolo: Long,
+    val fechaPrueba: String?,
+    val temperatura: Double?,
+    val humedad: Double?,
+    val latitud: Double?,
+    val longitud: Double?,
+    val estadoProtocolo: String?
+)
+
+data class AislacionResponse(
+    val id: Long,
+    val tag: String?,
+    val instalacion: String?,
+    val enumDevanado: String?,
+    val tension: Double?,
+    val lectura1Min: Double?,
+    val lectura10Min: Double?,
+    val idProtocolo: Long?
+)
