@@ -78,13 +78,14 @@ class IngenieroTest {
     }
 
     @Test
-    fun confirmarFormalizar_quedaFormalizado() {
-        val conDialogo = estado.copy(mostrarConfirmacion = true)
+    fun onConfirmarFormalizar_sinProtocolo_esperadoNoFormalizar() {
 
-        val resultado = conDialogo.copy(mostrarConfirmacion = false, formalizado = true)
+        viewModel.onPedirFormalizar()
+        viewModel.onConfirmarFormalizar()
+        val estado = viewModel.uistate.value
 
-        assertFalse(resultado.mostrarConfirmacion)
-        assertTrue(resultado.formalizado)
+        assertFalse(estado.formalizado)
+        assertNull(estado.errorGeneral)
     }
 
     @Test
