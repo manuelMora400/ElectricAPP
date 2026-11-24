@@ -67,11 +67,14 @@ class IngenieroTest {
     }
 
     @Test
-    fun cargarProtocolo_guardaElProtocolo() {
-        val resultado = estado.copy(protocolo = protocolo)
+    fun onCancelar_dialogoAbierto_esperadoCerrarSinFormalizar() {
 
-        assertEquals(4, resultado.protocolo?.idProtocolo)
-        assertEquals("TR-02", resultado.protocolo?.tag)
+        viewModel.onPedirFormalizar()
+        viewModel.onCancelar()
+        val estado = viewModel.uistate.value
+
+        assertFalse(estado.mostrarConfirmacion)
+        assertFalse(estado.formalizado)
     }
 
     @Test
