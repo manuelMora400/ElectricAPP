@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.ElectricHelperDb
+import com.example.electricapp.data.InstrumentoRepository
+import com.example.electricapp.data.remote.InstrumentoResponse
 import com.example.electricapp.model.FormularioInstrumentosStates
 import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.ResultadoPrueba
@@ -22,6 +24,7 @@ import java.util.Locale
 class FormularioProtocolosViewModel(application: Application) : AndroidViewModel(application){
 
     private val db = ElectricHelperDb(application)
+
 
 
     val equipos = listOf(
@@ -266,7 +269,6 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
 
         return !hayErrores
     }
-
     fun onRegistrar() : Boolean{
 
         val valido = validarCampos()
