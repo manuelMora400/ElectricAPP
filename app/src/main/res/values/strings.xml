@@ -134,6 +134,24 @@
     <string name="visualizar_instrumentos">Instrumentos registrados</string>
     <string name="informacion_instrumentos">Puede visualizar los instrumentos:</string>
 
+    <string name="ayuda_lista_instrumentos">Toque un instrumento para renovar su calibración</string>
+    <string name="ayuda_lista_instrumentos_lectura">Revise la vigencia antes de usar un instrumento en terreno</string>
+    <string name="agregar_instrumento">Agregar instrumento</string>
+    <string name="titulo_registrar_instrumento">Registrar instrumento</string>
+    <string name="ayuda_registrar_instrumento">Complete los datos del instrumento y su calibración vigente</string>
+    <string name="titulo_renovar_instrumento">Renovar calibración</string>
+    <string name="ayuda_renovar_instrumento">Ingrese las fechas de la nueva calibración del instrumento</string>
+    <string name="seccion_datos_instrumento">Datos del instrumento</string>
+    <string name="seccion_instrumento_renovar">Instrumento a renovar</string>
+    <string name="seccion_nueva_calibracion">Nueva calibración</string>
+    <string name="btn_renovar_instrumento">Renovar calibración</string>
+    <string name="mensaje_renovado_exito_instrumentos">Calibración renovada con éxito</string>
+    <string name="ej_nombre_instrumento">Ej: Megóhmetro 5 kV</string>
+    <string name="ej_marca_instrumento">Ej: Megger</string>
+    <string name="ej_modelo_instrumento">Ej: MIT525</string>
+    <string name="ej_serie_instrumento">Ej: MIT-0045821</string>
+    <string name="ej_fecha_instrumento">DD/MM/AAAA</string>
+
 
     <string name="Consulta_Aprobado">Aprobado</string>
     <string name="Consulta_Observacion">En observación</string>
@@ -230,7 +248,7 @@
     <string name="permiso_sms_denegado">Sin permiso de SMS no se puede enviar la clave</string>
     <string name="sms_mensaje_clave">ElectricApp: su clave temporal es %1$s. Cambiela al iniciar sesion.</string>
 
-    <!-- Perfil (común para todos los roles) -->
+    <!-- Perfil -->
     <string name="perfil_titulo">Mi perfil</string>
     <string name="perfil_seccion_datos">Datos de la cuenta</string>
     <string name="btn_editar_datos">Editar datos</string>
@@ -251,6 +269,10 @@
     <string name="btn_crear_protocolo"> Crear Protocolo</string>
     <string name="instrumentos_tecnico"> Instrumentos </string>
     <string name="subtitulo_tecnico_instrumento"> Ver vigencias </string>
+
+    <!-- etiquetas de los contadores del panel Tecnico  -->
+    <string name="tecnico_contador_mis_protocolos">Mis protocolos</string>
+    <string name="tecnico_contador_por_formalizar">Por formalizar</string>
     <string name="nuevo_protocolo"> Nuevo protocolo </string>
     <string name="foto_evidencia_terreno"> Evidencia en terreno </string>
     <string name="capturar_foto"> Capture una foto del equipo probado </string>
@@ -263,6 +285,30 @@
     <string name="perfil_clave_nueva">Nueva contraseña</string>
     <string name="perfil_btn_actualizar_clave">Actualizar contraseña</string>
     <string name="perfil_clave_actualizada">Contraseña actualizada</string>
+
+
+    <!-- Equipos  -->
+    <string name="titulo_equipos_jefe">Equipos</string>
+    <string name="subtitulo_equipos_jefe">Equipos de los clientes</string>
+    <string name="titulo_equipos_sistema">Equipos de clientes</string>
+    <string name="titulo_lista_equipos">Equipos registrados</string>
+    <string name="ayuda_lista_equipos">Equipos de los clientes que se pueden probar en terreno</string>
+    <string name="equipos_vacio">Aún no hay equipos registrados</string>
+    <string name="agregar_equipo">Agregar equipo</string>
+    <string name="titulo_formulario_equipo">Registrar equipo</string>
+    <string name="ayuda_formulario_equipo">Complete los datos del equipo del cliente</string>
+    <string name="seccion_datos_equipo">Datos del equipo</string>
+    <string name="seccion_cliente_equipo">Cliente dueño</string>
+    <string name="campo_tag_equipo">TAG</string>
+    <string name="ayuda_tag_equipo">ej: TR-03</string>
+    <string name="campo_tipo_equipo">Tipo de equipo</string>
+    <string name="ayuda_tipo_equipo">ej: Transformador</string>
+    <string name="campo_instalacion_equipo">Instalación</string>
+    <string name="ayuda_instalacion_equipo">ej: Planta Lampa</string>
+    <string name="campo_cliente_equipo">Cliente dueño del equipo</string>
+    <string name="btn_registrar_equipo">Registrar equipo</string>
+    <string name="equipo_registrado_exito">Equipo registrado</string>
+    <string name="equipo_tipo_instalacion">%1$s · %2$s</string>
 
 
 

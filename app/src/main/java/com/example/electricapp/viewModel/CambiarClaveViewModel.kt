@@ -1,20 +1,38 @@
 package com.example.electricapp.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.example.electricapp.data.ElectricHelperDb
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.UsuarioRepository
+import com.example.electricapp.data.remote.CambiarClaveRequest
 import com.example.electricapp.model.CambiarClaveState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class CambiarClaveViewModel(application : Application) : AndroidViewModel(application){
+class CambiarClaveViewModel() : ViewModel(){
 
-    private val db = ElectricHelperDb(application)
-
+    private val repositorio = UsuarioRepository()
     private val _uiState = MutableStateFlow(CambiarClaveState())
     val uiState : StateFlow<CambiarClaveState> = _uiState.asStateFlow()
+
+    private val _cargando = MutableStateFlow(false)
+    val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
+
+    private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
+        viewModelScope.launch {
+            _cargando.value = true
+            try {
+                accion()
+            } catch (e: Exception) {
+                onError(e.message ?: "Ocurrió un error inesperado")
+            } finally {
+                _cargando.value = false
+            }
+        }
+    }
 
     fun onClaveActual(valor : String){
         _uiState.update { it.copy(claveActual = valor, errorClaveActual = null, errorGeneral = null) }
@@ -35,7 +53,7 @@ class CambiarClaveViewModel(application : Application) : AndroidViewModel(applic
         _uiState.update { it.copy(passwordVisible = !it.passwordVisible) }
     }
 
-    fun onGuardarClaveNueva(idUsuario : Int) : Boolean{
+    fun onGuardarClaveNueva(idUsuario : Long, onExitoso : () -> Unit){
 
         val estado = _uiState.value
         val nuevaClave = estado.nuevaClave
@@ -43,8 +61,6 @@ class CambiarClaveViewModel(application : Application) : AndroidViewModel(applic
         val errorClaveActual =
             if(estado.claveActual.isBlank()){
                 "Debe ingresar su contraseña actual"
-            }else if(!db.claveCorrecta(idUsuario, estado.claveActual)){
-                "La contraseña actual no es correcta"
             }else
                 null
 
@@ -76,24 +92,31 @@ class CambiarClaveViewModel(application : Application) : AndroidViewModel(applic
                 errorNuevaClave = errorNuevaPassword,
                 errorConfirmarClave = errorConfirmarClave
             ) }
-            return false
+            return
         }
-
-        val confirmadoExito = db.actualizarClave(idUsuario, nuevaClave)
-
-        if(confirmadoExito){
+        ejecutar(
+            onError = { mensaje ->
+                if(mensaje == "La contraseña actual es incorrecta")
+                    _uiState.update { it.copy(errorClaveActual = mensaje) }
+                    else{
+                    _uiState.update { it.copy(
+                        errorGeneral = mensaje
+                    ) }
+                }
+            }
+        ){
+            val datos = CambiarClaveRequest(
+                claveActual = estado.claveActual,
+                claveNueva = nuevaClave,
+                confirmarClave = estado.confirmarClave
+            )
+            repositorio.cambiarClave(
+                id = idUsuario,
+                datos  = datos
+            )
             _uiState.value = CambiarClaveState()
-            return true
-        }else{
-            _uiState.update { it.copy(
-                errorGeneral = "Error al cambiar su contraseña"
-            ) }
-            return false
+            onExitoso()
         }
-    }
 
-    override fun onCleared() {
-        db.close()
-        super.onCleared()
     }
 }

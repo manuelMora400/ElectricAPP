@@ -38,7 +38,7 @@ import com.example.electricapp.viewModel.CambiarClaveViewModel
 @Composable
 fun CambiarClaveScreens(
     viewModel: CambiarClaveViewModel = viewModel(),
-    idUsuario: Int,
+    idUsuario: Long,
     onVolver: () -> Unit,
     onClaveGuardada: () -> Unit
 ) {
@@ -51,11 +51,7 @@ fun CambiarClaveScreens(
         onConfirmarClave = viewModel::onConfirmarClave,
         onVisibilidad = viewModel::onVisibilidad,
         onVolver = onVolver,
-        onGuardarClave = {
-            if (viewModel.onGuardarClaveNueva(idUsuario)) {
-                onClaveGuardada()
-            }
-        }
+        onGuardarClave = {viewModel.onGuardarClaveNueva(idUsuario, onClaveGuardada)}
     )
 }
 

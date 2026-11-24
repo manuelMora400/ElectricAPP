@@ -3,6 +3,7 @@ package com.example.electricapp.navigation
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,11 +27,15 @@ import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
 import com.example.electricapp.ui.screens.screensCrearContrasena
 import com.example.electricapp.ui.screens.screensCrearProtocolos
+import com.example.electricapp.ui.screens.screensEquipos
+import com.example.electricapp.ui.screens.screensRegistrarEquipo
 import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
+import com.example.electricapp.ui.screens.screensFormularioInstrumento
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
 import com.example.electricapp.ui.screens.PorRevisarScreens
 import com.example.electricapp.ui.screens.RevisarProtocoloScreens
+import com.example.electricapp.viewModel.FormularioInstrumentosViewModel
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -102,7 +107,27 @@ fun AppNavegacion(){
                 },
                 onPerfil = {
                     navController.navigate(Rutas.Perfil.rutas)
+                },
+                // lista para equipos de cliente
+                onEquipos = {
+                    navController.navigate(Rutas.Equipos.rutas)
                 }
+            )
+        }
+
+        // para ir a Equipos
+        composable(Rutas.Equipos.rutas) {
+            screensEquipos(
+                onAgregarEquipo = {
+                    navController.navigate(Rutas.RegistrarEquipo.rutas)
+                },
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(Rutas.RegistrarEquipo.rutas) {
+            screensRegistrarEquipo(
+                onVolver = { navController.popBackStack() }
             )
         }
 
@@ -141,10 +166,24 @@ fun AppNavegacion(){
 
         composable(Rutas.Instrumentos.rutas) {
             screensRegistrosInstrumentos(
-                onRegistro = {
+                onAbrirFormulario = {
+                    navController.navigate(Rutas.FormularioInstrumento.rutas)
                 },
-                onActualizado = {
-                }
+                onVolver = { navController.popBackStack() },
+                soloLectura = uiState.rol != Rol.JEFE_TECNICO
+            )
+        }
+
+        composable(Rutas.FormularioInstrumento.rutas) { entrada ->
+            val entradaLista = remember(entrada) {
+                navController.getBackStackEntry(Rutas.Instrumentos.rutas)
+            }
+            val instrumentosViewModel: FormularioInstrumentosViewModel =
+                viewModel(viewModelStoreOwner = entradaLista)
+
+            screensFormularioInstrumento(
+                viewModel = instrumentosViewModel,
+                onVolver = { navController.popBackStack() }
             )
         }
 
@@ -195,9 +234,6 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.MenuCliente.rutas)
-                },
-                onPerfil = {
-                    navController.navigate(Rutas.Perfil.rutas)
                 }
             )
         }
@@ -222,6 +258,9 @@ fun AppNavegacion(){
                 },
                 onHistorialDeEquipo = {
                     navController.navigate(Rutas.Consulta.rutas)
+                },
+                onInstrumentos = {
+                    navController.navigate(Rutas.Instrumentos.rutas)
                 }
             )
     }
@@ -305,9 +344,9 @@ fun AppNavegacion(){
 
         composable(
             route = Rutas.EditarPerfil.rutas,
-            arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+            arguments = listOf(navArgument("idUsuario") { type = NavType.LongType })
         ) { entrada ->
-            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0
+            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0L
             EditarPerfilScreens(
                 idUsuario = idUsuario,
                 rolSesion = uiState.rol,
@@ -326,10 +365,10 @@ fun AppNavegacion(){
 
         composable(
             route = Rutas.CambiarClave.rutas,
-            arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+            arguments = listOf(navArgument("idUsuario") { type = NavType.LongType })
         ) { entrada ->
             CambiarClaveScreens(
-                idUsuario = entrada.arguments?.getInt("idUsuario") ?: 0,
+                idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0L,
                 onVolver = {
                     navController.navigateUp()
                 },

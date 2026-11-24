@@ -22,4 +22,6 @@ data class FormularioInstrumentosStates(
     val  mensajeExito : Boolean = false,
 
     val id : Int = 0,
-    val vencido : Boolean = false )
+    val vencido : Boolean = false,
+
+    val modoRenovar : Boolean = false )

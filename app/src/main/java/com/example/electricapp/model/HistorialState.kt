@@ -2,8 +2,6 @@ package com.example.electricapp.model
 
 data class HistorialState(
 
-    val idProtocolo: Long = 0,
-
     val tagBuscar: String = "",
     val instalacion: String = "",
 
@@ -21,7 +19,7 @@ data class HistorialState(
     val formalizado: Boolean = false,
     val zonaCliente: String = "",
 
-    val cargando: Boolean = false
+    val idProtocolo: Long = 0
 
 ){
     val Cliente : Boolean get() = rolUsuario == Rol.CLIENTE
