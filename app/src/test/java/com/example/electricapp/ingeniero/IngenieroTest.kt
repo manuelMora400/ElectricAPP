@@ -1,15 +1,15 @@
-package com.example.electricapp
+package com.example.electricapp.ingeniero
 
 import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ProtocoloRevision
 import com.example.electricapp.model.ResultadoPrueba
 import com.example.electricapp.model.RevisarProtocoloState
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class IngenieroTest {
 
