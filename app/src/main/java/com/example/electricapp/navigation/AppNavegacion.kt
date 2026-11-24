@@ -303,10 +303,10 @@ fun AppNavegacion(){
 
         composable(
             route = Rutas.CambiarClave.rutas,
-            arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+            arguments = listOf(navArgument("idUsuario") { type = NavType.LongType })
         ) { entrada ->
             CambiarClaveScreens(
-                idUsuario = entrada.arguments?.getInt("idUsuario") ?: 0,
+                idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0L,
                 onVolver = {
                     navController.navigateUp()
                 },
