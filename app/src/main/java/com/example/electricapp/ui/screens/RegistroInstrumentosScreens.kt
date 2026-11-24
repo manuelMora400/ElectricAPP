@@ -46,7 +46,8 @@ fun screensRegistrosInstrumentos(
 
     viewModel: FormularioInstrumentosViewModel = viewModel(),
     onRegistro : () -> Unit,
-    onActualizado: () -> Unit
+    onActualizado: () -> Unit,
+    soloLectura : Boolean = false
 ){
     val Uistate by viewModel.uiState.collectAsStateWithLifecycle()
     val instrumentos by viewModel.instrumentosBD.collectAsStateWithLifecycle()
@@ -60,19 +61,10 @@ fun screensRegistrosInstrumentos(
         onNumSerieCambia = viewModel::onNumSerieCambia,
         onFechaCalibracionCambia = viewModel::onFechaCalifracionCambia,
         onFechaVencimientoCambia = viewModel::onFechaVencimientoCambia,
-        onRegistrar = {
-            val registradoExito = viewModel.onRegistrar()
-            if(registradoExito){
-                onRegistro()
-            }
-        },
+        onRegistrar = {viewModel.onRegistrar()},
         onLimpiar = viewModel::onLimpiar,
-        onActualizar = {
-            val actualizado = viewModel.onActualizar()
-            if(actualizado){
-                onActualizado()
-            }
-        }
+        onActualizar = { viewModel.onActualizar(onActualizado)},
+        soloLectura = soloLectura
     )
 }
 
@@ -89,7 +81,8 @@ fun RegistroInstrumentosScreens(
     onFechaVencimientoCambia : (String) -> Unit,
     onRegistrar : () -> Unit,
     onLimpiar : () -> Unit,
-    onActualizar : () -> Unit
+    onActualizar : () -> Unit,
+    soloLectura : Boolean = false
 ){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
@@ -113,7 +106,7 @@ fun RegistroInstrumentosScreens(
                 )
             }
 
-            item { Card(
+            if (!soloLectura) item { Card(
                 modifier = Modifier.fillMaxWidth().padding(Dimens.espacioPantalla),
                 colors = EstilosTarjetas.coloresSecundario(),
                 border = EstilosTarjetas.bordeado(),

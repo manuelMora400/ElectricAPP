@@ -4,6 +4,7 @@ import com.example.electricapp.data.remote.ContadorResponse
 import com.example.electricapp.data.remote.CrearInstrumentoRequest
 import com.example.electricapp.data.remote.InstrumentoApi
 import com.example.electricapp.data.remote.InstrumentoResponse
+import com.example.electricapp.data.remote.RenovarCalibracionRequest
 import com.example.electricapp.data.remote.RetrofitClient
 import com.example.electricapp.data.remote.VigenciaResponse
 import org.json.JSONObject
@@ -46,10 +47,10 @@ class InstrumentoRepository (
     suspend fun consultarVigencia(id : Long) : VigenciaResponse = llamar {
         instrumentoApi.vigencia(id)
     }
+    suspend fun renovarCalibracion(numSerie : String, datos : RenovarCalibracionRequest): InstrumentoResponse = llamar {
+        instrumentoApi.renovarCalibracion(numSerie, datos)
+    }
 
-    /*
-        falta actualizar (falta hacerlo en el backend)
-    */
 }
 
 

@@ -96,5 +96,10 @@ data class EquipoResponse(
     val idCliente: Long
 )
 
+data class RenovarCalibracionRequest(
+    val fechaCalibracion : String,
+    val fechaVencimiento: String
+)
+
 
 

@@ -18,4 +18,7 @@ interface InstrumentoApi {
 
     @POST("api/instrumentos")
     suspend fun crearInstrumentos(@Body datos : CrearInstrumentoRequest) : InstrumentoResponse
+
+    @POST("api/instrumentos/serie/{numeroSerie}/calibraciones")
+    suspend fun renovarCalibracion(@Path("numeroSerie") numeroSerie : String, @Body datos : RenovarCalibracionRequest): InstrumentoResponse
 }
