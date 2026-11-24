@@ -29,7 +29,7 @@ class IngenieroTest {
     }
 
     @Test
-    fun contadoresPanel_inicianEnCero() {
+    fun contadoresPanel_sinDatos_esperadoEnCero() {
         val contadores = ContadoresPanelIngeniero()
 
         assertEquals(0, contadores.porRevisar)
