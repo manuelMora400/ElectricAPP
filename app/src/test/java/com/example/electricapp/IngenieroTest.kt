@@ -54,4 +54,12 @@ class IngenieroTest {
         assertFalse(estado.mostrarConfirmacion)
         assertFalse(estado.formalizado)
     }
+
+    @Test
+    fun cargarProtocolo_guardaElProtocolo() {
+        val resultado = estado.copy(protocolo = protocolo)
+
+        assertEquals(4, resultado.protocolo?.idProtocolo)
+        assertEquals("TR-02", resultado.protocolo?.tag)
+    }
 }
