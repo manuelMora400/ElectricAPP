@@ -4,6 +4,7 @@ import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ProtocoloRevision
 import com.example.electricapp.model.ResultadoPrueba
 import com.example.electricapp.model.RevisarProtocoloState
+import com.example.electricapp.viewModel.RevisarProtocoloViewModel
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -15,9 +16,11 @@ class IngenieroTest {
 
     private lateinit var estado : RevisarProtocoloState
     private lateinit var protocolo : ProtocoloRevision
+    private lateinit var viewModel : RevisarProtocoloViewModel
 
     @Before
     fun preparar() {
+        viewModel = RevisarProtocoloViewModel()
         estado = RevisarProtocoloState()
         protocolo = ProtocoloRevision(
             idProtocolo = 4,
@@ -47,7 +50,10 @@ class IngenieroTest {
     }
 
     @Test
-    fun revisar_iniciaSinProtocolo() {
+    fun revisarProtocolo_alIniciar_esperadoSinProtocolo() {
+
+        val estado = viewModel.uistate.value
+
         assertNull(estado.protocolo)
     }
 
