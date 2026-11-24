@@ -13,5 +13,6 @@ data class DetallesState(
     val fechaPrueba: String = "",
     val listaDetalles: List<DetallesState> = emptyList(),
     val latitud: Double? = null,
-    val longitud: Double? = null
+    val longitud: Double? = null,
+    val idProtocolo: Long = 0
 )
