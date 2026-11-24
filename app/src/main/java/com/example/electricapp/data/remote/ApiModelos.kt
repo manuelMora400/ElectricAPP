@@ -123,3 +123,8 @@ data class AislacionResponse(
     val lectura10Min: Double?,
     val idProtocolo: Long?
 )
+
+data class CambiarEstadoProtocoloRequest(
+    val estadoProtocolo: String
+)
+
