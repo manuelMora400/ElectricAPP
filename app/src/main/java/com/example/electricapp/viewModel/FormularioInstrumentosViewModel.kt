@@ -193,7 +193,7 @@ class FormularioInstrumentosViewModel() : ViewModel() {
         return !hayErrores
     }
 
-    fun onRegistrar() {
+    fun onRegistrar(onExito : () -> Unit = {}) {
         val valido = validarCampos()
         if (!valido) return
 
@@ -215,6 +215,7 @@ class FormularioInstrumentosViewModel() : ViewModel() {
             repositorio.RegistrarInstrumento(request)
             cargarInstrumentos()
             _uiState.update { it.copy(mensajeExito = true) }
+            onExito()
 
             delay(7000)
             _uiState.update { it.copy(mensajeExito = false) }
@@ -238,9 +239,23 @@ class FormularioInstrumentosViewModel() : ViewModel() {
             )
             repositorio.renovarCalibracion(estado.numSerie, actualizar)
             cargarInstrumentos()
-            onExito()
             _uiState.update { it.copy(mensajeExito = true) }
+            onExito()
+
+            delay(7000)
+            _uiState.update { it.copy(mensajeExito = false) }
         }
+    }
+
+    fun onSeleccionarInstrumento(instrumento: FormularioInstrumentosStates) {
+        _uiState.value = FormularioInstrumentosStates(
+            id = instrumento.id,
+            nombre = instrumento.nombre,
+            marca = instrumento.marca,
+            modelo = instrumento.modelo,
+            numSerie = instrumento.numSerie,
+            modoRenovar = true
+        )
     }
 
     fun onLimpiar() {

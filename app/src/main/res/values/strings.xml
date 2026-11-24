@@ -134,6 +134,24 @@
     <string name="visualizar_instrumentos">Instrumentos registrados</string>
     <string name="informacion_instrumentos">Puede visualizar los instrumentos:</string>
 
+    <string name="ayuda_lista_instrumentos">Toque un instrumento para renovar su calibración</string>
+    <string name="ayuda_lista_instrumentos_lectura">Revise la vigencia antes de usar un instrumento en terreno</string>
+    <string name="agregar_instrumento">Agregar instrumento</string>
+    <string name="titulo_registrar_instrumento">Registrar instrumento</string>
+    <string name="ayuda_registrar_instrumento">Complete los datos del instrumento y su calibración vigente</string>
+    <string name="titulo_renovar_instrumento">Renovar calibración</string>
+    <string name="ayuda_renovar_instrumento">Ingrese las fechas de la nueva calibración del instrumento</string>
+    <string name="seccion_datos_instrumento">Datos del instrumento</string>
+    <string name="seccion_instrumento_renovar">Instrumento a renovar</string>
+    <string name="seccion_nueva_calibracion">Nueva calibración</string>
+    <string name="btn_renovar_instrumento">Renovar calibración</string>
+    <string name="mensaje_renovado_exito_instrumentos">Calibración renovada con éxito</string>
+    <string name="ej_nombre_instrumento">Ej: Megóhmetro 5 kV</string>
+    <string name="ej_marca_instrumento">Ej: Megger</string>
+    <string name="ej_modelo_instrumento">Ej: MIT525</string>
+    <string name="ej_serie_instrumento">Ej: MIT-0045821</string>
+    <string name="ej_fecha_instrumento">DD/MM/AAAA</string>
+
 
     <string name="Consulta_Aprobado">Aprobado</string>
     <string name="Consulta_Observacion">En observación</string>

@@ -6,6 +6,7 @@ sealed class Rutas(val rutas: String){
     data object VistaJefe : Rutas("vista")
     data object Registros : Rutas("registros")
     data object Instrumentos : Rutas("instrumentos")
+    data object FormularioInstrumento : Rutas("formulario_instrumento")
     data object Consulta: Rutas("consulta")
     data object TecnicoTerreno : Rutas("tecnico")
     data object CrearProtocolos : Rutas("crear_protocolos")

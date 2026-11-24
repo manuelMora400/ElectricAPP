@@ -3,6 +3,7 @@ package com.example.electricapp.navigation
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,7 +32,9 @@ import com.example.electricapp.ui.screens.screensEquipos
 import com.example.electricapp.ui.screens.screensRegistrarEquipo
 import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
+import com.example.electricapp.ui.screens.screensFormularioInstrumento
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
+import com.example.electricapp.viewModel.FormularioInstrumentosViewModel
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
 @Composable
@@ -162,11 +165,24 @@ fun AppNavegacion(){
 
         composable(Rutas.Instrumentos.rutas) {
             screensRegistrosInstrumentos(
-                onRegistro = {
+                onAbrirFormulario = {
+                    navController.navigate(Rutas.FormularioInstrumento.rutas)
                 },
-                onActualizado = {
-                },
+                onVolver = { navController.popBackStack() },
                 soloLectura = uiState.rol != Rol.JEFE_TECNICO
+            )
+        }
+
+        composable(Rutas.FormularioInstrumento.rutas) { entrada ->
+            val entradaLista = remember(entrada) {
+                navController.getBackStackEntry(Rutas.Instrumentos.rutas)
+            }
+            val instrumentosViewModel: FormularioInstrumentosViewModel =
+                viewModel(viewModelStoreOwner = entradaLista)
+
+            screensFormularioInstrumento(
+                viewModel = instrumentosViewModel,
+                onVolver = { navController.popBackStack() }
             )
         }
 
