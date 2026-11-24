@@ -2,6 +2,7 @@ package com.example.electricapp
 
 import com.example.electricapp.model.ContadoresPanelIngeniero
 import com.example.electricapp.model.ProtocoloRevision
+import com.example.electricapp.model.ResultadoPrueba
 import com.example.electricapp.model.RevisarProtocoloState
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -73,4 +74,12 @@ class IngenieroTest {
         assertFalse(resultado.mostrarConfirmacion)
         assertTrue(resultado.formalizado)
     }
+
+    @Test
+    fun resultadoAprobado_seTraduceConElEnum() {
+        val resultado = ResultadoPrueba.entries.find { it.name == protocolo.resultado }
+
+        assertEquals(ResultadoPrueba.APROBADO, resultado)
+    }
+
 }
