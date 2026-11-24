@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.electricapp.R
+import androidx.compose.ui.unit.dp
 import com.example.electricapp.model.FormularioInstrumentosStates
+import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
@@ -22,10 +25,13 @@ fun InstrumentosCards(
     modifier: Modifier = Modifier
 ){
     Card(
-        modifier = modifier.fillMaxWidth(1f).padding(Dimens.espacioMed)
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = EstilosTarjetas.colores(),
+        border = EstilosTarjetas.bordeado()
     ) {
         Column(
-            modifier = Modifier.padding(Dimens.espacioMed),
+            modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(Dimens.espacioChico)
         ) {
             Text(
