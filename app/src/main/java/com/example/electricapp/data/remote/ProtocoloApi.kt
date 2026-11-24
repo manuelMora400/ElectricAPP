@@ -1,6 +1,8 @@
 package com.example.electricapp.data.remote
 
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -17,4 +19,11 @@ interface ProtocoloApi {
 
     @GET("api/protocolos/{id}")
     suspend fun obtenerProtocolo(@Path("id") id: Long): ProtocoloResponse
+
+    @PUT("api/protocolos/{id}/estado")
+    suspend fun cambiarEstado(
+        @Path("id") id: Long,
+        @Body request: CambiarEstadoProtocoloRequest
+    ): ProtocoloResponse
+
 }
