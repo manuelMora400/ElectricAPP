@@ -29,4 +29,6 @@ interface UsuarioApi {
     @POST("api/usuarios/recuperar-clave")
     suspend fun recuperarClave(@Body datos : RecuperarClaveRequest) : UsuarioResponse
 
+    @GET("api/usuarios/activos/cantidad")
+    suspend fun cantidadCuentasActivas()  : ContadorResponse
 }
