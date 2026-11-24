@@ -6,6 +6,7 @@ import com.example.electricapp.model.RevisarProtocoloState
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -61,5 +62,15 @@ class IngenieroTest {
 
         assertEquals(4, resultado.protocolo?.idProtocolo)
         assertEquals("TR-02", resultado.protocolo?.tag)
+    }
+
+    @Test
+    fun confirmarFormalizar_quedaFormalizado() {
+        val conDialogo = estado.copy(mostrarConfirmacion = true)
+
+        val resultado = conDialogo.copy(mostrarConfirmacion = false, formalizado = true)
+
+        assertFalse(resultado.mostrarConfirmacion)
+        assertTrue(resultado.formalizado)
     }
 }
