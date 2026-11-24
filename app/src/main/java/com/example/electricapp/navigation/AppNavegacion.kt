@@ -165,7 +165,8 @@ fun AppNavegacion(){
                 onRegistro = {
                 },
                 onActualizado = {
-                }
+                },
+                soloLectura = uiState.rol != Rol.JEFE_TECNICO
             )
         }
 
@@ -224,6 +225,9 @@ fun AppNavegacion(){
                 },
                 onHistorialDeEquipo = {
                     navController.navigate(Rutas.Consulta.rutas)
+                },
+                onInstrumentos = {
+                    navController.navigate(Rutas.Instrumentos.rutas)
                 }
             )
     }
@@ -278,9 +282,9 @@ fun AppNavegacion(){
 
         composable(
             route = Rutas.EditarPerfil.rutas,
-            arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+            arguments = listOf(navArgument("idUsuario") { type = NavType.LongType })
         ) { entrada ->
-            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0
+            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0L
             EditarPerfilScreens(
                 idUsuario = idUsuario,
                 rolSesion = uiState.rol,
