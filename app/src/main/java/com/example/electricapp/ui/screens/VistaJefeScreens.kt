@@ -49,7 +49,8 @@ fun VistaJefeScreens(
     onCrearProtocolos: () -> Unit,
     onGestionUsuarios: () -> Unit,
     onInstrumentos: () -> Unit,
-    onPerfil: () -> Unit
+    onPerfil: () -> Unit,
+    onEquipos: () -> Unit
 ) {
     val estado by viewModel.uistate.collectAsStateWithLifecycle()
 
@@ -62,7 +63,8 @@ fun VistaJefeScreens(
         onCrearProtocolos = onCrearProtocolos,
         onGestionUsuarios = onGestionUsuarios,
         onInstrumentos = onInstrumentos,
-        onPerfil = onPerfil
+        onPerfil = onPerfil,
+        onEquipos = onEquipos
     )
 }
 
@@ -76,6 +78,7 @@ fun VistaJefeContenido(
     onGestionUsuarios: () -> Unit,
     onInstrumentos: () -> Unit,
     onPerfil : () -> Unit,
+    onEquipos : () -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -157,6 +160,12 @@ fun VistaJefeContenido(
                         subtitulo = stringResource(R.string.subtitulo_perfil),
                         icono = R.drawable.ic_nombre,
                         onClick = onPerfil
+                    ),
+                    OpcionPanel(
+                        titulo = stringResource(R.string.titulo_equipos_jefe),
+                        subtitulo = stringResource(R.string.subtitulo_equipos_jefe),
+                        icono = R.drawable.ic_registrar_client_equipo,
+                        onClick = onEquipos
                     )
                 )
             )
@@ -197,10 +206,6 @@ private data class OpcionPanel(
 )
 
 
-// chunked(2) parte la lista de a 2
-// IntrinsicSize.Min + fillMaxHeight hacen que las 2 tarjetas de una fila midan lo mismo de alto evitando que se
-// Deforme
-
 @Composable
 private fun GrillaOpciones(opciones: List<OpcionPanel>) {
     Column(verticalArrangement = Arrangement.spacedBy(Dimens.espacioGrilla)) {
@@ -239,7 +244,8 @@ fun VistaJefeView() {
             onCrearProtocolos = {},
             onGestionUsuarios = {},
             onInstrumentos = {},
-            onPerfil = {}
+            onPerfil = {},
+            onEquipos = {}
         )
     }
 }
@@ -255,7 +261,8 @@ fun VistaJefeView2() {
             onCrearProtocolos = {},
             onGestionUsuarios = {},
             onInstrumentos = {},
-            onPerfil = {}
+            onPerfil = {},
+            onEquipos = {}
         )
     }
 }
