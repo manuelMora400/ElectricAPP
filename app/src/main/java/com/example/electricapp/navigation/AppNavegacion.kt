@@ -156,6 +156,22 @@ fun AppNavegacion(){
                 },
                 rol = uiState.rol,
                 Buscado = {
+                },
+                onProtocoloClick = { protocolo ->
+                    navController.navigate(Rutas.DetalleProtocolo.crear(protocolo.idProtocolo))
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.DetalleProtocolo.rutas,
+            arguments = listOf(navArgument("idProtocolo") { type = NavType.LongType })
+        ) { entrada ->
+            DetallesScreen(
+                idProtocolo = entrada.arguments?.getLong("idProtocolo") ?: 0L,
+                onDescargar = {},
+                onVolver = {
+                    navController.popBackStack()
                 }
             )
         }

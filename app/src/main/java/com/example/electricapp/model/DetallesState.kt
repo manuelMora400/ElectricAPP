@@ -1,6 +1,7 @@
 package com.example.electricapp.model
 
 data class DetallesState(
+    val idProtocolo: Long = 0,
     val Tag: String = "",
     val Instalacion: String = "",
     val medicion1Min: String = "",
@@ -13,5 +14,8 @@ data class DetallesState(
     val fechaPrueba: String = "",
     val listaDetalles: List<DetallesState> = emptyList(),
     val latitud: Double? = null,
-    val longitud: Double? = null
+    val longitud: Double? = null,
+
+    val cargando: Boolean = false,
+    val error: String? = null
 )

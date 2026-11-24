@@ -3,6 +3,7 @@ package com.example.electricapp.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,11 +55,7 @@ fun buscarProtocolo(
         uiState = uiState,
         onTagBuscar = viewModel::onTagBuscar,
         onInstalacion = viewModel::onInstalacion,
-        realizarBusqueda = {
-            if (viewModel.Busqueda()) {
-                Buscado()
-            }
-        },
+        realizarBusqueda = { viewModel.Busqueda(onExito = Buscado) },
         onVolver = onVolver,
         onProtocoloClick = onProtocoloClick
     )
@@ -133,7 +130,6 @@ fun HistorialScreen(
                     error = uiState.tagError
                 )
 
-                // Solo se muestra el campo de instalación si NO es Cliente
                 if (!uiState.Cliente) {
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -151,8 +147,14 @@ fun HistorialScreen(
                 BotonInicio(
                     texto = stringResource(R.string.btn_historial),
                     onClick = realizarBusqueda,
+                    siHabilitado = !uiState.cargando,
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                if (uiState.cargando) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    CircularProgressIndicator()
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
