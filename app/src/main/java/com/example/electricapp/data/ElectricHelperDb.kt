@@ -14,6 +14,7 @@ import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
 import com.example.electricapp.model.PerfilUsuario
+import com.example.electricapp.model.ProtocoloRevision
 
 class ElectricHelperDb(context : Context) :
     SQLiteOpenHelper(context, NombreBD, null, VERSION_BD){
@@ -523,6 +524,10 @@ class ElectricHelperDb(context : Context) :
     fun cantidadCuentasActivas() : Int = contador("SELECT COUNT(*) FROM $TABLA_USUARIO WHERE $ACTIVO = 1")
     fun cantidadInstRegistrados() : Int = contador("SELECT COUNT(*) FROM $TABLA_INSTRUMENTOS")
 
+    fun cantidadPorRevisar() : Int = contador("SELECT COUNT(*) FROM $TABLA_PROTOCOLO WHERE $ESTADO_PROTOCOLO = ?", arrayOf("REGISTRADO_TERRENO"))
+    fun cantidadEnObservacion() : Int = contador("SELECT COUNT(*) FROM $TABLA_PROTOCOLO WHERE $ESTADO_PROTOCOLO = ?", arrayOf("EN_OBSERVACION"))
+    fun cantidadFormalizados() : Int = contador("SELECT COUNT(*) FROM $TABLA_PROTOCOLO WHERE $ESTADO_PROTOCOLO = ?", arrayOf("FORMALIZADO"))
+
     fun obtenerDetalle(): List<DetallesState> {
         val lista = mutableListOf<DetallesState>()
 
@@ -606,13 +611,14 @@ class ElectricHelperDb(context : Context) :
         return null
     }
 
-    fun actualizarPerfil(idUsuario : Long, nombre : String, correo : String, telefono : String, cargo : String) : Boolean{
+
+  fun actualizarPerfil(idUsuario : Long, nombre : String, correo : String, telefono : String, cargo : String = "") : Boolean{
+
 
         val valores = contentValuesOf().apply{
             put(NOMBRE_USU, nombre)
             put(CORREO, correo)
             put(TELEFONO, telefono)
-            put(CONTACTO_CARGO, cargo)
         }
         val filas = writableDatabase.update(
             TABLA_USUARIO,
@@ -641,6 +647,117 @@ class ElectricHelperDb(context : Context) :
         ).use { cursor ->
             return cursor.moveToFirst()
         }
+    }
+
+    fun protocolosPorRevisar(): List<ProtocoloRevision> {
+        val lista = mutableListOf<ProtocoloRevision>()
+
+        val consultaSql = """
+        SELECT
+            p.$ID_PROTOCOLO,
+            a.$EQUIPO_TAG,
+            a.$INSTALACION,
+            p.$FECHA_HORA_PRUEBA,
+            u.$NOMBRE_USU AS nombre_tecnico,
+            a.$DEVANADO,
+            a.$TENSION_PRUEBA,
+            a.$LECTURA_1MIN,
+            a.$LECTURA_10MIN,
+            p.$RESULTADO,
+            p.$ESTADO_PROTOCOLO
+        FROM $TABLA_PROTOCOLO p
+        INNER JOIN $TABLA_AISLACION a ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+        INNER JOIN $TABLA_USUARIO u ON p.$USU_ID = u.$ID_USUARIO
+        WHERE p.$ESTADO_PROTOCOLO = ?
+        ORDER BY p.$ID_PROTOCOLO ASC
+    """.trimIndent()
+
+        readableDatabase.rawQuery(consultaSql, arrayOf("REGISTRADO_TERRENO")).use { cursor ->
+            val idxId = cursor.getColumnIndexOrThrow(ID_PROTOCOLO)
+            val idxTag = cursor.getColumnIndexOrThrow(EQUIPO_TAG)
+            val idxInstalacion = cursor.getColumnIndexOrThrow(INSTALACION)
+            val idxFecha = cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)
+            val idxTecnico = cursor.getColumnIndexOrThrow("nombre_tecnico")
+            val idxDevanado = cursor.getColumnIndexOrThrow(DEVANADO)
+            val idxTension = cursor.getColumnIndexOrThrow(TENSION_PRUEBA)
+            val idxMin1 = cursor.getColumnIndexOrThrow(LECTURA_1MIN)
+            val idxMin10 = cursor.getColumnIndexOrThrow(LECTURA_10MIN)
+            val idxResultado = cursor.getColumnIndexOrThrow(RESULTADO)
+            val idxEstado = cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO)
+
+            while (cursor.moveToNext()) {
+                lista.add(
+                    ProtocoloRevision(
+                        idProtocolo = cursor.getInt(idxId),
+                        tag = cursor.getString(idxTag),
+                        instalacion = cursor.getString(idxInstalacion),
+                        fechaPrueba = cursor.getString(idxFecha),
+                        tecnico = cursor.getString(idxTecnico),
+                        devanado = cursor.getString(idxDevanado),
+                        tensionPrueba = cursor.getString(idxTension),
+                        medicion1Min = cursor.getString(idxMin1),
+                        medicion10Min = cursor.getString(idxMin10),
+                        resultado = cursor.getString(idxResultado),
+                        estado = cursor.getString(idxEstado)
+                    )
+                )
+            }
+        }
+        return lista
+    }
+
+    fun buscarProtocoloRevision(idProtocolo: Int): ProtocoloRevision? {
+        val consultaSql = """
+        SELECT
+            p.$ID_PROTOCOLO,
+            a.$EQUIPO_TAG,
+            a.$INSTALACION,
+            p.$FECHA_HORA_PRUEBA,
+            u.$NOMBRE_USU AS nombre_tecnico,
+            a.$DEVANADO,
+            a.$TENSION_PRUEBA,
+            a.$LECTURA_1MIN,
+            a.$LECTURA_10MIN,
+            p.$RESULTADO,
+            p.$ESTADO_PROTOCOLO
+        FROM $TABLA_PROTOCOLO p
+        INNER JOIN $TABLA_AISLACION a ON a.$PROTOCOLO_ID = p.$ID_PROTOCOLO
+        INNER JOIN $TABLA_USUARIO u ON p.$USU_ID = u.$ID_USUARIO
+        WHERE p.$ID_PROTOCOLO = ?
+    """.trimIndent()
+
+        readableDatabase.rawQuery(consultaSql, arrayOf(idProtocolo.toString())).use { cursor ->
+            if (cursor.moveToFirst()) {
+                return ProtocoloRevision(
+                    idProtocolo = cursor.getInt(cursor.getColumnIndexOrThrow(ID_PROTOCOLO)),
+                    tag = cursor.getString(cursor.getColumnIndexOrThrow(EQUIPO_TAG)),
+                    instalacion = cursor.getString(cursor.getColumnIndexOrThrow(INSTALACION)),
+                    fechaPrueba = cursor.getString(cursor.getColumnIndexOrThrow(FECHA_HORA_PRUEBA)),
+                    tecnico = cursor.getString(cursor.getColumnIndexOrThrow("nombre_tecnico")),
+                    devanado = cursor.getString(cursor.getColumnIndexOrThrow(DEVANADO)),
+                    tensionPrueba = cursor.getString(cursor.getColumnIndexOrThrow(TENSION_PRUEBA)),
+                    medicion1Min = cursor.getString(cursor.getColumnIndexOrThrow(LECTURA_1MIN)),
+                    medicion10Min = cursor.getString(cursor.getColumnIndexOrThrow(LECTURA_10MIN)),
+                    resultado = cursor.getString(cursor.getColumnIndexOrThrow(RESULTADO)),
+                    estado = cursor.getString(cursor.getColumnIndexOrThrow(ESTADO_PROTOCOLO))
+                )
+            }
+        }
+        return null
+    }
+
+    fun formalizarProtocolo(idProtocolo : Int) : Boolean{
+
+        val valores = contentValuesOf().apply{
+            put(ESTADO_PROTOCOLO, "FORMALIZADO")
+        }
+        val filas = writableDatabase.update(
+            TABLA_PROTOCOLO,
+            valores,
+            "$ID_PROTOCOLO = ? AND $ESTADO_PROTOCOLO = ?",
+            arrayOf(idProtocolo.toString(), "REGISTRADO_TERRENO")
+        )
+        return filas > 0
     }
 
 }
