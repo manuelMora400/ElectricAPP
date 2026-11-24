@@ -1,33 +1,39 @@
 package com.example.electricapp.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.electricapp.data.ElectricHelperDb
+import com.example.electricapp.data.ProtocoloRepository
 import com.example.electricapp.model.ProtocoloRevision
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PorRevisarViewModel(application: Application) : AndroidViewModel(application) {
+class PorRevisarViewModel() : ViewModel() {
 
-    private val bd = ElectricHelperDb(application)
+    private val repositorio = ProtocoloRepository()
     private val _uistate = MutableStateFlow<List<ProtocoloRevision>>(emptyList())
     val uistate : StateFlow<List<ProtocoloRevision>> = _uistate.asStateFlow()
 
-    init {cargarProtocolos()}
-
     fun cargarProtocolos(){
-        viewModelScope.launch (Dispatchers.IO){
-            val protocolos = bd.protocolosPorRevisar()
-            _uistate.update {protocolos}
+        viewModelScope.launch {
+            try {
+                val protocolos = repositorio.buscarHistorial("", "")
+                    .filter { !it.formalizado }
+                    .sortedBy { it.idProtocolo }
+                    .map {
+                        ProtocoloRevision(
+                            idProtocolo = it.idProtocolo.toInt(),
+                            tag = it.tagBuscar,
+                            instalacion = it.instalacion,
+                            fechaPrueba = it.fechaPrueba
+                        )
+                    }
+                _uistate.update { protocolos }
+            } catch (e: Exception) {
+                _uistate.update { emptyList() }
+            }
         }
-    }
-    override fun onCleared() {
-        bd.close()
-        super.onCleared()
     }
 }

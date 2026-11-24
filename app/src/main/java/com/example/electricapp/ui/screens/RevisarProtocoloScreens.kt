@@ -99,7 +99,20 @@ fun RevisarProtocoloContenido(
         }
     ) { innerPadding ->
 
-        val protocolo = uiState.protocolo ?: return@Scaffold
+        val errorGeneral = uiState.errorGeneral
+
+        val protocolo = uiState.protocolo
+        if (protocolo == null) {
+            if (errorGeneral != null) {
+                Text(
+                    text = errorGeneral,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(innerPadding).padding(16.dp)
+                )
+            }
+            return@Scaffold
+        }
 
         val resultado = ResultadoPrueba.entries.find { it.name == protocolo.resultado }
 
@@ -141,6 +154,16 @@ fun RevisarProtocoloContenido(
                             if (resultado != null) stringResource(resultado.texto) else protocolo.resultado
                         )
                     }
+                }
+            }
+
+            if (errorGeneral != null) {
+                item {
+                    Text(
+                        text = errorGeneral,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
             }
 
