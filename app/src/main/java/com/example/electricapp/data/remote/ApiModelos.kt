@@ -50,6 +50,12 @@ data class ContadorResponse (
     val contador : Long
 )
 
+data class ActualizarPerfilRequest(
+    val nombre : String,
+    val telefono : String,
+    val correo : String? = null
+)
+
 data class CrearInstrumentoRequest(
     val nombre: String,
     val marca: String,

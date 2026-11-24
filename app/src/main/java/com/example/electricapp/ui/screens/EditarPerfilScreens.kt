@@ -62,11 +62,7 @@ fun EditarPerfilScreens(
         onCorreoCambia = viewModel::onCorreoCambia,
         onTelefonoCambia = viewModel::onTelefonoCambia,
         onVolver = onVolver,
-        onGuardar = {
-            if (viewModel.onGuardar()) {
-                onGuardado(viewModel.uiState.value.nombre.trim())
-            }
-        }
+        onGuardar = {viewModel.onGuardar(onGuardado)}
     )
 }
 

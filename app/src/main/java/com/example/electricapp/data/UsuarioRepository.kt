@@ -1,6 +1,7 @@
 package com.example.electricapp.data
 
 
+import com.example.electricapp.data.remote.ActualizarPerfilRequest
 import com.example.electricapp.data.remote.CambiarClaveRequest
 import com.example.electricapp.data.remote.ContadorResponse
 import com.example.electricapp.data.remote.CrearUsuariosRequest
@@ -23,6 +24,11 @@ class UsuarioRepository(
     suspend fun crearUsuario(datos : CrearUsuariosRequest): UsuarioResponse = llamar{
          usuarioApi.crearUsuarios(datos);
     }
+
+    suspend fun actualizarPerfil(id : Long, datos: ActualizarPerfilRequest): UsuarioResponse = llamar {
+        usuarioApi.actualizar(id, datos)
+    }
+
     suspend fun cambiarEstado(id : Long) : UsuarioResponse = llamar{
          usuarioApi.cambiaEstado(id);
     }
