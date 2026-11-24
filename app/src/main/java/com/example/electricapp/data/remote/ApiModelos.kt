@@ -24,6 +24,8 @@ data class UsuarioResponse(
     val telefono: String,
     val rol: String,
     val activo: Boolean,
+    val giro : String?,
+    val contactoCargo : String?,
     val claveTemporal: String?
 )
 data class CrearUsuariosRequest(
@@ -43,4 +45,61 @@ data class RecuperarClaveRequest(
 data class CambiarEstadoRequest(
     val activo : Boolean
 )
+
+data class ContadorResponse (
+    val contador : Long
+)
+
+data class ActualizarPerfilRequest(
+    val nombre : String,
+    val telefono : String,
+    val correo : String? = null
+)
+
+data class CrearInstrumentoRequest(
+    val nombre: String,
+    val marca: String,
+    val modelo: String,
+    val numeroSerie: String,
+    val fechaCalibracion: String,
+    val fechaVencimiento: String
+)
+data class InstrumentoResponse(
+    val id: Long,
+    val nombre: String,
+    val marca: String,
+    val modelo: String,
+    val numeroSerie: String,
+    val fechaCalibracion: String,
+    val fechaVencimiento: String,
+    val vigente: Boolean
+)
+data class VigenciaResponse(
+    val idInstrumento: Long,
+    val vigente: Boolean,
+    val fechaVencimiento: String
+)
+
+
+data class CrearEquipoRequest(
+    val tag: String,
+    val tipo: String,
+    val instalacion: String,
+    val idCliente: Long        // id del usuario CLIENTE dueño (viene de ms_roles)
+)
+
+data class EquipoResponse(
+    val id: Long,
+    val tag: String,
+    val tipo: String,
+    val instalacion: String,
+    val idCliente: Long
+)
+
+data class RenovarCalibracionRequest(
+    val fechaCalibracion : String,
+    val fechaVencimiento: String
+)
+
+
 
