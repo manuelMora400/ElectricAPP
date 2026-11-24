@@ -38,7 +38,7 @@ class IngenieroTest {
     }
 
     @Test
-    fun contadoresPanel_guardanLosValores() {
+    fun contadoresPanel_conValores_esperadoGuardarValores() {
         val contadores = ContadoresPanelIngeniero(porRevisar = 2, enObservacion = 1, formalizados = 3)
 
         assertEquals(2, contadores.porRevisar)
