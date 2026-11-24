@@ -58,9 +58,12 @@ class IngenieroTest {
     }
 
     @Test
-    fun revisar_iniciaSinConfirmacionNiFormalizado() {
-        assertFalse(estado.mostrarConfirmacion)
-        assertFalse(estado.formalizado)
+    fun onPedirFormalizar_abrirDialogo_esperadoMostrarConfirmacion() {
+
+        viewModel.onPedirFormalizar()
+        val estado = viewModel.uistate.value
+
+        assertTrue(estado.mostrarConfirmacion)
     }
 
     @Test
