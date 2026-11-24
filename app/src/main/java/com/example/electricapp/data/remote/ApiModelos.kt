@@ -110,7 +110,8 @@ data class ProtocoloResponse(
     val humedad: Double?,
     val latitud: Double?,
     val longitud: Double?,
-    val estadoProtocolo: String?
+    val estadoProtocolo: String?,
+    val resultadoPrueba: String?
 )
 
 data class AislacionResponse(

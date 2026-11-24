@@ -82,6 +82,7 @@ class ProtocoloRepository(
             resultado = when (p.estadoProtocolo) {
                 "APROBADO" -> "Aprobado"
                 "RECHAZADO" -> "Rechazado"
+                "OBSERVACION" -> "Observacion"
                 else -> ""
             },
             estado = if (formalizado) "Formalizado" else "Pendiente de formalización",
@@ -93,7 +94,7 @@ class ProtocoloRepository(
     }
 
     private fun esFormalizado(estadoServidor: String?) =
-        estadoServidor == "APROBADO" || estadoServidor == "RECHAZADO"
+        estadoServidor == "FORMALIZADO"
 
     private fun formatearFecha(iso: String?): String {
         if (iso.isNullOrBlank()) return ""
@@ -120,7 +121,7 @@ class ProtocoloRepository(
         if (e.code() == 404) return "No se encontró el protocolo solicitado"
         val cuerpo = e.response()?.errorBody()?.string()
         val mensaje = try {
-            JSONObject(cuerpo ?: "").optString("message")
+            JSONObject(cuerpo ?: "").optString("error")
         } catch (ex: Exception) {
             ""
         }
