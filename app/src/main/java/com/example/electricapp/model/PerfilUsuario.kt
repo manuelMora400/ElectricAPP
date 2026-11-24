@@ -8,8 +8,8 @@ data class PerfilUsuario(
     val rut : String = "",
     val telefono : String = "",
     val cargo : String = "",
-    val rol : Rol = Rol.CLIENTE
-
+    val rol : Rol = Rol.CLIENTE,
+    val error : String? = null
 ){
 
     val iniciales : String
