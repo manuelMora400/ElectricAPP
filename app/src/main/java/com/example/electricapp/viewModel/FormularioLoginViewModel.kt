@@ -45,8 +45,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
 
 
 
-
-
     private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
         viewModelScope.launch {
             _cargando.value = true
@@ -72,14 +70,13 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                     idUsuario = perfil.id,
                     nombre = perfil.nombre,
                     logeadoExitoso = true,
-                    cambiarClave = perfil.claveTemporal !=null ,
+                    cambiarClave = false,
                     rol = rol
                 )
             }
         }
     }
 
-    // parte de cambiar clave
     fun onNuevaClave(valor : String){
         _uiState.update {it.copy(nuevaClave = valor, errorNuevaClave = null, errorGeneral = null, logeadoExitoso = false,
             cumpleLargoPassword = valor.length in 8..12,
@@ -150,6 +147,7 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                nuevaClave = "",
                confirmarClave = ""
            ) }
+           sesion.guardar(estado.idUsuario)
            onExito()
        }
     }
@@ -263,7 +261,9 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                cambiarClave = respuestaServidor.debeCambiarClave,
                rol = rolEmum
            ) }
-           sesion.guardar(respuestaServidor.idUsuario)
+           if (!respuestaServidor.debeCambiarClave) {
+               sesion.guardar(respuestaServidor.idUsuario)
+           }
            onExito(rolEmum)
        }
     }
