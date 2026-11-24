@@ -1,6 +1,7 @@
 package com.example.electricapp.data
 
 import com.example.electricapp.data.remote.AislacionResponse
+import com.example.electricapp.data.remote.CambiarEstadoProtocoloRequest
 import com.example.electricapp.data.remote.ProtocoloApi
 import com.example.electricapp.data.remote.ProtocoloResponse
 import com.example.electricapp.data.remote.RetrofitClient
@@ -125,4 +126,10 @@ class ProtocoloRepository(
         }
         return mensaje.ifBlank { "Error del servidor (${e.code()})" }
     }
+
+    suspend fun formalizar(idProtocolo: Long, estado: String = "APROBADO"): Boolean = llamar {
+        api.cambiarEstado(idProtocolo, CambiarEstadoProtocoloRequest(estado))
+        true
+    }
+
 }
