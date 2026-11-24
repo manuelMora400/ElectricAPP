@@ -2,6 +2,7 @@ package com.example.electricapp.data
 
 
 import com.example.electricapp.data.remote.CambiarClaveRequest
+import com.example.electricapp.data.remote.ContadorResponse
 import com.example.electricapp.data.remote.CrearUsuariosRequest
 import com.example.electricapp.data.remote.LoginRequest
 import com.example.electricapp.data.remote.LoginResponse
@@ -37,7 +38,9 @@ class UsuarioRepository(
     suspend fun listarUsuarios(): List<UsuarioResponse> = llamar {
         usuarioApi.listarUsuarios()
     }
-
+    suspend fun cantidadUsaurios() : ContadorResponse = llamar{
+        usuarioApi.cantidadCuentasActivas()
+    }
     private suspend fun <T> llamar(peticion: suspend () -> T) : T = try{
         peticion()
     }catch (e : HttpException){
