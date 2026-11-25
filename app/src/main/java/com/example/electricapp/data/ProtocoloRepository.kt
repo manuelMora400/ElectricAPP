@@ -2,6 +2,8 @@ package com.example.electricapp.data
 
 import com.example.electricapp.data.remote.AislacionResponse
 import com.example.electricapp.data.remote.CambiarEstadoProtocoloRequest
+import com.example.electricapp.data.remote.CrearAislacionRequest
+import com.example.electricapp.data.remote.CrearProtocoloRequest
 import com.example.electricapp.data.remote.ProtocoloApi
 import com.example.electricapp.data.remote.ProtocoloResponse
 import com.example.electricapp.data.remote.RetrofitClient
@@ -61,7 +63,7 @@ class ProtocoloRepository(
         tagBuscar = a.tag.orEmpty(),
         instalacion = a.instalacion.orEmpty(),
         fechaPrueba = formatearFecha(p.fechaPrueba),
-        estado = when (p.estadoProtocolo) {
+        estado = when (p.resultadoPrueba) {
             "APROBADO" -> Estado.APROBADO
             "RECHAZADO" -> Estado.RECHAZADO
             else -> Estado.OBSERVACION
@@ -79,10 +81,10 @@ class ProtocoloRepository(
             medicion10Min = formatearNumero(a.lectura10Min),
             devanado = a.enumDevanado.orEmpty().replace('_', '-'),
             tensionPrueba = formatearNumero(a.tension),
-            resultado = when (p.estadoProtocolo) {
+            resultado = when (p.resultadoPrueba) {
                 "APROBADO" -> "Aprobado"
                 "RECHAZADO" -> "Rechazado"
-                "OBSERVACION" -> "Observacion"
+                "OBSERVACION" -> "Observado"
                 else -> ""
             },
             estado = if (formalizado) "Formalizado" else "Pendiente de formalización",
@@ -128,9 +130,27 @@ class ProtocoloRepository(
         return mensaje.ifBlank { "Error del servidor (${e.code()})" }
     }
 
-    suspend fun formalizar(idProtocolo: Long, estado: String = "APROBADO"): Boolean = llamar {
-        api.cambiarEstado(idProtocolo, CambiarEstadoProtocoloRequest(estado))
-        true
+    suspend fun formalizar(idProtocolo: Long): ProtocoloResponse = llamar {
+        api.cambiarEstado(idProtocolo, CambiarEstadoProtocoloRequest("FORMALIZADO"))
     }
 
+    suspend fun listarProtocolos(): List<ProtocoloResponse> = llamar {
+        api.listarProtocolos()
+    }
+
+    suspend fun protocolosDelTecnico(idTecnico: Long): List<ProtocoloResponse> = llamar {
+        api.protocolosDelTecnico(idTecnico)
+    }
+
+    suspend fun registrarProtocolo(datos: CrearProtocoloRequest): ProtocoloResponse = llamar {
+        api.crearProtocolo(datos)
+    }
+
+    suspend fun registrarAislacion(datos: CrearAislacionRequest): AislacionResponse = llamar {
+        api.crearAislacion(datos)
+    }
+
+    suspend fun listarDevanados(): List<String> = llamar {
+        api.listarDevanados()
+    }
 }
