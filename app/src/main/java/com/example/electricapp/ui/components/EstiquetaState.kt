@@ -12,7 +12,6 @@ import com.example.electricapp.model.Estado
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 
-
 @Composable
 fun etiqueta(
     text: Int,

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 class FormularioLoginViewModel(application : Application): AndroidViewModel(application){
 
     private  val repositorio = UsuarioRepository()
@@ -23,11 +22,8 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
     private val _uiState = MutableStateFlow(FormularioLoginState())
     val uiState : StateFlow<FormularioLoginState> = _uiState.asStateFlow()
 
-
-
     private val _cargando = MutableStateFlow(false)
     val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
-
 
     init {
         restaurarSesion()
@@ -43,8 +39,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         _uiState.update {it.copy(passwordVisible = !it.passwordVisible)}
     }
 
-
-
     private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
         viewModelScope.launch {
             _cargando.value = true
@@ -57,7 +51,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
             }
         }
     }
-
 
     private fun restaurarSesion() {
         val id = sesion.leer()

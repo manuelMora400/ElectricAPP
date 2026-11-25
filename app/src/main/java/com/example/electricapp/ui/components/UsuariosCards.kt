@@ -39,7 +39,6 @@ fun UsuariosCards(
 
     ) {
 
-        //esto saca las iniciales por ejemplo manuel mora MM o javier gongora JG
         val iniciales = usuario.nombre.split(" ").take(2).mapNotNull { it.firstOrNull() }
                         .joinToString ("").uppercase()
 

@@ -7,4 +7,3 @@ data class ContadoresPanelIngeniero(
     val formalizados : Int = 0
 
 )
-

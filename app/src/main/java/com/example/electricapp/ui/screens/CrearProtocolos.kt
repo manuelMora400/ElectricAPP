@@ -68,6 +68,9 @@ fun screensCrearProtocolos(
     onRegistrado: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val equipos by viewModel.equipos.collectAsStateWithLifecycle()
+    val devanados by viewModel.devanados.collectAsStateWithLifecycle()
+    val instrumentos by viewModel.nombresInstrumentos.collectAsStateWithLifecycle()
 
     LaunchedEffect(idTecnico) {
         viewModel.onTecnicoSesion(idTecnico, nombreTecnico)
@@ -75,9 +78,9 @@ fun screensCrearProtocolos(
 
     CrearProtocolosScreens(
         uiState = uiState,
-        equipos = viewModel.equipos,
-        devanados = viewModel.devanados,
-        instrumentos = viewModel.nombresInstrumentos,
+        equipos = equipos,
+        devanados = devanados,
+        instrumentos = instrumentos,
         onVolver = onVolver,
         onEquipoCambia = viewModel::onEquipoCambia,
         onTemperaturaCambia = viewModel::onTemperaturaCambia,
@@ -88,12 +91,7 @@ fun screensCrearProtocolos(
         onLecturaDiezMinutosCambia = viewModel::onLecturaDiezMinutosCambia,
         onInstrumentoCambia = viewModel::onInstrumentoCambia,
         onLimpiar = viewModel::onLimpiar,
-        onRegistrar = {
-            val registrado = viewModel.onRegistrar()
-            if (registrado) {
-                onRegistrado()
-            }
-        }
+        onRegistrar = { viewModel.onRegistrar(onExito = onRegistrado) }
     )
 }
 
@@ -322,7 +320,6 @@ fun CrearProtocolosScreens(
                     }
                 }
             }
-
 
             if (uiState.indicePolarizacion != null && uiState.resultado != null) {
                 item {

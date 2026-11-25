@@ -61,12 +61,14 @@ class RevisarProtocoloViewModel() : ViewModel() {
     }
 
     fun onConfirmarFormalizar(){
-        _uistate.value.protocolo ?: return
-        _uistate.update {
-            it.copy(
-                mostrarConfirmacion = false,
-                errorGeneral = "Formalizar aún no está disponible en el servidor"
-            )
+        val protocolo = _uistate.value.protocolo ?: return
+        ejecutar(
+            onError = { mensaje ->
+                _uistate.update { it.copy(mostrarConfirmacion = false, errorGeneral = mensaje) }
+            }
+        ){
+            repositorio.formalizar(protocolo.idProtocolo.toLong())
+            _uistate.update { it.copy(mostrarConfirmacion = false, formalizado = true) }
         }
     }
 }

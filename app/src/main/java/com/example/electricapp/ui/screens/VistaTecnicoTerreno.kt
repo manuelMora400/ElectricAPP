@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.ui.components.BotonCerrarSesion
@@ -38,7 +37,6 @@ import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.ui.theme.PrimarioClaro
 import com.example.electricapp.ui.theme.PrimarioOscuro
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

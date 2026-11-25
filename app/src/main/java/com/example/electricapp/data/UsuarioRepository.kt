@@ -1,6 +1,5 @@
 package com.example.electricapp.data
 
-
 import com.example.electricapp.data.remote.ActualizarPerfilRequest
 import com.example.electricapp.data.remote.CambiarClaveRequest
 import com.example.electricapp.data.remote.ContadorResponse
@@ -65,4 +64,3 @@ class UsuarioRepository(
         return mensaje.ifBlank { "Error del servidor (${e.code()})" }
     }
 }
-

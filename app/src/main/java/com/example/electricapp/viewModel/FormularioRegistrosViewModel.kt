@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(application){
 
-
     private val repositorio = UsuarioRepository()
 
     private val _cuentasBD = MutableStateFlow<List<FormularioRegistros>>(emptyList())

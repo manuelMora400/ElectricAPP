@@ -2,6 +2,7 @@ package com.example.electricapp.navigation
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -13,7 +14,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.R
-import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
 import com.example.electricapp.ui.screens.CambiarClaveScreens
 import com.example.electricapp.ui.screens.DetallesScreen
@@ -37,10 +37,10 @@ import com.example.electricapp.ui.screens.PorRevisarScreens
 import com.example.electricapp.ui.screens.RevisarProtocoloScreens
 import com.example.electricapp.viewModel.FormularioInstrumentosViewModel
 import com.example.electricapp.viewModel.FormularioLoginViewModel
+import com.example.electricapp.viewModel.TecnicoViewModel
 
 @Composable
 fun AppNavegacion(){
-
 
     val loginViewModel: FormularioLoginViewModel = viewModel()
     val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
@@ -48,11 +48,9 @@ fun AppNavegacion(){
     val navController = rememberNavController()
     val contexto = LocalContext.current
 
-
     fun enDesarrollo(){
         Toast.makeText(contexto, contexto.getString(R.string.en_desarrollo), Toast.LENGTH_SHORT).show()
     }
-
 
     fun cerrarSesion(rutaActual : String){
         loginViewModel.onCerrarSesion()
@@ -108,14 +106,12 @@ fun AppNavegacion(){
                 onPerfil = {
                     navController.navigate(Rutas.Perfil.rutas)
                 },
-                // lista para equipos de cliente
                 onEquipos = {
                     navController.navigate(Rutas.Equipos.rutas)
                 }
             )
         }
 
-        // para ir a Equipos
         composable(Rutas.Equipos.rutas) {
             screensEquipos(
                 onAgregarEquipo = {
@@ -134,7 +130,6 @@ fun AppNavegacion(){
         composable(Rutas.Registros.rutas) {
             screensRegistro(
 
-                //rutas -> ir a crear cuenta
                 onAgregarCuenta = {
                     navController.navigate(Rutas.RegistrarCuentas.rutas)
                 },
@@ -142,7 +137,6 @@ fun AppNavegacion(){
             )
         }
 
-        // Pantalla crear cuenta
         composable (Rutas.RegistrarCuentas.rutas){
             screensRegistrarCuentas(
                 onRegistroExitoso = {},
@@ -150,7 +144,6 @@ fun AppNavegacion(){
             )
         }
 
-        // Crear contraseña
         composable(Rutas.CrearContrasema.rutas){
             screensCrearContrasena(
                  viewModel = loginViewModel,
@@ -187,7 +180,6 @@ fun AppNavegacion(){
             )
         }
 
-
         composable(Rutas.Consulta.rutas){
             buscarProtocolo(
                 onVolver = {
@@ -195,6 +187,22 @@ fun AppNavegacion(){
                 },
                 rol = uiState.rol,
                 Buscado = {
+                },
+                onProtocoloClick = { protocolo ->
+                    navController.navigate(Rutas.DetalleProtocolo.crear(protocolo.idProtocolo))
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.DetalleProtocolo.rutas,
+            arguments = listOf(navArgument("idProtocolo") { type = NavType.LongType })
+        ) { entrada ->
+            DetallesScreen(
+                idProtocolo = entrada.arguments?.getLong("idProtocolo") ?: 0L,
+                onDescargar = {},
+                onVolver = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -223,9 +231,15 @@ fun AppNavegacion(){
         }
 
         composable(Rutas.TecnicoTerreno.rutas) {
-            VistaTecnicoScrees(
+            val tecnicoViewModel: TecnicoViewModel = viewModel()
+            val contadores by tecnicoViewModel.uistate.collectAsStateWithLifecycle()
 
-                estado = ContadoresVistaTecnico(),
+            LaunchedEffect(uiState.idUsuario) {
+                tecnicoViewModel.cargarResumenes(uiState.idUsuario)
+            }
+
+            VistaTecnicoScrees(
+                estado = contadores,
                 nombreTecnico = uiState.nombre.substringBefore(" "),
 
                 onCrearProtocolos = {
@@ -259,7 +273,7 @@ fun AppNavegacion(){
                     navController.navigate(Rutas.Consulta.rutas)
                 },
                 onInstrumentos = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.Instrumentos.rutas)
                 },
                 onPerfil = {
                     navController.navigate(Rutas.Perfil.rutas)

@@ -18,9 +18,6 @@ import androidx.compose.ui.unit.Dp
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-// este componente lo usaremos dentro de la top bar, mas adelante se puede hacer que pueda poner foto
-// ya sea de su cara u de su galeria..... hay que reutilizar en cliente, jefe tecnico, tecncio y ingeniero
-
 @Composable
 fun LogoPerfil(
     iniciales : String,

@@ -34,14 +34,12 @@ fun BotonVerUbicacion(
         modifier = modifier.fillMaxWidth(),
         onClick = {
             if (latitud != null && longitud != null) {
-                // Crea el enlace con la ubicacion mas el nombre del equipo/instalación
                 val etiquetaCodificada = Uri.encode(etiqueta)
                 val uriMaps = Uri.parse("geo:$latitud,$longitud?q=$latitud,$longitud($etiquetaCodificada)")
                 val intentMaps = Intent(Intent.ACTION_VIEW, uriMaps).apply {
                     setPackage("com.google.android.apps.maps")
                 }
 
-                // Si Google Maps está instalado lo abre directo pero si no, este usara el navegador
                 if (intentMaps.resolveActivity(contexto.packageManager) != null) {
                     contexto.startActivity(intentMaps)
                 } else {

@@ -1,6 +1,5 @@
 package com.example.electricapp.ui.components
 
-
 import androidx.compose.material3.Icon
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateFloatAsState
@@ -28,12 +27,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.electricapp.R
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
-
 
 @Composable
 fun TarjetaOpciones(
@@ -43,7 +40,6 @@ fun TarjetaOpciones(
     onClick :  ()  -> Unit,
     modifier: Modifier = Modifier
 ){
- // esta animacion tendra el objetivo de si el usuario presione una opcion se unda la card
     val accionCard = remember {MutableInteractionSource()}
     val presiona by accionCard.collectIsPressedAsState()
 

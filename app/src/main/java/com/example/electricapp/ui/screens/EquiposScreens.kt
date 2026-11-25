@@ -40,7 +40,6 @@ import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.EquiposViewModel
 
-
 @Composable
 fun screensEquipos(
     viewModel: EquiposViewModel = viewModel(),

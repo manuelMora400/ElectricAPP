@@ -47,11 +47,6 @@ import com.example.electricapp.ui.components.EncabezadoVistaJefe
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.FormularioLoginViewModel
 
-
-// Se elimino la card que mantenia los campos formularios
-//  y se actualizo el componente vista jefe  para adaptarse
-// por ultimo se agrega una animacion que "Hunde el boton"
-
 @Composable
 fun ScreensLogin(
     viewModel : FormularioLoginViewModel = viewModel(),
@@ -131,7 +126,6 @@ fun LoginScreens(
                     onVisibilidad ,
                     error = uiState.errorPassword
                 )
-
 
                 var errorCredenciales by remember {mutableStateOf("")}
 

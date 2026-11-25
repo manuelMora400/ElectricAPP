@@ -18,7 +18,6 @@ import com.example.electricapp.R
 import com.example.electricapp.ui.styles.EstilosBotones
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-
 @Composable
 fun BotonCerrarSesion(
 

@@ -1,6 +1,5 @@
 package com.example.electricapp.viewModel
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.InstrumentoRepository
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FormularioInstrumentosViewModel() : ViewModel() {
-
 
     private val repositorio = InstrumentoRepository()
 

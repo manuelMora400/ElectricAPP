@@ -1,18 +1,19 @@
 package com.example.electricapp.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.example.electricapp.data.ElectricHelperDb
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.electricapp.data.ProtocoloRepository
 import com.example.electricapp.model.HistorialState
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class HistorialViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val db = ElectricHelperDb(application)
+class HistorialViewModel(
+    private val repositorio: ProtocoloRepository = ProtocoloRepository()
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HistorialState())
     val uiState: StateFlow<HistorialState> = _uiState.asStateFlow()
@@ -51,8 +52,9 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun Busqueda(): Boolean {
+    fun Busqueda(onExito: () -> Unit = {}) {
         val estado = _uiState.value
+        if (estado.cargando) return
 
         val errorSerie = when {
             estado.tagBuscar.isBlank() ->
@@ -64,7 +66,6 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
             else -> null
         }
 
-        // Si es Cliente, usa su zona asignada; si es Técnico/Jefe, valida el campo escrito
         val instalacionAFiltrar = if (estado.Cliente) {
             estado.zonaCliente.trim()
         } else {
@@ -93,44 +94,57 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
                     busquedaExitosa = false
                 )
             }
-            return false
+            return
         }
 
-        val protocolosEncontrados = db.filtrarProtocolo(
-            tag = estado.tagBuscar.trim(),
-            instalacion = instalacionAFiltrar
-        )
-
-        return if (protocolosEncontrados.isNotEmpty()) {
-            _uiState.update {
-                it.copy(
-                    tagError = null,
-                    intalacionError = null,
-                    busquedaExitosa = true,
-                    listaProtocolo = protocolosEncontrados
-                )
-            }
-            true
-        } else {
-            val mensajeError = if (estado.Cliente) {
-                "No hay protocolos para ese TAG en tu zona (${estado.zonaCliente})"
-            } else {
-                "No hay protocolos para ese TAG en esa instalación"
-            }
-            _uiState.update {
-                it.copy(
-                    tagError = if (estado.Cliente) mensajeError else null,
-                    intalacionError = if (!estado.Cliente) mensajeError else null,
-                    busquedaExitosa = false,
-                    listaProtocolo = emptyList()
-                )
-            }
-            false
+        _uiState.update {
+            it.copy(cargando = true, tagError = null, intalacionError = null, busquedaExitosa = false)
         }
-    }
 
-    override fun onCleared() {
-        db.close()
-        super.onCleared()
+        viewModelScope.launch {
+            try {
+                val protocolosEncontrados = repositorio.buscarHistorial(
+                    tag = estado.tagBuscar.trim(),
+                    instalacion = instalacionAFiltrar
+                )
+
+                if (protocolosEncontrados.isNotEmpty()) {
+                    _uiState.update {
+                        it.copy(
+                            cargando = false,
+                            tagError = null,
+                            intalacionError = null,
+                            busquedaExitosa = true,
+                            listaProtocolo = protocolosEncontrados
+                        )
+                    }
+                    onExito()
+                } else {
+                    val mensajeError = if (estado.Cliente) {
+                        "No hay protocolos para ese TAG en tu zona (${estado.zonaCliente})"
+                    } else {
+                        "No hay protocolos para ese TAG en esa instalación"
+                    }
+                    _uiState.update {
+                        it.copy(
+                            cargando = false,
+                            tagError = if (estado.Cliente) mensajeError else null,
+                            intalacionError = if (!estado.Cliente) mensajeError else null,
+                            busquedaExitosa = false,
+                            listaProtocolo = emptyList()
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        cargando = false,
+                        tagError = e.message ?: "Error inesperado",
+                        busquedaExitosa = false,
+                        listaProtocolo = emptyList()
+                    )
+                }
+            }
+        }
     }
 }

@@ -15,7 +15,6 @@ import com.example.electricapp.ui.styles.EstilosBotones
 import com.example.electricapp.ui.styles.estiloAltoBoton
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-// Boton secundario para botones menos importante (como limpiar) etc
 @Composable
 fun BotonSecundario(
     texto : String,

@@ -1,6 +1,9 @@
 package com.example.electricapp.data
 
 import com.example.electricapp.data.remote.AislacionResponse
+import com.example.electricapp.data.remote.CambiarEstadoProtocoloRequest
+import com.example.electricapp.data.remote.CrearAislacionRequest
+import com.example.electricapp.data.remote.CrearProtocoloRequest
 import com.example.electricapp.data.remote.ProtocoloApi
 import com.example.electricapp.data.remote.ProtocoloResponse
 import com.example.electricapp.data.remote.RetrofitClient
@@ -60,7 +63,7 @@ class ProtocoloRepository(
         tagBuscar = a.tag.orEmpty(),
         instalacion = a.instalacion.orEmpty(),
         fechaPrueba = formatearFecha(p.fechaPrueba),
-        estado = when (p.estadoProtocolo) {
+        estado = when (p.resultadoPrueba) {
             "APROBADO" -> Estado.APROBADO
             "RECHAZADO" -> Estado.RECHAZADO
             else -> Estado.OBSERVACION
@@ -78,9 +81,10 @@ class ProtocoloRepository(
             medicion10Min = formatearNumero(a.lectura10Min),
             devanado = a.enumDevanado.orEmpty().replace('_', '-'),
             tensionPrueba = formatearNumero(a.tension),
-            resultado = when (p.estadoProtocolo) {
+            resultado = when (p.resultadoPrueba) {
                 "APROBADO" -> "Aprobado"
                 "RECHAZADO" -> "Rechazado"
+                "OBSERVACION" -> "Observado"
                 else -> ""
             },
             estado = if (formalizado) "Formalizado" else "Pendiente de formalización",
@@ -92,7 +96,7 @@ class ProtocoloRepository(
     }
 
     private fun esFormalizado(estadoServidor: String?) =
-        estadoServidor == "APROBADO" || estadoServidor == "RECHAZADO"
+        estadoServidor == "FORMALIZADO"
 
     private fun formatearFecha(iso: String?): String {
         if (iso.isNullOrBlank()) return ""
@@ -119,10 +123,34 @@ class ProtocoloRepository(
         if (e.code() == 404) return "No se encontró el protocolo solicitado"
         val cuerpo = e.response()?.errorBody()?.string()
         val mensaje = try {
-            JSONObject(cuerpo ?: "").optString("message")
+            JSONObject(cuerpo ?: "").optString("error")
         } catch (ex: Exception) {
             ""
         }
         return mensaje.ifBlank { "Error del servidor (${e.code()})" }
+    }
+
+    suspend fun formalizar(idProtocolo: Long): ProtocoloResponse = llamar {
+        api.cambiarEstado(idProtocolo, CambiarEstadoProtocoloRequest("FORMALIZADO"))
+    }
+
+    suspend fun listarProtocolos(): List<ProtocoloResponse> = llamar {
+        api.listarProtocolos()
+    }
+
+    suspend fun protocolosDelTecnico(idTecnico: Long): List<ProtocoloResponse> = llamar {
+        api.protocolosDelTecnico(idTecnico)
+    }
+
+    suspend fun registrarProtocolo(datos: CrearProtocoloRequest): ProtocoloResponse = llamar {
+        api.crearProtocolo(datos)
+    }
+
+    suspend fun registrarAislacion(datos: CrearAislacionRequest): AislacionResponse = llamar {
+        api.crearAislacion(datos)
+    }
+
+    suspend fun listarDevanados(): List<String> = llamar {
+        api.listarDevanados()
     }
 }

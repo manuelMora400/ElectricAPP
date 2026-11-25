@@ -9,7 +9,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// antes se usaba como componente no reutilizable ahora si es reutolizable
 @Composable
 fun TituloSeccion(
     texto: String,

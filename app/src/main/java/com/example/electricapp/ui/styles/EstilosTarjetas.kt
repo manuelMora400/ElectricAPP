@@ -8,7 +8,6 @@ import androidx.compose.material3.CardElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import com.example.electricapp.ui.theme.ColorCard
 import com.example.electricapp.ui.theme.Dimens
 
 object EstilosTarjetas{
@@ -37,9 +36,6 @@ object EstilosTarjetas{
             color = MaterialTheme.colorScheme.outline
         )
     }
-
-
-    // Estilos para los paneles De los menus
 
     val formaPanel = RoundedCornerShape(Dimens.radioPanel)
 

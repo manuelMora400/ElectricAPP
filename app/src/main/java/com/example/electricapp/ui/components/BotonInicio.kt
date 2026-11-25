@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.electricapp.ui.styles.EstilosBotones
-import com.example.electricapp.ui.styles.estiloAltoBoton
 
 @Composable
 fun BotonInicio(

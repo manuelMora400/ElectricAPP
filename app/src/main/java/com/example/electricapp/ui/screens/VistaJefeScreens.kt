@@ -114,7 +114,6 @@ fun VistaJefeContenido(
             verticalArrangement = Arrangement.spacedBy(Dimens.espacioGrilla)
         ) {
 
-
             TarjetaSaludo(
                 titulo = stringResource(R.string.titulo_rol),
                 subtitulo = stringResource(R.string.subtitulo),
@@ -197,14 +196,12 @@ fun VistaJefeContenido(
     }
 }
 
-
 private data class OpcionPanel(
     val titulo: String,
     val subtitulo: String,
     @DrawableRes val icono: Int,
     val onClick: () -> Unit
 )
-
 
 @Composable
 private fun GrillaOpciones(opciones: List<OpcionPanel>) {

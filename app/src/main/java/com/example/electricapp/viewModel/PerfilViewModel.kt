@@ -1,15 +1,10 @@
 package com.example.electricapp.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.electricapp.data.ElectricHelperDb
 import com.example.electricapp.data.UsuarioRepository
-import com.example.electricapp.data.remote.UsuarioResponse
 import com.example.electricapp.model.PerfilUsuario
 import com.example.electricapp.model.Rol
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,16 +13,13 @@ import kotlinx.coroutines.launch
 
 class PerfilViewModel() : ViewModel() {
 
-
     private val repositorio = UsuarioRepository()
 
     private val _uiState = MutableStateFlow(PerfilUsuario())
     val uiState : StateFlow<PerfilUsuario> = _uiState.asStateFlow()
 
-
     private val _cargando = MutableStateFlow(false)
     val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
-
 
     private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
         viewModelScope.launch {

@@ -42,10 +42,6 @@ data class RecuperarClaveRequest(
     val identificar : String
 )
 
-data class CambiarEstadoRequest(
-    val activo : Boolean
-)
-
 data class ContadorResponse (
     val contador : Long
 )
@@ -74,18 +70,11 @@ data class InstrumentoResponse(
     val fechaVencimiento: String,
     val vigente: Boolean
 )
-data class VigenciaResponse(
-    val idInstrumento: Long,
-    val vigente: Boolean,
-    val fechaVencimiento: String
-)
-
-
 data class CrearEquipoRequest(
     val tag: String,
     val tipo: String,
     val instalacion: String,
-    val idCliente: Long        // id del usuario CLIENTE dueño (viene de ms_roles)
+    val idCliente: Long
 )
 
 data class EquipoResponse(
@@ -101,8 +90,6 @@ data class RenovarCalibracionRequest(
     val fechaVencimiento: String
 )
 
-
-
 data class ProtocoloResponse(
     val idProtocolo: Long,
     val fechaPrueba: String?,
@@ -110,7 +97,8 @@ data class ProtocoloResponse(
     val humedad: Double?,
     val latitud: Double?,
     val longitud: Double?,
-    val estadoProtocolo: String?
+    val estadoProtocolo: String?,
+    val resultadoPrueba: String?
 )
 
 data class AislacionResponse(
@@ -122,4 +110,26 @@ data class AislacionResponse(
     val lectura1Min: Double?,
     val lectura10Min: Double?,
     val idProtocolo: Long?
+)
+
+data class CambiarEstadoProtocoloRequest(
+    val estadoProtocolo: String
+)
+
+data class CrearProtocoloRequest(
+    val temperatura: Double,
+    val humedad: Double,
+    val resultadoPrueba: String,
+    val idTecnico: Long,
+    val idInstrumento: Long
+)
+
+data class CrearAislacionRequest(
+    val tag: String,
+    val instalacion: String,
+    val enumDevanado: String,
+    val tension: Double,
+    val lectura1Min: Double,
+    val lectura10Min: Double,
+    val idProtocolo: Long
 )

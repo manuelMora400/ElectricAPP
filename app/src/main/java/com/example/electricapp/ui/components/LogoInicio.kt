@@ -35,7 +35,6 @@ fun LogoInicio(
     )
 }
 
-// Vista previa
 @Preview(showBackground = true)
 @Composable
 private fun LogoInicioView(){

@@ -17,7 +17,6 @@ import com.example.electricapp.R
 import com.example.electricapp.permiso.permiso
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-
 @Composable
 fun BotonEnviarSms(
     telefono : String,
@@ -64,7 +63,6 @@ fun BotonEnviarSms(
 
 private fun enviarSMS(contexto : Context, numero : String, mensaje : String) : Boolean{
 
-    // replace saca los espacios -> "+56 9 1234 5678" queda "+56912345678"
     val numeroSeparado = numero.replace(" ", "")
 
     try {
@@ -75,7 +73,6 @@ private fun enviarSMS(contexto : Context, numero : String, mensaje : String) : B
                     SmsManager.getDefault()
                 }
 
-        //  talefono sin SIM
         if (smsManager == null) {
             return false
         }

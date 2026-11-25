@@ -8,7 +8,6 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
 
-
 class EquipoRepository(
     private val equipoApi: EquipoApi = RetrofitClient.equipoApi
 ) {
