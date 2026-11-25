@@ -1,11 +1,13 @@
 package com.example.electricapp.viewModel
 
-import android.app.Application
-import android.graphics.Bitmap
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.electricapp.data.ElectricHelperDb
-import com.example.electricapp.model.FormularioInstrumentosStates
+import com.example.electricapp.data.EquipoRepository
+import com.example.electricapp.data.InstrumentoRepository
+import com.example.electricapp.data.ProtocoloRepository
+import com.example.electricapp.data.remote.CrearAislacionRequest
+import com.example.electricapp.data.remote.CrearProtocoloRequest
+import com.example.electricapp.data.remote.InstrumentoResponse
 import com.example.electricapp.model.FormularioProtocolosState
 import com.example.electricapp.model.ResultadoPrueba
 import kotlinx.coroutines.delay
@@ -18,38 +20,57 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+class FormularioProtocolosViewModel() : ViewModel() {
 
-class FormularioProtocolosViewModel(application: Application) : AndroidViewModel(application){
+    private val repositorio = ProtocoloRepository()
+    private val repositorioEquipos = EquipoRepository()
+    private val repositorioInstrumentos = InstrumentoRepository()
 
-    private val db = ElectricHelperDb(application)
+    private val _equipos = MutableStateFlow<List<String>>(emptyList())
+    val equipos : StateFlow<List<String>> = _equipos.asStateFlow()
 
+    private val _devanados = MutableStateFlow<List<String>>(emptyList())
+    val devanados : StateFlow<List<String>> = _devanados.asStateFlow()
 
-    val equipos = listOf(
-        "TR-01 - Planta Lampa",
-        "TR-02 - Planta Lampa",
-        "TR-A - Planta Elevadora Sur",
-        "TR-SS-01 - Faena Til Til"
-    )
+    private var instrumentos : List<InstrumentoResponse> = emptyList()
+    private val _nombresInstrumentos = MutableStateFlow<List<String>>(emptyList())
+    val nombresInstrumentos : StateFlow<List<String>> = _nombresInstrumentos.asStateFlow()
 
-    val devanados = listOf("AT-BT", "AT-T", "BT-T")
-
-
-    val instrumentos = db.listaInstrumentos()
-    val nombresInstrumentos = instrumentos.map { textoInstrumento(it) }
-
-
-    private var  idTecnico = 0L
+    private var idTecnico = 0L
     private var tecnicoSesion = ""
 
     private val _uiState = MutableStateFlow(estadoInicial())
     val uiState : StateFlow<FormularioProtocolosState> = _uiState.asStateFlow()
 
-    fun onEquipoCambia(valor : String){
-        _uiState.update { it.copy(equipo = valor, errorEquipo = null, mensajeExito = false) }
+    init {
+        cargarListas()
     }
 
-    fun onEvidenciaFoto(bitmap: Bitmap){
-        _uiState.update { it.copy(fotoEvidencia = bitmap)}
+    private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
+        viewModelScope.launch {
+            try {
+                accion()
+            } catch (e: Exception) {
+                onError(e.message ?: "Ocurrió un error inesperado")
+            }
+        }
+    }
+
+    fun cargarListas(){
+        ejecutar(
+            onError = { mensaje ->
+                _uiState.update { it.copy(errorGeneral = mensaje) }
+            }
+        ){
+            _equipos.value = repositorioEquipos.listarEquipos().map { "${it.tag} - ${it.instalacion}" }
+            _devanados.value = repositorio.listarDevanados().map { it.replace("_", "-") }
+            instrumentos = repositorioInstrumentos.CargarInstrumentos()
+            _nombresInstrumentos.value = instrumentos.map { textoInstrumento(it) }
+        }
+    }
+
+    fun onEquipoCambia(valor : String){
+        _uiState.update { it.copy(equipo = valor, errorEquipo = null, mensajeExito = false) }
     }
 
     fun onTemperaturaCambia(valor : String){
@@ -79,7 +100,6 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
     }
 
     fun onInstrumentoCambia(valor : String){
-
         _uiState.update { it.copy(instrumento = valor, errorInstrumento = errorCalibracion(valor), mensajeExito = false) }
     }
 
@@ -89,8 +109,8 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
         _uiState.update { it.copy(tecnico = nombre) }
     }
 
-    private fun textoInstrumento(instrumento : FormularioInstrumentosStates) : String{
-        return "${instrumento.nombre} (${instrumento.numSerie})"
+    private fun textoInstrumento(instrumento : InstrumentoResponse) : String{
+        return "${instrumento.nombre} (${instrumento.numeroSerie})"
     }
 
     private fun estadoInicial() : FormularioProtocolosState{
@@ -104,22 +124,13 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
         return SimpleDateFormat(formato, Locale.getDefault()).format(Date())
     }
 
+    private fun fechaBackendAUi(fechaIso : String) : String{
+        val partes = fechaIso.split("-")
+        return if (partes.size == 3) "${partes[2]}/${partes[1]}/${partes[0]}" else fechaIso
+    }
 
     private fun numero(valor : String) : Double?{
         return valor.replace(",", ".").toDoubleOrNull()
-    }
-
-    private fun formatoFecha(fecha : String) : Int?{
-
-        val parte = fecha.split("/")
-
-        if(parte.size != 3) return null
-
-        val dias =  parte[0]
-        val meses = parte[1]
-        val anios = parte[2]
-
-        return "$anios$meses$dias".toIntOrNull()
     }
 
     private fun errorCalibracion(nombre : String) : String?{
@@ -127,14 +138,12 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
         val instrumento = instrumentos.find { textoInstrumento(it) == nombre }
         if(instrumento == null) return null
 
-        val hoy = formatoFecha(fechaActual("dd/MM/yyyy"))
-        val vencimiento = formatoFecha(instrumento.fechaVencimiento)
-
-        return if(hoy != null && vencimiento != null && vencimiento < hoy){
-            "Calibracion vencida el ${instrumento.fechaVencimiento}, no se puede usar"
+        return if(!instrumento.vigente){
+            "Calibracion vencida el ${fechaBackendAUi(instrumento.fechaVencimiento)}, no se puede usar"
         }else
             null
     }
+
     private fun calcularResultado(){
 
         val estado = _uiState.value
@@ -159,6 +168,10 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
                 ResultadoPrueba.RECHAZADO
 
         _uiState.update { it.copy(indicePolarizacion = indice, resultado = resultado) }
+    }
+
+    private fun resultadoBackend(resultado : ResultadoPrueba) : String{
+        return if(resultado == ResultadoPrueba.OBSERVADO) "OBSERVACION" else resultado.name
     }
 
     private fun validarCampos() : Boolean{
@@ -267,49 +280,60 @@ class FormularioProtocolosViewModel(application: Application) : AndroidViewModel
         return !hayErrores
     }
 
-    fun onRegistrar() : Boolean{
+    fun onRegistrar(onExito : () -> Unit = {}){
 
         val valido = validarCampos()
-        if(!valido) return false
+        if(!valido) return
 
         val estado = _uiState.value
         val instrumento = instrumentos.find { textoInstrumento(it) == estado.instrumento }
+        val resultado = estado.resultado
 
-        if(instrumento == null || idTecnico == 0L){
+        if(instrumento == null || resultado == null || idTecnico == 0L){
             _uiState.update { it.copy(errorGeneral = "No se pudo registrar, vuelva a iniciar sesion") }
-            return false
+            return
         }
-
 
         val partes = estado.equipo.split(" - ")
         val tag = partes[0]
         val instalacion = if(partes.size > 1) partes[1] else ""
 
+        ejecutar(
+            onError = { mensaje ->
+                _uiState.update { it.copy(errorGeneral = mensaje) }
+            }
+        ){
+            val protocolo = repositorio.registrarProtocolo(
+                CrearProtocoloRequest(
+                    temperatura = numero(estado.temperatura) ?: 0.0,
+                    humedad = numero(estado.humedad) ?: 0.0,
+                    resultadoPrueba = resultadoBackend(resultado),
+                    idTecnico = idTecnico,
+                    idInstrumento = instrumento.id
+                )
+            )
 
-        val idProtocolo = db.insertarProtocolos(estado, idTecnico, instrumento.id)
-        if(idProtocolo <= 0){
-            _uiState.update { it.copy(errorGeneral = "No se pudo registrar el protocolo") }
-            return false
-        }
-        db.insertarAislacion(estado, tag, instalacion, idProtocolo.toInt())
+            repositorio.registrarAislacion(
+                CrearAislacionRequest(
+                    tag = tag,
+                    instalacion = instalacion,
+                    enumDevanado = estado.devanado.replace("-", "_"),
+                    tension = numero(estado.tensionPrueba) ?: 0.0,
+                    lectura1Min = numero(estado.lecturaUnMinuto) ?: 0.0,
+                    lectura10Min = numero(estado.lecturaDiezMinutos) ?: 0.0,
+                    idProtocolo = protocolo.idProtocolo
+                )
+            )
 
+            _uiState.value = estadoInicial().copy(mensajeExito = true)
+            onExito()
 
-        _uiState.value = estadoInicial().copy(mensajeExito = true)
-
-        viewModelScope.launch {
             delay(7000)
             _uiState.update { it.copy(mensajeExito = false) }
         }
-        return true
     }
 
     fun onLimpiar(){
-        _uiState.update { it.copy(fotoEvidencia = null)}
         _uiState.value = estadoInicial()
-    }
-
-    override fun onCleared() {
-        db.close()
-        super.onCleared()
     }
 }

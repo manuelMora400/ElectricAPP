@@ -24,7 +24,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.FormularioLoginState
-import com.example.electricapp.ui.components.Bienvenida
 import com.example.electricapp.ui.components.BotonInicio
 import com.example.electricapp.ui.components.CampoPassword
 import com.example.electricapp.ui.styles.EstilosBarra
@@ -127,7 +126,6 @@ fun CrearContrasenaScreens(
 
 @Composable
 private fun ReglaContrasenas(cumplePassword : Boolean, texto : String){
-
 
     val colores by animateColorAsState(
         targetValue = if(cumplePassword) Exito else MaterialTheme.colorScheme.error,

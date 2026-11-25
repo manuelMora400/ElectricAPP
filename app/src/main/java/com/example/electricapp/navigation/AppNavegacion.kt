@@ -2,7 +2,9 @@ package com.example.electricapp.navigation
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,27 +14,33 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.electricapp.R
-import com.example.electricapp.model.ContadoresPanelIngeniero
-import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.model.Rol
+import com.example.electricapp.ui.screens.CambiarClaveScreens
+import com.example.electricapp.ui.screens.DetallesScreen
 import com.example.electricapp.ui.screens.EditarPerfilScreens
 import com.example.electricapp.ui.screens.MenuClienteScreens
 import com.example.electricapp.ui.screens.PerfilScreens
 import com.example.electricapp.ui.screens.ScreensLogin
-import com.example.electricapp.ui.screens.VistaIngenieroContenido
+import com.example.electricapp.ui.screens.VistaIngenieroScreens
 import com.example.electricapp.ui.screens.VistaJefeScreens
 import com.example.electricapp.ui.screens.VistaTecnicoScrees
 import com.example.electricapp.ui.screens.buscarProtocolo
 import com.example.electricapp.ui.screens.screensCrearContrasena
 import com.example.electricapp.ui.screens.screensCrearProtocolos
+import com.example.electricapp.ui.screens.screensEquipos
+import com.example.electricapp.ui.screens.screensRegistrarEquipo
 import com.example.electricapp.ui.screens.screensRegistrarCuentas
 import com.example.electricapp.ui.screens.screensRegistro
+import com.example.electricapp.ui.screens.screensFormularioInstrumento
 import com.example.electricapp.ui.screens.screensRegistrosInstrumentos
+import com.example.electricapp.ui.screens.PorRevisarScreens
+import com.example.electricapp.ui.screens.RevisarProtocoloScreens
+import com.example.electricapp.viewModel.FormularioInstrumentosViewModel
 import com.example.electricapp.viewModel.FormularioLoginViewModel
+import com.example.electricapp.viewModel.TecnicoViewModel
 
 @Composable
 fun AppNavegacion(){
-
 
     val loginViewModel: FormularioLoginViewModel = viewModel()
     val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
@@ -40,11 +48,9 @@ fun AppNavegacion(){
     val navController = rememberNavController()
     val contexto = LocalContext.current
 
-
     fun enDesarrollo(){
         Toast.makeText(contexto, contexto.getString(R.string.en_desarrollo), Toast.LENGTH_SHORT).show()
     }
-
 
     fun cerrarSesion(rutaActual : String){
         loginViewModel.onCerrarSesion()
@@ -99,14 +105,31 @@ fun AppNavegacion(){
                 },
                 onPerfil = {
                     navController.navigate(Rutas.Perfil.rutas)
+                },
+                onEquipos = {
+                    navController.navigate(Rutas.Equipos.rutas)
                 }
+            )
+        }
+
+        composable(Rutas.Equipos.rutas) {
+            screensEquipos(
+                onAgregarEquipo = {
+                    navController.navigate(Rutas.RegistrarEquipo.rutas)
+                },
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(Rutas.RegistrarEquipo.rutas) {
+            screensRegistrarEquipo(
+                onVolver = { navController.popBackStack() }
             )
         }
 
         composable(Rutas.Registros.rutas) {
             screensRegistro(
 
-                //rutas -> ir a crear cuenta
                 onAgregarCuenta = {
                     navController.navigate(Rutas.RegistrarCuentas.rutas)
                 },
@@ -114,7 +137,6 @@ fun AppNavegacion(){
             )
         }
 
-        // Pantalla crear cuenta
         composable (Rutas.RegistrarCuentas.rutas){
             screensRegistrarCuentas(
                 onRegistroExitoso = {},
@@ -122,7 +144,6 @@ fun AppNavegacion(){
             )
         }
 
-        // Crear contraseña
         composable(Rutas.CrearContrasema.rutas){
             screensCrearContrasena(
                  viewModel = loginViewModel,
@@ -138,18 +159,50 @@ fun AppNavegacion(){
 
         composable(Rutas.Instrumentos.rutas) {
             screensRegistrosInstrumentos(
-                onRegistro = {
+                onAbrirFormulario = {
+                    navController.navigate(Rutas.FormularioInstrumento.rutas)
                 },
-                onActualizado = {
+                onVolver = { navController.popBackStack() },
+                soloLectura = uiState.rol != Rol.JEFE_TECNICO
+            )
+        }
+
+        composable(Rutas.FormularioInstrumento.rutas) { entrada ->
+            val entradaLista = remember(entrada) {
+                navController.getBackStackEntry(Rutas.Instrumentos.rutas)
+            }
+            val instrumentosViewModel: FormularioInstrumentosViewModel =
+                viewModel(viewModelStoreOwner = entradaLista)
+
+            screensFormularioInstrumento(
+                viewModel = instrumentosViewModel,
+                onVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(Rutas.Consulta.rutas){
+            buscarProtocolo(
+                onVolver = {
+                    navController.popBackStack()
+                },
+                rol = uiState.rol,
+                Buscado = {
+                },
+                onProtocoloClick = { protocolo ->
+                    navController.navigate(Rutas.DetalleProtocolo.crear(protocolo.idProtocolo))
                 }
             )
         }
 
-
-        composable(Rutas.Consulta.rutas){
-            buscarProtocolo(
-                rol = uiState.rol,
-                Buscado = {
+        composable(
+            route = Rutas.DetalleProtocolo.rutas,
+            arguments = listOf(navArgument("idProtocolo") { type = NavType.LongType })
+        ) { entrada ->
+            DetallesScreen(
+                idProtocolo = entrada.arguments?.getLong("idProtocolo") ?: 0L,
+                onDescargar = {},
+                onVolver = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -168,6 +221,9 @@ fun AppNavegacion(){
                 onClick = {
                     navController.navigate(Rutas.Consulta.rutas)
                 },
+                onPerfil = {
+                    navController.navigate(Rutas.Perfil.rutas)
+                },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.MenuCliente.rutas)
                 }
@@ -175,9 +231,15 @@ fun AppNavegacion(){
         }
 
         composable(Rutas.TecnicoTerreno.rutas) {
-            VistaTecnicoScrees(
+            val tecnicoViewModel: TecnicoViewModel = viewModel()
+            val contadores by tecnicoViewModel.uistate.collectAsStateWithLifecycle()
 
-                estado = ContadoresVistaTecnico(),
+            LaunchedEffect(uiState.idUsuario) {
+                tecnicoViewModel.cargarResumenes(uiState.idUsuario)
+            }
+
+            VistaTecnicoScrees(
+                estado = contadores,
                 nombreTecnico = uiState.nombre.substringBefore(" "),
 
                 onCrearProtocolos = {
@@ -194,22 +256,24 @@ fun AppNavegacion(){
                 },
                 onHistorialDeEquipo = {
                     navController.navigate(Rutas.Consulta.rutas)
+                },
+                onInstrumentos = {
+                    navController.navigate(Rutas.Instrumentos.rutas)
                 }
             )
     }
 
         composable(Rutas.VistaIngeniero.rutas) {
-            VistaIngenieroContenido(
-                estado = ContadoresPanelIngeniero(),
+            VistaIngenieroScreens(
                 nombreIngeniero = uiState.nombre.substringBefore(" "),
                 onRevisarProtocolos = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.PorRevisar.rutas)
                 },
                 onHistorial = {
                     navController.navigate(Rutas.Consulta.rutas)
                 },
                 onInstrumentos = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.Instrumentos.rutas)
                 },
                 onPerfil = {
                     navController.navigate(Rutas.Perfil.rutas)
@@ -219,6 +283,36 @@ fun AppNavegacion(){
                 },
                 onCerrarSesion = {
                     cerrarSesion(Rutas.VistaIngeniero.rutas)
+                }
+            )
+        }
+
+        composable(Rutas.PorRevisar.rutas) {
+            PorRevisarScreens(
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onRevisar = { idProtocolo ->
+                    navController.navigate(Rutas.RevisarProtocolo.crear(idProtocolo))
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.RevisarProtocolo.rutas,
+            arguments = listOf(navArgument("idProtocolo") { type = NavType.IntType })
+        ) { entrada ->
+            RevisarProtocoloScreens(
+                idProtocolo = entrada.arguments?.getInt("idProtocolo") ?: 0,
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onObservar = {
+                    enDesarrollo()
+                },
+                onFormalizado = {
+                    Toast.makeText(contexto, contexto.getString(R.string.ing_protocolo_formalizado), Toast.LENGTH_SHORT).show()
+                    navController.navigateUp()
                 }
             )
         }
@@ -233,7 +327,7 @@ fun AppNavegacion(){
                     navController.navigate(Rutas.EditarPerfil.crear(uiState.idUsuario))
                 },
                 onCambiarClave = {
-                    enDesarrollo()
+                    navController.navigate(Rutas.CambiarClave.crear(uiState.idUsuario))
                 },
                 onCerrarSesion = {
                     loginViewModel.onCerrarSesion()
@@ -248,9 +342,9 @@ fun AppNavegacion(){
 
         composable(
             route = Rutas.EditarPerfil.rutas,
-            arguments = listOf(navArgument("idUsuario") { type = NavType.IntType })
+            arguments = listOf(navArgument("idUsuario") { type = NavType.LongType })
         ) { entrada ->
-            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0
+            val idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0L
             EditarPerfilScreens(
                 idUsuario = idUsuario,
                 rolSesion = uiState.rol,
@@ -262,6 +356,22 @@ fun AppNavegacion(){
                         loginViewModel.onNombreActualizado(nombre)
                     }
                     Toast.makeText(contexto, contexto.getString(R.string.perfil_datos_actualizados), Toast.LENGTH_SHORT).show()
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable(
+            route = Rutas.CambiarClave.rutas,
+            arguments = listOf(navArgument("idUsuario") { type = NavType.LongType })
+        ) { entrada ->
+            CambiarClaveScreens(
+                idUsuario = entrada.arguments?.getLong("idUsuario") ?: 0L,
+                onVolver = {
+                    navController.navigateUp()
+                },
+                onClaveGuardada = {
+                    Toast.makeText(contexto, contexto.getString(R.string.perfil_clave_actualizada), Toast.LENGTH_SHORT).show()
                     navController.navigateUp()
                 }
             )

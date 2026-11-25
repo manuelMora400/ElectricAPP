@@ -1,7 +1,8 @@
 package com.example.electricapp.data
 
-
+import com.example.electricapp.data.remote.ActualizarPerfilRequest
 import com.example.electricapp.data.remote.CambiarClaveRequest
+import com.example.electricapp.data.remote.ContadorResponse
 import com.example.electricapp.data.remote.CrearUsuariosRequest
 import com.example.electricapp.data.remote.LoginRequest
 import com.example.electricapp.data.remote.LoginResponse
@@ -22,6 +23,11 @@ class UsuarioRepository(
     suspend fun crearUsuario(datos : CrearUsuariosRequest): UsuarioResponse = llamar{
          usuarioApi.crearUsuarios(datos);
     }
+
+    suspend fun actualizarPerfil(id : Long, datos: ActualizarPerfilRequest): UsuarioResponse = llamar {
+        usuarioApi.actualizar(id, datos)
+    }
+
     suspend fun cambiarEstado(id : Long) : UsuarioResponse = llamar{
          usuarioApi.cambiaEstado(id);
     }
@@ -37,7 +43,9 @@ class UsuarioRepository(
     suspend fun listarUsuarios(): List<UsuarioResponse> = llamar {
         usuarioApi.listarUsuarios()
     }
-
+    suspend fun cantidadUsaurios() : ContadorResponse = llamar{
+        usuarioApi.cantidadCuentasActivas()
+    }
     private suspend fun <T> llamar(peticion: suspend () -> T) : T = try{
         peticion()
     }catch (e : HttpException){
@@ -56,4 +64,3 @@ class UsuarioRepository(
         return mensaje.ifBlank { "Error del servidor (${e.code()})" }
     }
 }
-

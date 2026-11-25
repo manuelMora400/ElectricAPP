@@ -32,7 +32,6 @@ object GeneradorPdfProtocolo {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         val margen = 40f
 
-        //_________TopBar con el nombre del Protocolo__________
         paint.color = android.graphics.Color.parseColor("#283593")
         canvas.drawRect(0f, 0f, 595f, 80f, paint)
 
@@ -41,10 +40,8 @@ object GeneradorPdfProtocolo {
         paint.typeface = Typeface.DEFAULT_BOLD
         canvas.drawText("Detalle · ${detalle.Tag}", margen, 50f, paint)
 
-        //Para dar separacion (Me puse tonoto)
         var y = 130f
 
-        //____________ Estado del Protocolo ________________
         val colorEstado = when {
             detalle.resultado.equals("APROBADO", true) -> CuadroAprobado.toArgb()
             detalle.resultado.equals("OBSERVADO", true) -> CuadroObservacion.toArgb()
@@ -56,7 +53,6 @@ object GeneradorPdfProtocolo {
             TextoOscuro.toArgb()
         }
 
-        // 3.- Banner de Resultado (DetalleScreen)
         paint.color = colorEstado
         canvas.drawRoundRect(margen, y, 555f, y + 65f, 16f, 16f, paint)
 
@@ -70,10 +66,8 @@ object GeneradorPdfProtocolo {
             paint
         )
 
-        // Avanzamos 'y' para que las tarjetas se dibujen DEBAJO del banner y no encima
         y += 95f
 
-        // 4.- Tarjetas de datos (De Validacion / Nombre de la que se encargo)
         val ingeniero: String = if (detalle.nombreIngeniero.isNullOrBlank()) {
             "Pendiente de validación"
         } else {
@@ -93,14 +87,11 @@ object GeneradorPdfProtocolo {
             "Ubicación GPS de la prueba" to ubicacionGps
         )
 
-        //_____ Diseno y Arquitectura del PDF _____
         tarjetas.forEach { (titulo, subtitulo) ->
-            // Para el fondo y ek borde
             paint.style = Paint.Style.FILL
             paint.color = android.graphics.Color.parseColor("#F5F7FA")
             canvas.drawRoundRect(margen, y, 555f, y + 75f, 16f, 16f, paint)
 
-            // Titulo y su descripcion
             paint.color = TextoOscuro.toArgb()
             paint.textSize = 15f
             paint.typeface = Typeface.DEFAULT_BOLD
@@ -118,7 +109,6 @@ object GeneradorPdfProtocolo {
         pdf.close()
     }
 
-    //Para armar la ruta de guardado
     private fun guardarArchivo(context: Context, pdf: PdfDocument, nombre: String) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

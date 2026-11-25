@@ -1,6 +1,9 @@
 package com.example.electricapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.R
 import com.example.electricapp.model.DetallesState
@@ -48,10 +56,105 @@ import com.example.electricapp.viewModel.DetalleViewModel
 
 @Composable
 fun DetallesScreen(
+    idProtocolo: Long,
     viewModel: DetalleViewModel = viewModel(),
     onDescargar: () -> Unit,
     onVolver: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(idProtocolo) {
+        viewModel.cargarDetalle(idProtocolo)
+    }
+
+    when {
+        uiState.cargando -> EstadoCargandoDetalle(onVolver = onVolver)
+
+        uiState.error != null -> EstadoErrorDetalle(
+            mensaje = uiState.error.orEmpty(),
+            onReintentar = { viewModel.cargarDetalle(idProtocolo, forzar = true) },
+            onVolver = onVolver
+        )
+
+        else -> DetallesContentScreen(
+            uiState = uiState,
+            onDescargar = onDescargar,
+            onVolver = onVolver
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EstadoCargandoDetalle(onVolver: () -> Unit) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = { BarraDetalle(titulo = "Detalle de Protocolo", onVolver = onVolver) }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EstadoErrorDetalle(
+    mensaje: String,
+    onReintentar: () -> Unit,
+    onVolver: () -> Unit
+) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = { BarraDetalle(titulo = "Detalle de Protocolo", onVolver = onVolver) }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(Dimens.espacioPantalla),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = mensaje,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.error
+            )
+            Spacer(modifier = Modifier.height(Dimens.espacioMed))
+            OutlinedButton(onClick = onReintentar) {
+                Text("Reintentar")
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BarraDetalle(titulo: String, onVolver: () -> Unit) {
+    TopAppBar(
+        title = {
+            Text(text = titulo, style = MaterialTheme.typography.titleLarge, color = Blanco)
+        },
+        navigationIcon = {
+            IconButton(onClick = onVolver) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_volver),
+                    contentDescription = "Volver",
+                    tint = Blanco
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Primario,
+            titleContentColor = Color.White
+        )
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -304,6 +407,7 @@ private fun BannerResultadoProtocolo(
 private fun obtenerColorResultado(resultado: String) = when {
     resultado.equals("APROBADO", ignoreCase = true) -> CuadroAprobado
     resultado.equals("OBSERVADO", ignoreCase = true) -> CuadroObservacion
+    resultado.isBlank() -> CuadroObservacion
     else -> CuadroRechazado
 }
 

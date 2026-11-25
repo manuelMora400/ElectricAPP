@@ -26,7 +26,12 @@ interface UsuarioApi {
     @PUT("api/usuarios/cambiarClave/{id}")
     suspend fun cambiarClave(@Path("id") id : Long, @Body datos : CambiarClaveRequest)
 
+    @PUT("api/usuarios/actualizar/{id}")
+    suspend fun actualizar(@Path("id") id : Long, @Body datos : ActualizarPerfilRequest ) : UsuarioResponse
+
     @POST("api/usuarios/recuperar-clave")
     suspend fun recuperarClave(@Body datos : RecuperarClaveRequest) : UsuarioResponse
 
+    @GET("api/usuarios/activos/cantidad")
+    suspend fun cantidadCuentasActivas()  : ContadorResponse
 }

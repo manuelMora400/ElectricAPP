@@ -10,7 +10,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-// configuramos todos los colores necesarios , ya que los que faltaba Material 3 lo hacian x nosotros
 private val DarkColorScheme = darkColorScheme(
     primary = PrimarioNoche,
     onPrimary = PrimarioOscuro,
@@ -34,7 +33,6 @@ private val DarkColorScheme = darkColorScheme(
     onError = TextoSobreErrorOscuro,
     errorContainer = ErrorFondoOscuro,
     onErrorContainer = ErrorFondoClaro,
-    // para menu desplegables
     surfaceContainerLowest = FondoOscuro,
     surfaceContainerLow = SuperficieOscura,
     surfaceContainer = SuperficieOscura,

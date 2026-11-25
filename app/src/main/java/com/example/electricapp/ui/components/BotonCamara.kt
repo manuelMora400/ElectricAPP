@@ -41,9 +41,7 @@ fun BotonCamara(
 ){
     val contexto = LocalContext.current
 
-
     var foto by remember { mutableStateOf<Bitmap?>(null) }
-
 
     val camaraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicturePreview()
@@ -53,7 +51,6 @@ fun BotonCamara(
         }
     }
 
-
     fun abrirCamara(){
         try {
             camaraLauncher.launch(null)
@@ -61,7 +58,6 @@ fun BotonCamara(
             Toast.makeText(contexto, contexto.getString(R.string.sin_camara), Toast.LENGTH_SHORT).show()
         }
     }
-
 
     val permisoLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -96,7 +92,6 @@ fun BotonCamara(
                 modifier = Modifier.padding(start = Dimens.espacioMed)
             )
         }
-
 
         foto?.let { imagen ->
             Image(

@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.example.electricapp.R
 import com.example.electricapp.ui.theme.Dimens
 
-
 @Composable
 fun CampoCorreo(
     valor : String,

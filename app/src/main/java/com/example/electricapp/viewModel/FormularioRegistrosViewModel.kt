@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.electricapp.data.UsuarioRepository
 import com.example.electricapp.data.remote.CrearUsuariosRequest
-import com.example.electricapp.generador.GeneradorClave
 import com.example.electricapp.model.FormularioRegistros
 import com.example.electricapp.model.Rol
 import kotlinx.coroutines.delay
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(application){
-
 
     private val repositorio = UsuarioRepository()
 
@@ -115,6 +113,9 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
     fun onRegistrar(onExito : () -> Unit){
 
         val formatoCorreo = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+        val formatoRut = Regex("^(\\d{1,2}\\.\\d{3}\\.\\d{3}|\\d{7,8})-[0-9kK]$")
+        val tieneNumeros = Regex("[0-9]")
+
         val estado = _uiState.value
 
         val errorRut =
@@ -124,6 +125,8 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
                     "El rut no debe contener mas de 12 caracteres"
                 }else if(estado.rut != estado.rut.trim()){
                     "El rut no debe contener espacios en blanco"
+                }else if(!estado.rut.matches(formatoRut)){
+                    "Formato de RUT invalido (ej: 12345678-K o 12.345.678-K)"
                 } else
                     null
 
@@ -132,6 +135,8 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
                     "El nombre no puede estar vacio"
                 }else if (estado.nombre.length !in 10..120){
                     "El nombre debe contener entre 10 a 120 caracteres"
+                }else if(estado.nombre.contains(tieneNumeros)){
+                    "El nombre no debe contener numeros"
                 }else
                     null
 
@@ -217,11 +222,6 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
             return
         }
 
-        //Generamo la clave
-        val claveGenerada = GeneradorClave.generarClave()
-
-
-
         ejecutar(
             onError = { mensaje ->
                 _uiState.update { it.copy(
@@ -240,18 +240,19 @@ class FormularioRegistrosViewModel(application: Application) : AndroidViewModel(
                 rol = estado.rol.name
             )
             val respuestaServidor = repositorio.crearUsuario(request)
+
             _uiState.update { it.copy(
                 registradoExito = true,
-                claveTemporal = respuestaServidor.claveTemporal ?: claveGenerada,
+                claveTemporal = respuestaServidor.claveTemporal,
                 errorGeneral = null
             ) }
-        }
-            _uiState.update { it.copy(registradoExito = true, claveTemporal = claveGenerada) }
+
             viewModelScope.launch {
                 delay(4000)
                 _uiState.update { it.copy(registradoExito = false) }
             }
-        onExito()
+            onExito()
+        }
     }
 
     fun onLimpiar(){

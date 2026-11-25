@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.electricapp.R
 import com.example.electricapp.model.ContadoresVistaTecnico
 import com.example.electricapp.ui.components.BotonCerrarSesion
@@ -39,7 +38,6 @@ import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.ui.theme.PrimarioClaro
 import com.example.electricapp.ui.theme.PrimarioOscuro
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VistaTecnicoScrees(
@@ -48,6 +46,7 @@ fun VistaTecnicoScrees(
     onCrearProtocolos : () -> Unit,
     onMisProtocolos   : () -> Unit,
     onHistorialDeEquipo : () -> Unit,
+    onInstrumentos : () -> Unit,
     onPerfil : () -> Unit,
     onCerrarSesion : () -> Unit
 ){
@@ -96,7 +95,7 @@ fun VistaTecnicoScrees(
 
                 tarjetaContadores(
                     valor = estado.misProtocolos,
-                    etiqueta = stringResource(R.string.ing_por_revisar),
+                    etiqueta = stringResource(R.string.tecnico_contador_mis_protocolos),
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 tarjetaContadores(
@@ -106,7 +105,7 @@ fun VistaTecnicoScrees(
                 )
                 tarjetaContadores(
                     valor = estado.porFormalizar,
-                    etiqueta = stringResource(R.string.ing_formalizados),
+                    etiqueta = stringResource(R.string.tecnico_contador_por_formalizar),
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
             }
@@ -125,8 +124,8 @@ fun VistaTecnicoScrees(
                 TarjetaOpciones(
                     titulo = stringResource(R.string.tecnico_mis_protocolos),
                     subtitulo = stringResource(R.string.tecnico_ver_estados),
-                    icono = R.drawable.ic_crear_protocolos,
-                    onClick = onCrearProtocolos,
+                    icono = R.drawable.ic_revisar_protocolos,
+                    onClick = onMisProtocolos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
 
@@ -154,8 +153,8 @@ fun VistaTecnicoScrees(
                 TarjetaOpciones(
                     titulo = stringResource(R.string.instrumentos_tecnico),
                     subtitulo = stringResource(R.string.subtitulo_tecnico_instrumento),
-                    icono = R.drawable.ic_revisar_protocolos,
-                    onClick = onMisProtocolos,
+                    icono = R.drawable.ic_calibracion_instrumento,
+                    onClick = onInstrumentos,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
             }
@@ -179,6 +178,7 @@ fun viewVistaTecnico(){
             onCrearProtocolos = {},
             onMisProtocolos = {},
             onHistorialDeEquipo = {},
+            onInstrumentos = {},
             onPerfil = {},
             onCerrarSesion = {}
         )

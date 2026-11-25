@@ -26,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,7 +40,6 @@ import com.example.electricapp.ui.styles.EstilosCampos
 import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.styles.estiloAltoBoton
 import com.example.electricapp.ui.theme.Dimens
-import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.EditarPerfilViewModel
 
 @Composable
@@ -63,13 +61,8 @@ fun EditarPerfilScreens(
         onNombreCambia = viewModel::onNombreCambia,
         onCorreoCambia = viewModel::onCorreoCambia,
         onTelefonoCambia = viewModel::onTelefonoCambia,
-        onCargoCambia = viewModel::onCargoCambia,
         onVolver = onVolver,
-        onGuardar = {
-            if (viewModel.onGuardar()) {
-                onGuardado(viewModel.uiState.value.nombre.trim())
-            }
-        }
+        onGuardar = {viewModel.onGuardar(onGuardado)}
     )
 }
 
@@ -80,7 +73,6 @@ fun EditarPerfilContenido(
     onNombreCambia: (String) -> Unit,
     onCorreoCambia: (String) -> Unit,
     onTelefonoCambia: (String) -> Unit,
-    onCargoCambia: (String) -> Unit,
     onVolver: () -> Unit,
     onGuardar: () -> Unit
 ) {
@@ -161,18 +153,6 @@ fun EditarPerfilContenido(
                         icono = R.drawable.ic_rut,
                         ayuda = null
                     )
-
-                    if (uiState.rol == Rol.CLIENTE) {
-                        CamposFormularios(
-                            valor = uiState.cargo,
-                            onValorCambia = onCargoCambia,
-                            etiquetaCampo = stringResource(R.string.campo_contacto_cargo),
-                            ayudaUsuario = "",
-                            icono = R.drawable.ic_contacto_cargo,
-                            error = uiState.errorCargo,
-                            tipoTeclado = KeyboardType.Text
-                        )
-                    }
                 }
             }
             item {
@@ -245,43 +225,4 @@ private fun CampoBloqueado(
         supportingText = if (ayuda != null) { { Text(ayuda) } } else null,
         shape = EstilosCampos.forma
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EditarPerfilView() {
-    ElectricAppTheme(false) {
-        EditarPerfilContenido(
-            uiState = EditarPerfilState(
-                nombre = "Valentina Soto",
-                correo = "vsoto@induztek.cl",
-                telefono = "987541666",
-                rut = "18.871.905-7",
-                rol = Rol.TECNICO,
-                puedeEditarCorreo = false
-            ),
-            onNombreCambia = {}, onCorreoCambia = {}, onTelefonoCambia = {},
-            onCargoCambia = {}, onVolver = {}, onGuardar = {}
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EditarPerfilJefeView() {
-    ElectricAppTheme(true) {
-        EditarPerfilContenido(
-            uiState = EditarPerfilState(
-                nombre = "Marcela Fuentes Rojas",
-                correo = "mfuentes@envpacifico.ejemplo",
-                telefono = "+56900000101",
-                rut = "14.226.791-8",
-                cargo = "Jefa de Mantenimiento",
-                rol = Rol.CLIENTE,
-                puedeEditarCorreo = true
-            ),
-            onNombreCambia = {}, onCorreoCambia = {}, onTelefonoCambia = {},
-            onCargoCambia = {}, onVolver = {}, onGuardar = {}
-        )
-    }
 }

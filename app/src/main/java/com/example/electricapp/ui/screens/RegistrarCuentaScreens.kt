@@ -166,7 +166,7 @@ fun RegistrarCuentaScreens(
                         ayudaUsuario = stringResource(R.string.ayuda_telefono).trim(),
                         icono = R.drawable.ic_telefono,
                         error = uiState.errorTelefono,
-                        tipoTeclado = KeyboardType.Phone //Teclado para telefono (numerico) para el +
+                        tipoTeclado = KeyboardType.Phone
                     )
 
                     CamposFormularios(
@@ -194,9 +194,6 @@ fun RegistrarCuentaScreens(
                         icono = R.drawable.ic_gestion_usuarios
                     )
 
-                    // Se añade Animacion
-                    // antes era if(uistate.cliente) -> abria un menu aparte abajito
-                    // ahora es lo mismo, solo que se le pasa a una animacion
                     AnimatedVisibility(
                         visible = uiState.Cliente,
                         enter = expandVertically() + fadeIn(),
@@ -225,6 +222,17 @@ fun RegistrarCuentaScreens(
                     }
                 }
             }
+
+            if (uiState.errorGeneral != null) {
+                item {
+                    Text(
+                        text = uiState.errorGeneral,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+
             item {
                 Column(
                     modifier = Modifier.padding(top = Dimens.espacioMed),
@@ -300,8 +308,6 @@ fun RegistrarCuentaScreens(
     }
 }
 
-// componente unico de aqui, se usa para alinear todo lo que tenga dentro de la card
-// y no se deforme
 @Composable
 private fun SeccionFormulario(contenido: @Composable ColumnScope.() -> Unit) {
     Card(
@@ -337,6 +343,4 @@ fun RegistrarCuentasView() {
         )
     }
 }
-
-
 

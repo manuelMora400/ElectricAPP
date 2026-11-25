@@ -5,13 +5,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val URL_USUARIOS = "https://lc71zsll-8080.brs.devtunnels.ms/"
+    private const val URL_GATEWAY = "https://lc71zsll-8081.brs.devtunnels.ms/"
 
-    private fun crear(urlBase : String) : Retrofit =
+    private val retrofit : Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(urlBase)
+            .baseUrl(URL_GATEWAY)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
 
-    val usuarioApi: UsuarioApi  by lazy { crear(URL_USUARIOS).create(UsuarioApi::class.java)}
+    val usuarioApi : UsuarioApi by lazy { retrofit.create(UsuarioApi::class.java) }
+    val instrumentoApi : InstrumentoApi by lazy { retrofit.create(InstrumentoApi::class.java) }
+    val equipoApi : EquipoApi by lazy { retrofit.create(EquipoApi::class.java) }
+    val protocoloApi : ProtocoloApi by lazy { retrofit.create(ProtocoloApi::class.java) }
 }

@@ -20,13 +20,11 @@ import com.example.electricapp.ui.theme.FondoClaro
 import com.example.electricapp.ui.theme.GrisDeshabilitado
 import com.example.electricapp.ui.theme.TextoOscuro
 
-
 object EstilosBotones{
 
     val formaBoton = RoundedCornerShape(Dimens.radioBoton)
     val rellenar = PaddingValues(horizontal = 10.dp, vertical = 5.dp)
 
-    // Boton Inicio Sesion
     @Composable
     fun ColorPrincipal() : ButtonColors = buttonColors(
 

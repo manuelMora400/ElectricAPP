@@ -23,7 +23,6 @@ import com.example.electricapp.ui.theme.Blanco
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-
 @Composable
 fun ImagenEncabezadoLogin(
     @DrawableRes imagen : Int,

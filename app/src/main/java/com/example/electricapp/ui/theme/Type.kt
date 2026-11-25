@@ -30,7 +30,6 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
 
-    // Texto para etiqueta lo usamo en texto o botones
     labelLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
@@ -39,7 +38,6 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
 
-    // Texto para etiuetas y para que no sea grande
     bodyMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,

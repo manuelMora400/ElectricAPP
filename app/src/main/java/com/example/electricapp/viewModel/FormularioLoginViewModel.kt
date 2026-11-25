@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 class FormularioLoginViewModel(application : Application): AndroidViewModel(application){
 
     private  val repositorio = UsuarioRepository()
@@ -23,11 +22,8 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
     private val _uiState = MutableStateFlow(FormularioLoginState())
     val uiState : StateFlow<FormularioLoginState> = _uiState.asStateFlow()
 
-
-
     private val _cargando = MutableStateFlow(false)
     val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
-
 
     init {
         restaurarSesion()
@@ -43,10 +39,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         _uiState.update {it.copy(passwordVisible = !it.passwordVisible)}
     }
 
-
-
-
-
     private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
         viewModelScope.launch {
             _cargando.value = true
@@ -60,7 +52,6 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
         }
     }
 
-
     private fun restaurarSesion() {
         val id = sesion.leer()
         if (id == -1L) return
@@ -72,14 +63,13 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                     idUsuario = perfil.id,
                     nombre = perfil.nombre,
                     logeadoExitoso = true,
-                    cambiarClave = perfil.claveTemporal !=null ,
+                    cambiarClave = false,
                     rol = rol
                 )
             }
         }
     }
 
-    // parte de cambiar clave
     fun onNuevaClave(valor : String){
         _uiState.update {it.copy(nuevaClave = valor, errorNuevaClave = null, errorGeneral = null, logeadoExitoso = false,
             cumpleLargoPassword = valor.length in 8..12,
@@ -150,6 +140,7 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                nuevaClave = "",
                confirmarClave = ""
            ) }
+           sesion.guardar(estado.idUsuario)
            onExito()
        }
     }
@@ -263,7 +254,9 @@ class FormularioLoginViewModel(application : Application): AndroidViewModel(appl
                cambiarClave = respuestaServidor.debeCambiarClave,
                rol = rolEmum
            ) }
-           sesion.guardar(respuestaServidor.idUsuario)
+           if (!respuestaServidor.debeCambiarClave) {
+               sesion.guardar(respuestaServidor.idUsuario)
+           }
            onExito(rolEmum)
        }
     }

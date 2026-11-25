@@ -22,7 +22,6 @@ fun obtenerUbicacionActual(
             if (location != null) {
                 onUbicacionObtenida(location.latitude, location.longitude)
             } else {
-                // Si lastLocation es null (ej. emulador recién encendido), pide ubicación actual
                 fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
                     .addOnSuccessListener { currentLoc ->
                         onUbicacionObtenida(currentLoc?.latitude, currentLoc?.longitude)
@@ -34,4 +33,3 @@ fun obtenerUbicacionActual(
             onUbicacionObtenida(null, null)
         }
 }
-

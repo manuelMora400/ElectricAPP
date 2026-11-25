@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -53,23 +54,18 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    // Dependencias para el proyecto (nuevas)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 
     implementation("androidx.navigation:navigation-compose:2.10.2")
 
-    //Para poder usar la locacion (nuevo)
     implementation("com.google.android.gms:play-services-location:21.3.0")
-    // NUEVO (Retrofit): cliente HTTP que convierte una interfaz Kotlin en llamadas a la API REST
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    // NUEVO (Retrofit): convierte JSON <-> data class de Kotlin usando Gson
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
-    // NUEVO (Corrutinas): trae viewModelScope para lanzar las llamadas de red desde el ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
-    // NUEVO (Foto en servidor): Coil descarga y muestra imágenes desde una URL (AsyncImage)
     implementation("io.coil-kt.coil3:coil-compose:3.4.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
+    testImplementation(kotlin("test"))
 
 }
