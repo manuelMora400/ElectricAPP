@@ -246,7 +246,7 @@
     <string name="sms_enviado">SMS enviado al usuario</string>
     <string name="sms_error">No se pudo enviar el SMS, revise la señal o la SIM</string>
     <string name="permiso_sms_denegado">Sin permiso de SMS no se puede enviar la clave</string>
-    <string name="sms_mensaje_clave">ElectricApp: su clave temporal es %1$s. Cambiela al iniciar sesion.</string>
+    <string name="sms_mensaje_clave">ElectricApp: cambie su clave al iniciar sesion. Clave temporal: %1$s</string>
 
     <!-- Perfil -->
     <string name="perfil_titulo">Mi perfil</string>
