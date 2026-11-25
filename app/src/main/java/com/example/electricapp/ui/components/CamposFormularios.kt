@@ -48,7 +48,7 @@ fun CamposFormularios(
             )
         },
         isError = error != null,
-        supportingText = if (error != null) { { Text(error) } } else null, // nuevo evitamos q el error deforme lo visual
+        supportingText = if (error != null) { { Text(error) } } else null,
         shape = EstilosCampos.forma,
         keyboardOptions = KeyboardOptions(
             keyboardType = tipoTeclado,

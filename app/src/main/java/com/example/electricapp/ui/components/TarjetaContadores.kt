@@ -43,8 +43,6 @@ fun tarjetaContadores(
             modifier = Modifier.fillMaxWidth().padding(vertical = Dimens.rowEspacio, horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // esta animacion permitira si agregamos una cuenta 7 + 1 -> subira  a 8 con una animacion
-            // viserversa si se desactiva restara.
             AnimatedContent(
                 targetState = valor,
                 transitionSpec =  {

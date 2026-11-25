@@ -1,6 +1,5 @@
 package com.example.electricapp.ui.screens
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +32,6 @@ import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.FormularioRegistrosViewModel
 
-
 @Composable
 fun screensRegistro(
      viewModel : FormularioRegistrosViewModel = viewModel(),
@@ -43,7 +41,6 @@ fun screensRegistro(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val cuentas by viewModel.cuentasBD.collectAsStateWithLifecycle()
-
 
     LaunchedEffect(Unit) {
         viewModel.cargarCuentas()
@@ -71,9 +68,6 @@ fun RegistrosScreens(
 ){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-
-        //este bloque permitira dibujar un boton + flotante en la pantalla, alli usare registro cuentas
-        // asi separamos pantallas con cada una de sus responsabilidades
 
         floatingActionButton = {
             FloatingActionButton(

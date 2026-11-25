@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,7 +52,6 @@ fun ProtocoloCards(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                // 1. Fecha arriba en negrita (ej. 26/09/2026)
                 Text(
                     text = protocolo.fechaPrueba.ifBlank { "Sin fecha" },
                     style = MaterialTheme.typography.titleMedium,
@@ -63,7 +61,6 @@ fun ProtocoloCards(
 
                 Spacer(modifier = Modifier.height(2.dp))
 
-                // 2. Subtítulo secundario de rol y estado
                 val subtitulo = if (esCliente) {
                     if (protocolo.formalizado) {
                         val detalleFormalizado = protocolo.tituloResultado.ifBlank { "Formalizado" }
@@ -83,7 +80,6 @@ fun ProtocoloCards(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // 3. Píldora de estado (RN-19: pendientes no muestran resultado ni IP)
                 if (esCliente && !protocolo.formalizado) {
                     etiqueta(
                         text = R.string.pendiente_formalizacion,
@@ -101,7 +97,6 @@ fun ProtocoloCards(
                 }
             }
 
-            // 4. Indicador lateral de navegación ">"
             Text(
                 text = "›",
                 style = MaterialTheme.typography.headlineSmall,

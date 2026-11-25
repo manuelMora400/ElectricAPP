@@ -8,16 +8,13 @@ data class FormularioLoginState(
     val rol : Rol = Rol.CLIENTE,
     val activo : Boolean = true,
 
-
     val cambiarClave : Boolean = false,
     val nuevaClave : String = "",
     val confirmarClave : String = "",
 
-    //los campos aparecian en rojo sin haber escrito nada. Ahora parten en null
     val errorNuevaClave : String? = null,
     val errorConfirmarClave : String? = null,
 
-    // Recupera contraseña
     val idRecuperacion : String = "",
     val errorRecuperacion : String? = null,
     val mensajeRecuperacionExito : String? = null,
@@ -35,7 +32,5 @@ data class FormularioLoginState(
     val mensajeExitoso : String = "",
     val logeadoExitoso : Boolean = false,
 
-
     val passwordVisible : Boolean = false
 )
-

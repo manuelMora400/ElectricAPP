@@ -42,7 +42,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.electricapp.viewModel.IngenieroViewModel
 
-
 @Composable
 fun VistaIngenieroScreens(
     viewModel: IngenieroViewModel = viewModel(),

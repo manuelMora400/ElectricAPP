@@ -13,9 +13,6 @@ interface InstrumentoApi {
     @GET("api/instrumentos/cantidad")
     suspend fun contador() : ContadorResponse
 
-    @GET("api/instrumentos/vigencia/{id}")
-    suspend fun vigencia(@Path("id") id : Long) : VigenciaResponse
-
     @POST("api/instrumentos")
     suspend fun crearInstrumentos(@Body datos : CrearInstrumentoRequest) : InstrumentoResponse
 

@@ -308,7 +308,6 @@ fun RegistrarCuentaScreens(
     }
 }
 
-
 @Composable
 private fun SeccionFormulario(contenido: @Composable ColumnScope.() -> Unit) {
     Card(
@@ -344,6 +343,4 @@ fun RegistrarCuentasView() {
         )
     }
 }
-
-
 

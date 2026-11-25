@@ -42,7 +42,6 @@ import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 import com.example.electricapp.viewModel.EquiposViewModel
 
-
 @Composable
 fun screensRegistrarEquipo(
     viewModel: EquiposViewModel = viewModel(),
@@ -213,7 +212,6 @@ fun RegistrarEquipoScreens(
         }
     }
 }
-
 
 @Composable
 private fun SeccionFormularioEquipo(contenido: @Composable ColumnScope.() -> Unit) {

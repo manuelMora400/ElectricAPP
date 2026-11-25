@@ -15,16 +15,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 class EquiposViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repositorio = EquipoRepository()
     private val repositorioUsuarios = UsuarioRepository()
 
-
     private val _equipos = MutableStateFlow<List<FormularioEquipos>>(emptyList())
     val equipos: StateFlow<List<FormularioEquipos>> = _equipos.asStateFlow()
-
 
     private val _clientes = MutableStateFlow<List<FormularioRegistros>>(emptyList())
     val clientes: StateFlow<List<FormularioRegistros>> = _clientes.asStateFlow()
@@ -38,7 +35,6 @@ class EquiposViewModel(application: Application) : AndroidViewModel(application)
     init {
         cargarDatos()
     }
-
 
     fun cargarDatos() {
         ejecutar(
@@ -96,7 +92,6 @@ class EquiposViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun onRegistrar(onExito: () -> Unit) {
-
 
         val formatoTag = Regex("^[A-Za-z0-9-]+$")
         val estado = _uiState.value

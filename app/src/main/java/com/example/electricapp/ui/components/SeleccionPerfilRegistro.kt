@@ -26,7 +26,6 @@ import com.example.electricapp.ui.styles.EstilosCampos
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SeleccionPerfilRegistro(

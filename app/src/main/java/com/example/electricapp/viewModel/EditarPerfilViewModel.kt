@@ -20,7 +20,6 @@ class EditarPerfilViewModel() : ViewModel(){
     private val _cargando = MutableStateFlow(false)
     val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
 
-
     private fun ejecutar(onError: (String) -> Unit, accion: suspend () -> Unit) {
         viewModelScope.launch {
             _cargando.value = true
@@ -33,7 +32,6 @@ class EditarPerfilViewModel() : ViewModel(){
             }
         }
     }
-
 
     fun cargar(idUsuario : Long, rolSesion : Rol){
         ejecutar( onError = { mensaje ->

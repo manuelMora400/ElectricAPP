@@ -15,8 +15,6 @@ import com.example.electricapp.ui.styles.EstilosTarjetas
 import com.example.electricapp.ui.theme.Dimens
 import com.example.electricapp.ui.theme.ElectricAppTheme
 
-
-// Sirve igual para los paneles del Técnico, Ingeniero y Cliente
 @Composable
 fun TarjetaSaludo(
     titulo : String,

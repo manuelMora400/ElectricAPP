@@ -1,6 +1,5 @@
 package com.example.electricapp.model
 
-
 data class FormularioEquipos(
 
     val id : Long = 0L,

@@ -30,15 +30,11 @@ class DetalleViewModel(
                 val detalle = repositorio.obtenerDetalle(idProtocolo)
                 _uiState.update { detalle }
             } catch (e: Exception) {
-                idCargado = null   // permite reintentar
+                idCargado = null
                 _uiState.update {
                     DetallesState(idProtocolo = idProtocolo, error = e.message ?: "Error inesperado")
                 }
             }
         }
-    }
-
-    fun seleccionarDetalle(detalle: DetallesState) {
-        _uiState.update { actual -> detalle.copy(listaDetalles = actual.listaDetalles) }
     }
 }
