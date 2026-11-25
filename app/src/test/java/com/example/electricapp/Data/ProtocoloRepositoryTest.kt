@@ -8,9 +8,17 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.junit.Assert.assertThrows
 
 class ProtocoloRepositoryTest {
     private lateinit var repositorio: ProtocoloRepository
+    private lateinit var apiFalsa: FakeProtocoloApi
+
+    @Before
+    fun preparar() {
+        apiFalsa = FakeProtocoloApi()
+        repositorio = ProtocoloRepository(api = apiFalsa)
+    }
 
     @Test
     fun buscarHistorial_protocoloFormalizadoAprobado_esperadoConvertirEnHistorial() = runBlocking {
